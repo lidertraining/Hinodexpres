@@ -2,7 +2,37 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+
+<!-- 📱 PWA: Meta tags pra app fullscreen iOS + Android -->
+<meta name="theme-color" content="#370014" />
+<meta name="background-color" content="#1F0009" />
+<meta name="color-scheme" content="dark" />
+
+<!-- iOS: tudo pra abrir como app sem barra de Safari -->
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Hinode" />
+<meta name="format-detection" content="telephone=no" />
+
+<!-- Android Chrome -->
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="application-name" content="Hinode Express" />
+
+<!-- Manifest e ícones -->
+<link rel="manifest" href="manifest.json" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png" />
+<link rel="shortcut icon" href="apple-touch-icon.png" />
+
+<!-- SEO básico -->
+<meta name="description" content="Perfumes e cosméticos Hinode entregues em até 60 minutos no conforto da sua casa." />
+<meta property="og:title" content="Hinode Express" />
+<meta property="og:description" content="Beleza Hinode em casa em até 60 minutos. Pedido pelo app, entrega expressa via Uber." />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="icon-512.png" />
 <title>Hinode Express — Protótipo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -47,7 +77,9 @@ body {
     radial-gradient(circle at 80% 80%, rgba(185, 0, 50, 0.06), transparent 50%),
     linear-gradient(135deg, var(--bordeaux-deep) 0%, var(--noir) 50%, var(--bordeaux) 100%);
   color: var(--blanc);
-  min-height: 100vh;
+  min-height: 100vh; /* fallback */
+  min-height: 100dvh; /* dynamic viewport — não pula com barra do navegador */
+  min-height: 100svh; /* fallback alternativo */
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
@@ -5265,6 +5297,80 @@ h1.poetic, h2.poetic, .hero-title {
 }
 
 
+
+
+/* ================================================================
+   📱 MODO STANDALONE (PWA INSTALADO)
+   Quando o app está rodando como PWA (não no navegador)
+   ================================================================ */
+
+/* HTML/Body ocupando 100% da tela */
+html, body {
+  height: 100%;
+  height: 100dvh;
+  overflow-x: hidden;
+}
+
+/* Container do app respeita safe-areas (notch, home indicator, dynamic island) */
+#app {
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding-top: env(safe-area-inset-top, 0);
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  padding-left: env(safe-area-inset-left, 0);
+  padding-right: env(safe-area-inset-right, 0);
+}
+
+/* Em modo standalone (PWA aberto da home), ainda mais imersivo */
+@media all and (display-mode: standalone),
+       all and (display-mode: fullscreen) {
+  /* Esconde o banner de instalação se está rodando como PWA */
+  #pwa-install-banner { display: none !important; }
+  
+  /* Garante que o app preencha tudo */
+  body {
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+  }
+  
+  #app {
+    height: 100vh;
+    height: 100dvh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* No iOS, status bar fica em cima do app (translucent), 
+     então o conteúdo precisa de padding extra */
+  .stage,
+  .app-content {
+    padding-top: max(env(safe-area-inset-top), 8px);
+  }
+  
+  /* Fixed bottom respeita home indicator do iPhone */
+  .fixed-bottom,
+  .floating-cart-bar,
+  .bottom-nav,
+  .detail-cta-bar {
+    padding-bottom: max(env(safe-area-inset-bottom), 12px) !important;
+  }
+}
+
+/* iOS specific tweaks */
+@supports (-webkit-touch-callout: none) {
+  /* Disable text selection in app UI elements */
+  button, .btn-primary, .btn-secondary, .product-card, 
+  .nav-btn, .bottom-nav button, [role="button"] {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+}
+
+
+
 </style>
 </head>
 <body>
@@ -9142,6 +9248,7 @@ window.fireSparkles = fireSparkles;
     lastCartCount = cartCount;
   }, 500);
 })();
+
 
 
 render();
