@@ -4439,6 +4439,11 @@ body::after {
   mix-blend-mode: overlay;
 }
 
+/* No mobile, desativa o ruído pra não pesar a GPU */
+@media (max-width: 600px) {
+  body::after { display: none; }
+}
+
 /* Botões com depth premium — efeito de "afundar" */
 button:not(.no-press),
 .btn-primary,
@@ -4600,14 +4605,41 @@ a:hover, .link:hover {
   }
 }
 
-/* Prefers reduced motion — accessibility */
+/* Prefers reduced motion — accessibility (versão corrigida)
+   IMPORTANTE: animation-iteration-count: 1 impede loops infinitos.
+   Sem isso, animações com duração 0.01ms + iteration: infinite
+   rodam 100.000x/seg e geram efeito de piscando frenético no mobile. */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important; /* CRUCIAL — para loops infinitos */
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
+  /* Splash com tempo razoável pra mostrar a marca, mesmo com reduce-motion */
   #splash-screen {
-    animation: splashFadeOut 0.3s ease-out 0.5s forwards !important;
+    animation: splashFadeOut 0.6s ease-out 1.8s forwards !important;
+  }
+  #splash-screen .splash-logo-svg .logo-stroke {
+    animation: logoStroke 1s ease-out 0.2s forwards !important;
+  }
+  #splash-screen .splash-logo-svg .logo-fill {
+    animation: logoFill 0.4s ease-out 1.2s forwards !important;
+  }
+  #splash-screen .splash-tagline {
+    animation: taglineFade 0.4s ease-out 1.0s forwards !important;
+  }
+  #splash-screen .splash-product-name {
+    animation: productNameFade 0.4s ease-out 1.2s forwards !important;
+  }
+  #splash-screen .splash-loader {
+    animation: loaderFade 0.3s ease-out 1.4s forwards !important;
+  }
+  #splash-screen .splash-content {
+    animation: splashContentEnter 0.5s ease-out 0.2s both !important;
+  }
+  #splash-screen .splash-sun-bg {
+    animation: splashSunRise 1.8s ease-out forwards !important;
   }
 }
 
@@ -4619,18 +4651,27 @@ a:hover, .link:hover {
    ================================================================ */
 
 /* Transições entre telas (slide tipo iOS) */
-.stage > * {
-  animation: stageEnter 0.5s var(--ease-out-expo);
+/* stageEnter aplicado SÓ em elementos com .fade-enter (que já existe no app)
+   Antes: rodava em TODO re-render, causando piscar quando clicava em +/- no carrinho */
+.stage > .fade-enter {
+  animation: stageEnter 0.35s var(--ease-out-expo);
 }
 
 @keyframes stageEnter {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(6px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* No mobile, mais rápido pra não dar sensação de lag */
+@media (max-width: 600px) {
+  .stage > .fade-enter {
+    animation-duration: 0.2s;
   }
 }
 
@@ -4642,15 +4683,12 @@ a:hover, .link:hover {
   position: relative;
 }
 
+/* navItemBreath REMOVIDO — o indicador dourado deslizante já dá feedback visual suficiente
+   sem precisar pulsar o botão inteiro (causava sensação de "piscando" no mobile) */
 .bottom-nav button.active,
 .nav-btn.active,
 [class*="nav-item"].active {
-  animation: navItemBreath 2.5s ease-in-out infinite;
-}
-
-@keyframes navItemBreath {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
+  /* sem animação infinita — só feedback de cor do CSS já existente */
 }
 
 /* Indicador ativo do nav (linha dourada que desliza) */
@@ -4678,14 +4716,18 @@ a:hover, .link:hover {
   animation: cardCascadeIn 0.5s var(--ease-out-expo) backwards;
 }
 
-.product-grid .product-card:nth-child(1) { animation-delay: 0.05s; }
-.product-grid .product-card:nth-child(2) { animation-delay: 0.10s; }
-.product-grid .product-card:nth-child(3) { animation-delay: 0.15s; }
-.product-grid .product-card:nth-child(4) { animation-delay: 0.20s; }
-.product-grid .product-card:nth-child(5) { animation-delay: 0.25s; }
-.product-grid .product-card:nth-child(6) { animation-delay: 0.30s; }
-.product-grid .product-card:nth-child(7) { animation-delay: 0.35s; }
-.product-grid .product-card:nth-child(8) { animation-delay: 0.40s; }
+.product-grid .product-card:nth-child(1) { animation-delay: 0.04s; }
+.product-grid .product-card:nth-child(2) { animation-delay: 0.08s; }
+.product-grid .product-card:nth-child(3) { animation-delay: 0.12s; }
+.product-grid .product-card:nth-child(4) { animation-delay: 0.16s; }
+.product-grid .product-card:nth-child(5) { animation-delay: 0.20s; }
+.product-grid .product-card:nth-child(6) { animation-delay: 0.24s; }
+.product-grid .product-card:nth-child(7) { animation-delay: 0.28s; }
+.product-grid .product-card:nth-child(8) { animation-delay: 0.32s; }
+/* No mobile, cards não cascateiam (entram juntos) pra não dar sensação de "lerdo" */
+@media (max-width: 600px) {
+  .product-grid .product-card { animation-delay: 0s !important; }
+}
 
 @keyframes cardCascadeIn {
   from {
@@ -4838,11 +4880,13 @@ input[type="search"]:focus + .search-icon,
   color: var(--or-shimmer);
 }
 
-/* Detail page — title slide-in elegante */
-.product-detail h1,
-.product-detail-title,
-.detail-title {
-  animation: titleSlideIn 0.6s var(--ease-out-expo) 0.1s backwards;
+/* Title slide-in — desativado no mobile pra não ficar repetindo */
+@media (min-width: 601px) {
+  .product-detail h1,
+  .product-detail-title,
+  .detail-title {
+    animation: titleSlideIn 0.6s var(--ease-out-expo) 0.1s backwards;
+  }
 }
 
 @keyframes titleSlideIn {
@@ -4903,37 +4947,13 @@ input[type="search"]:focus + .search-icon,
   -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.4);
 }
 
-/* Stage transitions específicas */
-.client-onboarding,
-.client-home,
-.client-category,
-.client-product,
-.client-tracking,
-.client-cart,
-.client-checkout {
-  animation: screenSlideIn 0.5s var(--ease-out-expo);
-}
+/* screenSlideIn DESATIVADO — duplicava o fade-enter e causava double-flash.
+   O .fade-enter já existe no app original e cuida das transições. */
 
-@keyframes screenSlideIn {
-  from {
-    opacity: 0;
-    transform: translateX(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-/* Eta banner — pulsa sutilmente */
+/* subtleGlow REMOVIDO — no mobile a sombra pulsando ficava chamativa demais */
 .eta-banner,
 .franchise-bar {
-  animation: subtleGlow 4s ease-in-out infinite;
-}
-
-@keyframes subtleGlow {
-  0%, 100% { box-shadow: var(--shadow-elev-2); }
-  50% { box-shadow: var(--shadow-elev-2), 0 0 24px rgba(244, 220, 160, 0.08); }
+  box-shadow: var(--shadow-elev-2);
 }
 
 /* Star rating — preenche elegantemente */
@@ -5056,34 +5076,23 @@ input[type="search"]:focus + .search-icon,
   100% { transform: scale(1); }
 }
 
-/* Frasco de perfume rotação 3D sutil */
+/* bottleSubtleRotate REMOVIDO — no mobile a rotação infinita do produto incomoda */
 .product-detail-image,
 .detail-product-image,
 .perfume-bottle-3d {
   transform-style: preserve-3d;
   perspective: 1000px;
-  animation: bottleSubtleRotate 8s ease-in-out infinite;
 }
 
-@keyframes bottleSubtleRotate {
-  0%, 100% { transform: rotateY(0deg) translateY(0); }
-  50% { transform: rotateY(3deg) translateY(-3px); }
-}
-
-/* Glow ambient atrás do produto */
+/* ambientGlow estático — sem animação infinita */
 .product-detail-image::before,
 .detail-product-image::before {
   content: '';
   position: absolute;
   inset: -20%;
-  background: radial-gradient(circle, rgba(244, 220, 160, 0.15) 0%, transparent 60%);
+  background: radial-gradient(circle, rgba(244, 220, 160, 0.12) 0%, transparent 60%);
   z-index: -1;
-  animation: ambientGlow 6s ease-in-out infinite;
-}
-
-@keyframes ambientGlow {
-  0%, 100% { opacity: 0.4; transform: scale(1); }
-  50% { opacity: 0.8; transform: scale(1.05); }
+  opacity: 0.5;
 }
 
 /* Cart bag swing quando adiciona */
@@ -5810,9 +5819,12 @@ function setView(v) {
   });
   
   // Remove automaticamente após a animação completar
+  // Detecta se reduce-motion está ativo pra ajustar tempo
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const removeDelay = reduceMotion ? 2600 : 4200; // Mais curto se reduce-motion, ainda mostra a marca
   setTimeout(() => {
     if (splash.parentNode) splash.remove();
-  }, 4200);
+  }, removeDelay);
 })();
 
 
@@ -9105,21 +9117,30 @@ function fireSparkles(x, y) {
 }
 window.fireSparkles = fireSparkles;
 
-// 🛍️ Detecta mudanças no carrinho e anima ícone
+// 🛍️ Detecta mudanças no carrinho e anima ícone (uma vez só)
 (function watchCart() {
   let lastCartCount = 0;
+  let initialized = false;
   setInterval(() => {
     const cartCount = (typeof STATE !== 'undefined' && STATE.cart)
       ? STATE.cart.reduce((s, i) => s + i.qty, 0) : 0;
+    // Pula a primeira leitura (estado inicial) pra não disparar no carregamento
+    if (!initialized) {
+      initialized = true;
+      lastCartCount = cartCount;
+      return;
+    }
+    // Só anima quando aumenta DE VERDADE (nova adição)
     if (cartCount > lastCartCount) {
-      const icons = document.querySelectorAll('.cart-icon-wrapper, .nav-btn[onclick*="cart"], [data-cart-icon]');
+      const icons = document.querySelectorAll('.cart-icon-wrapper');
       icons.forEach(icon => {
+        if (icon.classList.contains('has-items')) return; // já está animando
         icon.classList.add('has-items');
         setTimeout(() => icon.classList.remove('has-items'), 800);
       });
     }
     lastCartCount = cartCount;
-  }, 300);
+  }, 500);
 })();
 
 
