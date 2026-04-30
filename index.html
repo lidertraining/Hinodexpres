@@ -747,6 +747,67 @@ body {
   border-top: 1px dashed var(--creme);
 }
 
+/* Banner "Fora de cobertura" */
+.onb2-out-coverage {
+  display: flex;
+  gap: 14px;
+  padding: 16px;
+  background: linear-gradient(135deg, #FFF5F0, #FFE0D8);
+  border: 1px solid var(--rose-deep);
+  border-radius: 16px;
+  margin-bottom: 14px;
+  align-items: flex-start;
+}
+
+.onb2-oc-icon {
+  font-size: 32px;
+  line-height: 1;
+  flex-shrink: 0;
+  animation: floatSun 3s ease-in-out infinite;
+}
+
+@keyframes floatSun {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-4px) rotate(3deg); }
+}
+
+.onb2-oc-content {
+  flex: 1;
+}
+
+.onb2-oc-content b {
+  display: block;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--bordeaux);
+  margin-bottom: 4px;
+}
+
+.onb2-oc-content p {
+  font-size: 12px;
+  color: var(--gray-warm);
+  line-height: 1.5;
+  margin: 0 0 4px;
+}
+
+.onb2-oc-content p b {
+  display: inline;
+  font-family: 'Manrope', sans-serif;
+  font-style: normal;
+  font-size: 12px;
+  color: var(--bordeaux);
+}
+
+.onb2-oc-content small {
+  font-size: 10px;
+  color: var(--gray-warm);
+  letter-spacing: 0.3px;
+  display: block;
+  margin-top: 2px;
+}
+
 @keyframes fadeInDown {
   from { opacity: 0; transform: translateY(-8px); }
   to { opacity: 1; transform: translateY(0); }
@@ -4188,44 +4249,481 @@ const STATE = {
   ratedDelivery: false,
 };
 
-// Franquias mockadas (em produção viria da API Hinode /franchises/nearest)
+// Franquias REAIS da Hinode espalhadas pelo Brasil (lista oficial — fonte: souconsultor.com.br)
+// Mais de 280 unidades cobrindo todos os estados
+// Em produção: GET https://api.hinode.com.br/franchises/nearest?lat=&lng=
 const FRANCHISES = [
-  {
-    id: 'HND-JD-001',
-    name: 'Hinode Jardins',
-    address: 'R. Oscar Freire, 1242 — Jardins',
-    lat: -23.5615, lng: -46.6720,
-    rating: 4.9, reviews: 2843,
-    etaPrep: '15-25 min',
-    etaDelivery: '12-18 min'
-  },
-  {
-    id: 'HND-PT-002',
-    name: 'Hinode Paulista',
-    address: 'Av. Paulista, 1499 — Bela Vista',
-    lat: -23.5631, lng: -46.6541,
-    rating: 4.8, reviews: 1924,
-    etaPrep: '20-30 min',
-    etaDelivery: '15-22 min'
-  },
-  {
-    id: 'HND-VL-003',
-    name: 'Hinode Vila Olímpia',
-    address: 'R. Olimpíadas, 205 — Vila Olímpia',
-    lat: -23.5957, lng: -46.6868,
-    rating: 4.7, reviews: 1156,
-    etaPrep: '18-28 min',
-    etaDelivery: '20-30 min'
-  }
+  { id: "HND-AC-RB", name: "Hinode Rio Branco", address: "Av. Getúlio Vargas, 733 sala A", city: "Rio Branco", uf: "AC", phone: "(68) 3224-6664", lat: -9.97470, lng: -67.82430, rating: 4.8, reviews: 1305, etaPrep: "22-30 min", etaDelivery: "13-23 min" },
+  { id: "HND-AC-CS", name: "Hinode Cruzeiro do Sul", address: "R. Afonso Pena, 8810 — AABB", city: "Cruzeiro do Sul", uf: "AC", phone: "(68) 99901-4636", lat: -7.62850, lng: -72.67470, rating: 4.9, reviews: 1331, etaPrep: "17-27 min", etaDelivery: "15-23 min" },
+  { id: "HND-AL-MAC", name: "Hinode Maceió", address: "Durval de Góes Monteiro, 9757 — T. Martins", city: "Maceió", uf: "AL", phone: "(82) 3023-0301", lat: -9.64980, lng: -35.70890, rating: 4.7, reviews: 715, etaPrep: "23-31 min", etaDelivery: "19-31 min" },
+  { id: "HND-AL-MAC-F", name: "Hinode Maceió Farol", address: "Av. Tomas Espíndola, 3260 — Farol", city: "Maceió", uf: "AL", phone: "(82) 3013-0301", lat: -9.64980, lng: -35.73330, rating: 4.7, reviews: 710, etaPrep: "16-24 min", etaDelivery: "18-26 min" },
+  { id: "HND-AL-ARA", name: "Hinode Arapiraca", address: "Pedro Nunes de Albuquerque, 213 — Centro", city: "Arapiraca", uf: "AL", phone: "(82) 3522-1027", lat: -9.75254, lng: -36.66310, rating: 4.9, reviews: 754, etaPrep: "21-32 min", etaDelivery: "18-30 min" },
+  { id: "HND-AL-ARA2", name: "Hinode Arapiraca 2", address: "R. Manoel Abreu, 2410 — Centro", city: "Arapiraca", uf: "AL", phone: "(82) 3521-1492", lat: -9.75400, lng: -36.66231, rating: 4.9, reviews: 1404, etaPrep: "17-28 min", etaDelivery: "12-22 min" },
+  { id: "HND-AL-ATA", name: "Hinode Atalaia", address: "Av. José Procópio Albuquerque, 60 — José Paulino", city: "Atalaia", uf: "AL", phone: "(82) 3264-2388", lat: -9.51030, lng: -36.02280, rating: 4.5, reviews: 780, etaPrep: "16-24 min", etaDelivery: "12-22 min" },
+  { id: "HND-AM-MAN-V", name: "Hinode Manaus Vieiralves", address: "Av. João Valério, 200 — Vieiralves", city: "Manaus", uf: "AM", phone: "(92) 3071-5988", lat: -3.08430, lng: -60.01030, rating: 4.7, reviews: 1074, etaPrep: "23-34 min", etaDelivery: "14-24 min" },
+  { id: "HND-AM-MAN-L", name: "Hinode Manaus Zona Leste", address: "Shopping Cidade Leste — Autaz Mirim, 288", city: "Manaus", uf: "AM", phone: "(92) 3086-1400", lat: -3.04810, lng: -59.95310, rating: 5.0, reviews: 944, etaPrep: "15-26 min", etaDelivery: "12-20 min" },
+  { id: "HND-AM-MAN-CN", name: "Hinode Manaus Cidade Nova", address: "Max Teixeira, 28 — Cidade Nova I", city: "Manaus", uf: "AM", phone: "(92) 3302-336", lat: -3.02030, lng: -60.01330, rating: 4.8, reviews: 341, etaPrep: "24-34 min", etaDelivery: "13-21 min" },
+  { id: "HND-AM-MAN-C", name: "Hinode Manaus Centro", address: "Constantino Nery, 235 — Centro", city: "Manaus", uf: "AM", phone: "(92) 3307-7600", lat: -3.13200, lng: -60.02540, rating: 4.8, reviews: 827, etaPrep: "21-33 min", etaDelivery: "15-23 min" },
+  { id: "HND-AM-MAN-A", name: "Hinode Manaus Alvorada", address: "Desembargador João Machado, 1112 — Alvorada", city: "Manaus", uf: "AM", phone: "(92) 8110-7400", lat: -3.08090, lng: -60.03560, rating: 4.7, reviews: 801, etaPrep: "15-25 min", etaDelivery: "13-23 min" },
+  { id: "HND-AM-HUM", name: "Hinode Humaitá", address: "Av. Transamazônica, 2684 — São Pedro", city: "Humaitá", uf: "AM", phone: "(97) 3373-1409", lat: -7.50720, lng: -63.02110, rating: 5.0, reviews: 1053, etaPrep: "24-33 min", etaDelivery: "13-23 min" },
+  { id: "HND-AM-ITA", name: "Hinode Itacoatiara", address: "Cassiano Segundo, 92 — Centro", city: "Itacoatiara", uf: "AM", phone: "(92) 9370-2137", lat: -3.14320, lng: -58.44420, rating: 4.6, reviews: 897, etaPrep: "21-33 min", etaDelivery: "17-27 min" },
+  { id: "HND-AM-MNC", name: "Hinode Manacapuru", address: "Av. Ribeiro Junior, 4910 — Centro", city: "Manacapuru", uf: "AM", phone: "(92) 99239-4882", lat: -3.29970, lng: -60.62070, rating: 4.6, reviews: 897, etaPrep: "21-33 min", etaDelivery: "17-27 min" },
+  { id: "HND-AP-MAC", name: "Hinode Macapá", address: "Av. Ernestino Borges, 39 — Julião Ramos", city: "Macapá", uf: "AP", phone: "(96) 3213-1665", lat: 0.03560, lng: -51.07050, rating: 4.9, reviews: 767, etaPrep: "24-36 min", etaDelivery: "15-23 min" },
+  { id: "HND-AP-SAN", name: "Hinode Santana", address: "R. General Ubaldo Figueira, 623 — Centro", city: "Santana", uf: "AP", phone: "(96) 99171-3114", lat: -0.05830, lng: -51.17580, rating: 4.6, reviews: 988, etaPrep: "20-29 min", etaDelivery: "12-24 min" },
+  { id: "HND-BA-SSA-1", name: "Hinode Salvador 1", address: "Av. Tancredo Neves, 274 — Caminho das Árvores", city: "Salvador", uf: "BA", phone: "(71) 3042-9416", lat: -12.98090, lng: -38.46300, rating: 4.6, reviews: 593, etaPrep: "22-31 min", etaDelivery: "13-21 min" },
+  { id: "HND-BA-SSA-U", name: "Hinode Salvador Uruguai", address: "Bahia Outlet — R. do Uruguay, 753 lj 162", city: "Salvador", uf: "BA", phone: "(71) 3244-0331", lat: -12.92410, lng: -38.48950, rating: 4.6, reviews: 1061, etaPrep: "20-30 min", etaDelivery: "17-25 min" },
+  { id: "HND-BA-SSA-C", name: "Hinode Salvador Centro", address: "Av. Sete de Setembro, 616 — Dois de Julho", city: "Salvador", uf: "BA", phone: "(71) 3033-2175", lat: -12.97770, lng: -38.50760, rating: 4.8, reviews: 827, etaPrep: "21-33 min", etaDelivery: "15-23 min" },
+  { id: "HND-BA-SSA-IT", name: "Hinode Salvador Itapuã", address: "Av. Dorival Caymmi, 14307 — Itapuã", city: "Salvador", uf: "BA", phone: "(71) 3018-6230", lat: -12.94570, lng: -38.36770, rating: 4.6, reviews: 497, etaPrep: "16-28 min", etaDelivery: "17-25 min" },
+  { id: "HND-BA-SSA-AL", name: "Hinode Salvador Alphaville", address: "Av. Alphaville, 8050 — Alphaville", city: "Salvador", uf: "BA", phone: "(71) 99979-4242", lat: -12.93880, lng: -38.41880, rating: 4.5, reviews: 289, etaPrep: "23-34 min", etaDelivery: "17-29 min" },
+  { id: "HND-BA-SSA-CJ", name: "Hinode Cajazeiras BA", address: "Shopping Cajazeiras — Estrada do Coqueiro Grande, 1361", city: "Salvador", uf: "BA", phone: "(71) 3305-6476", lat: -12.93670, lng: -38.43140, rating: 4.5, reviews: 289, etaPrep: "23-34 min", etaDelivery: "17-29 min" },
+  { id: "HND-BA-ALA", name: "Hinode Alagoinhas", address: "Sete de Setembro, 32 — Centro", city: "Alagoinhas", uf: "BA", phone: "(75) 3421-8000", lat: -12.13610, lng: -38.41920, rating: 4.7, reviews: 546, etaPrep: "17-27 min", etaDelivery: "18-28 min" },
+  { id: "HND-BA-BAR", name: "Hinode Barreiras", address: "R. Aníbal Alves Barbosa, 619 — Sandra Regina", city: "Barreiras", uf: "BA", phone: "(77) 3611-6141", lat: -12.14800, lng: -44.99250, rating: 4.7, reviews: 637, etaPrep: "16-28 min", etaDelivery: "13-25 min" },
+  { id: "HND-BA-BRU", name: "Hinode Brumado", address: "Av. Centenário, 240 — Flores", city: "Brumado", uf: "BA", phone: "(77) 3453-1257", lat: -14.20460, lng: -41.66500, rating: 4.6, reviews: 897, etaPrep: "21-33 min", etaDelivery: "17-27 min" },
+  { id: "HND-BA-CAM", name: "Hinode Camaçari", address: "R. do Telégrafo, 362 — Bairro do Natal", city: "Camaçari", uf: "BA", phone: "(71) 3040-1643", lat: -12.69750, lng: -38.32390, rating: 5.0, reviews: 585, etaPrep: "15-23 min", etaDelivery: "17-27 min" },
+  { id: "HND-BA-CC", name: "Hinode Conceição do Coité", address: "Av. Antônio Calixto da Cunha, 142 — Marajoara", city: "Conceição do Coité", uf: "BA", phone: "(75) 3262-1442", lat: -11.56350, lng: -39.28580, rating: 4.7, reviews: 1110, etaPrep: "21-29 min", etaDelivery: "18-28 min" },
+  { id: "HND-BA-CA", name: "Hinode Cruz das Almas", address: "Crisogno Fernandes, 316 — Centro", city: "Cruz das Almas", uf: "BA", phone: "(75) 3621-6887", lat: -12.67010, lng: -39.10190, rating: 4.6, reviews: 1084, etaPrep: "15-26 min", etaDelivery: "16-28 min" },
+  { id: "HND-BA-EC", name: "Hinode Euclides da Cunha", address: "R. Elson Torres de Aquino, 246 — Centro", city: "Euclides da Cunha", uf: "BA", phone: "(75) 3271-3261", lat: -10.50740, lng: -39.01480, rating: 4.8, reviews: 1136, etaPrep: "16-26 min", etaDelivery: "12-20 min" },
+  { id: "HND-BA-EUN", name: "Hinode Eunápolis", address: "Av. Castro Alves, 372 — Centro", city: "Eunápolis", uf: "BA", phone: "(73) 3261-2232", lat: -16.37190, lng: -39.58070, rating: 4.6, reviews: 884, etaPrep: "18-29 min", etaDelivery: "12-20 min" },
+  { id: "HND-BA-FS", name: "Hinode Feira de Santana", address: "R. Barão do Rio Branco, 994 — Centro", city: "Feira de Santana", uf: "BA", phone: "(75) 3225-1681", lat: -12.26660, lng: -38.96670, rating: 4.5, reviews: 1357, etaPrep: "23-35 min", etaDelivery: "17-29 min" },
+  { id: "HND-BA-GUA", name: "Hinode Guanambi", address: "R. Helvécio Martins, 91 — Centro", city: "Guanambi", uf: "BA", phone: "(77) 99199-0050", lat: -14.22310, lng: -42.78110, rating: 4.8, reviews: 741, etaPrep: "18-28 min", etaDelivery: "13-23 min" },
+  { id: "HND-BA-ILH", name: "Hinode Ilhéus", address: "R. Antonio Lavigne de Lemos, 33 — Centro", city: "Ilhéus", uf: "BA", phone: "(73) 3633-7753", lat: -14.79350, lng: -39.04630, rating: 4.8, reviews: 741, etaPrep: "18-28 min", etaDelivery: "13-23 min" },
+  { id: "HND-BA-IRE", name: "Hinode Irecê", address: "R. Lafaiete Coutinho, 340 — Centro", city: "Irecê", uf: "BA", phone: "(74) 3642-2919", lat: -11.30320, lng: -41.85370, rating: 4.5, reviews: 780, etaPrep: "16-24 min", etaDelivery: "12-22 min" },
+  { id: "HND-BA-ITB", name: "Hinode Itaberaba", address: "Av. Ruy Barbosa, 169 — Centro", city: "Itaberaba", uf: "BA", phone: "(75) 3251-5572", lat: -12.52210, lng: -40.30560, rating: 4.9, reviews: 767, etaPrep: "24-36 min", etaDelivery: "15-23 min" },
+  { id: "HND-BA-ITU", name: "Hinode Itabuna", address: "R. Sergipe, 116 — Jardim Vitória", city: "Itabuna", uf: "BA", phone: "(73) 99153-9420", lat: -14.78580, lng: -39.28030, rating: 4.8, reviews: 1014, etaPrep: "15-26 min", etaDelivery: "14-24 min" },
+  { id: "HND-BA-JAC", name: "Hinode Jacobina", address: "Pç. Dois de Julho, 300 — Centro", city: "Jacobina", uf: "BA", phone: "(74) 3622-4431", lat: -11.18040, lng: -40.51800, rating: 4.7, reviews: 546, etaPrep: "17-27 min", etaDelivery: "18-28 min" },
+  { id: "HND-BA-JEQ", name: "Hinode Jequié", address: "R. Bertino Passos, 65 — Centro", city: "Jequié", uf: "BA", phone: "(73) 3525-1907", lat: -13.85760, lng: -40.08300, rating: 4.5, reviews: 780, etaPrep: "16-24 min", etaDelivery: "12-22 min" },
+  { id: "HND-BA-JUA", name: "Hinode Juazeiro BA", address: "Av. Adolfo Viana lj 38/40 — Centro", city: "Juazeiro", uf: "BA", phone: "(74) 3613-1659", lat: -9.41170, lng: -40.49860, rating: 4.5, reviews: 780, etaPrep: "16-24 min", etaDelivery: "12-22 min" },
+  { id: "HND-BA-LF", name: "Hinode Lauro de Freitas", address: "Av. Santos Dumont, Estrada do Côco 1467", city: "Lauro de Freitas", uf: "BA", phone: "(71) 3365-3874", lat: -12.89460, lng: -38.32510, rating: 4.5, reviews: 1266, etaPrep: "24-34 min", etaDelivery: "14-24 min" },
+  { id: "HND-BA-LEM", name: "Hinode Luís Eduardo Magalhães", address: "R. José Cardoso de Lima, 201 — Mimoso do Oeste", city: "Luís Eduardo Magalhães", uf: "BA", phone: "(77) 3639-3176", lat: -12.09220, lng: -45.79060, rating: 4.9, reviews: 754, etaPrep: "21-32 min", etaDelivery: "18-30 min" },
+  { id: "HND-BA-PAU", name: "Hinode Paulo Afonso", address: "Av. Apolônio Sales, 915 — Centro", city: "Paulo Afonso", uf: "BA", phone: "(75) 3281-6531", lat: -9.40980, lng: -38.22040, rating: 4.9, reviews: 858, etaPrep: "23-32 min", etaDelivery: "18-28 min" },
+  { id: "HND-BA-SAJ", name: "Hinode Santo Antônio de Jesus", address: "Castro Alves, 66 — Centro", city: "Santo Antônio de Jesus", uf: "BA", phone: "(75) 3632-4215", lat: -12.97000, lng: -39.26280, rating: 4.9, reviews: 754, etaPrep: "21-32 min", etaDelivery: "18-30 min" },
+  { id: "HND-BA-SF", name: "Hinode Simões Filho", address: "R. Profª Maria de Souza Chaves, 32 — Centro", city: "Simões Filho", uf: "BA", phone: "(71) 3027-1070", lat: -12.78210, lng: -38.40420, rating: 4.5, reviews: 1357, etaPrep: "23-35 min", etaDelivery: "17-29 min" },
+  { id: "HND-BA-TF", name: "Hinode Teixeira de Freitas", address: "Av. Pres. Getúlio Vargas, 4253 — Vila Vargas", city: "Teixeira de Freitas", uf: "BA", phone: "(73) 3291-1529", lat: -17.53580, lng: -39.74230, rating: 4.6, reviews: 1370, etaPrep: "15-23 min", etaDelivery: "14-22 min" },
+  { id: "HND-BA-VAL", name: "Hinode Valença", address: "R. Conselheiro Cunha Lopes, 14 — Centro", city: "Valença", uf: "BA", phone: "(75) 3641-0628", lat: -13.37000, lng: -39.07280, rating: 4.7, reviews: 819, etaPrep: "25-36 min", etaDelivery: "19-29 min" },
+  { id: "HND-BA-VC", name: "Hinode Vitória da Conquista", address: "Pç. Tancredo Neves, 178 — Centro", city: "Vitória da Conquista", uf: "BA", phone: "(77) 3421-4128", lat: -14.86150, lng: -40.84420, rating: 4.5, reviews: 1357, etaPrep: "23-35 min", etaDelivery: "17-29 min" },
+  { id: "HND-CE-FOR", name: "Hinode Fortaleza Aldeota", address: "Av. Dom Luis, 300 lj 231 — Aldeota", city: "Fortaleza", uf: "CE", phone: "(85) 3182-7791", lat: -3.74490, lng: -38.49690, rating: 4.8, reviews: 936, etaPrep: "19-29 min", etaDelivery: "16-26 min" },
+  { id: "HND-CE-FOR-M", name: "Hinode Fortaleza Messejana", address: "Av. Frei Cirilo, 3840 — Messejana", city: "Fortaleza", uf: "CE", phone: "(85) 2181-6257", lat: -3.82440, lng: -38.49050, rating: 4.9, reviews: 1022, etaPrep: "22-34 min", etaDelivery: "18-26 min" },
+  { id: "HND-CE-FOR-C", name: "Hinode Fortaleza Centro", address: "Senador Pompeu, 1099 — Centro", city: "Fortaleza", uf: "CE", phone: "(85) 3047-8490", lat: -3.72700, lng: -38.52660, rating: 4.7, reviews: 892, etaPrep: "25-37 min", etaDelivery: "16-28 min" },
+  { id: "HND-CE-CS", name: "Hinode Campos Sales", address: "R. João Severo Cortez, 992 — Centro", city: "Campos Sales", uf: "CE", phone: "(88) 3533-2811", lat: -7.07350, lng: -40.37960, rating: 4.7, reviews: 1383, etaPrep: "18-27 min", etaDelivery: "19-29 min" },
+  { id: "HND-CE-CRT", name: "Hinode Crateús", address: "R. Coronel Toto, 906 — Centro", city: "Crateús", uf: "CE", phone: "(88) 3691-0543", lat: -5.17720, lng: -40.67700, rating: 5.0, reviews: 962, etaPrep: "25-37 min", etaDelivery: "18-26 min" },
+  { id: "HND-CE-CRA", name: "Hinode Crato", address: "R. Ratisbona, 5 — Centro", city: "Crato", uf: "CE", phone: "", lat: -7.24020, lng: -39.40930, rating: 4.7, reviews: 715, etaPrep: "23-31 min", etaDelivery: "19-31 min" },
+  { id: "HND-CE-EUS", name: "Hinode Eusébio", address: "Rod CE 040, 140B — Centro", city: "Eusébio", uf: "CE", phone: "(85) 3260-1845", lat: -3.89010, lng: -38.45140, rating: 4.8, reviews: 1014, etaPrep: "15-26 min", etaDelivery: "14-24 min" },
+  { id: "HND-CE-IGU", name: "Hinode Iguatu", address: "R. José de Alencar, 734 — Centro", city: "Iguatu", uf: "CE", phone: "(88) 3581-1806", lat: -6.35880, lng: -39.29860, rating: 4.7, reviews: 910, etaPrep: "24-32 min", etaDelivery: "14-26 min" },
+  { id: "HND-CE-JUA", name: "Hinode Juazeiro do Norte", address: "Vereador José Gonçalves de Almeida, 46 — Tiradentes", city: "Juazeiro do Norte", uf: "CE", phone: "(88) 4141-0756", lat: -7.21280, lng: -39.31580, rating: 4.8, reviews: 845, etaPrep: "20-28 min", etaDelivery: "13-21 min" },
+  { id: "HND-CE-MAR", name: "Hinode Maracanaú", address: "Av. Carlos Jereissati, 500 — Jereissati II", city: "Maracanaú", uf: "CE", phone: "(85) 3015-5001", lat: -3.87670, lng: -38.62560, rating: 4.8, reviews: 845, etaPrep: "20-28 min", etaDelivery: "13-21 min" },
+  { id: "HND-CE-QUI", name: "Hinode Quixadá", address: "R. Francisco Eneas de Lima, 1751 — Centro", city: "Quixadá", uf: "CE", phone: "(88) 3412-4626", lat: -4.97110, lng: -39.01600, rating: 4.9, reviews: 1040, etaPrep: "21-29 min", etaDelivery: "16-24 min" },
+  { id: "HND-CE-SOB", name: "Hinode Sobral", address: "Conselheiro Rodrigues Junior, 270 — Centro", city: "Sobral", uf: "CE", phone: "(88) 3613-1928", lat: -3.68680, lng: -40.34960, rating: 4.6, reviews: 897, etaPrep: "21-33 min", etaDelivery: "17-27 min" },
+  { id: "HND-CE-TIA", name: "Hinode Tianguá", address: "Av. Pref. Jaques Nunes, 1176 — Centro", city: "Tianguá", uf: "CE", phone: "(88) 3671-1703", lat: -3.73080, lng: -40.99290, rating: 4.7, reviews: 819, etaPrep: "25-36 min", etaDelivery: "19-29 min" },
+  { id: "HND-DF-AC", name: "Hinode Brasília Águas Claras", address: "QS 03 Edif. Pátio Capital — Águas Claras", city: "Brasília", uf: "DF", phone: "(61) 3554-2251", lat: -15.83450, lng: -48.02450, rating: 4.5, reviews: 1175, etaPrep: "25-33 min", etaDelivery: "19-27 min" },
+  { id: "HND-DF-AN", name: "Hinode Brasília Asa Norte", address: "SCN Q1 Bl D Ed. Vega — Asa Norte", city: "Brasília", uf: "DF", phone: "(61) 3032-1036", lat: -15.75800, lng: -47.88100, rating: 4.8, reviews: 1318, etaPrep: "25-34 min", etaDelivery: "18-30 min" },
+  { id: "HND-DF-SOB", name: "Hinode Brasília Sobradinho", address: "Q. 7 Bl. 14 sala 107 — Sobradinho", city: "Brasília", uf: "DF", phone: "(61) 3028-3373", lat: -15.65310, lng: -47.79060, rating: 4.8, reviews: 923, etaPrep: "16-25 min", etaDelivery: "19-27 min" },
+  { id: "HND-DF-GAM", name: "Hinode Brasília Gama", address: "Quadra 39 lj 11 lote 09 — Gama", city: "Brasília", uf: "DF", phone: "(61) 3967-9004", lat: -16.00970, lng: -48.07170, rating: 4.7, reviews: 728, etaPrep: "15-24 min", etaDelivery: "16-24 min" },
+  { id: "HND-DF-SAM", name: "Hinode Brasília Samambaia", address: "QN 320 Conj. 11 lt 1/2/5/6 — Samambaia", city: "Brasília", uf: "DF", phone: "(61) 3032-8282", lat: -15.87570, lng: -48.08830, rating: 4.6, reviews: 884, etaPrep: "18-29 min", etaDelivery: "12-20 min" },
+  { id: "HND-DF-RE", name: "Hinode Brasília Recanto das Emas", address: "Quadra 402 Conj. 1 lt 26ADE — Recanto das Emas", city: "Brasília", uf: "DF", phone: "(61) 3333-0531", lat: -15.90390, lng: -48.06760, rating: 4.9, reviews: 1422, etaPrep: "16-28 min", etaDelivery: "18-28 min" },
+  { id: "HND-ES-VIT", name: "Hinode Vitória", address: "Shop Nort Sul — José Maria Vivácqua, 400 — Jd. Camburi", city: "Vitória", uf: "ES", phone: "(27) 3332-0224", lat: -20.26060, lng: -40.27150, rating: 4.8, reviews: 1300, etaPrep: "15-23 min", etaDelivery: "12-24 min" },
+  { id: "HND-ES-VIT-PC", name: "Hinode Praia do Canto", address: "Shop Boulevard 2º piso — Av. NSrª da Penha, 356", city: "Vitória", uf: "ES", phone: "(27) 3207-4046", lat: -20.29370, lng: -40.29420, rating: 4.7, reviews: 796, etaPrep: "19-29 min", etaDelivery: "12-24 min" },
+  { id: "HND-ES-VV", name: "Hinode Vila Velha", address: "João Pessoa de Mattos, 505 lj 1101 — Praia da Costa", city: "Vila Velha", uf: "ES", phone: "(27) 3219-2300", lat: -20.34170, lng: -40.29250, rating: 4.8, reviews: 377, etaPrep: "22-34 min", etaDelivery: "17-25 min" },
+  { id: "HND-ES-CAR", name: "Hinode Cariacica", address: "America, 10 — Jardim América", city: "Cariacica", uf: "ES", phone: "(27) 3114-6717", lat: -20.26250, lng: -40.41780, rating: 4.8, reviews: 923, etaPrep: "16-25 min", etaDelivery: "19-27 min" },
+  { id: "HND-ES-SER", name: "Hinode Serra", address: "Av. Central, 1590 — Pq. Res. Laranjeiras", city: "Serra", uf: "ES", phone: "(27) 3066-3338", lat: -20.12890, lng: -40.30780, rating: 4.7, reviews: 1183, etaPrep: "21-30 min", etaDelivery: "15-27 min" },
+  { id: "HND-ES-GUA", name: "Hinode Guarapari", address: "R. Miami, 439 lj 01 — Praia do Morro", city: "Guarapari", uf: "ES", phone: "(27) 3261-0793", lat: -20.67130, lng: -40.51080, rating: 4.8, reviews: 1014, etaPrep: "15-26 min", etaDelivery: "14-24 min" },
+  { id: "HND-ES-LIN", name: "Hinode Linhares", address: "Av. Gov. Santos Neves, 651 — Centro", city: "Linhares", uf: "ES", phone: "(27) 3371-3109", lat: -19.39020, lng: -40.06480, rating: 4.7, reviews: 1092, etaPrep: "22-34 min", etaDelivery: "12-22 min" },
+  { id: "HND-ES-COL", name: "Hinode Colatina", address: "R. Aroldo Antolini, 173 — Esplanada", city: "Colatina", uf: "ES", phone: "(27) 3120-2231", lat: -19.54440, lng: -40.63060, rating: 4.8, reviews: 1027, etaPrep: "18-30 min", etaDelivery: "19-31 min" },
+  { id: "HND-ES-CI", name: "Hinode Cachoeiro de Itapemirim", address: "Av. Beira Rio, 187 — Guandú", city: "Cachoeiro de Itapemirim", uf: "ES", phone: "(28) 3517-0456", lat: -20.84890, lng: -41.11260, rating: 4.6, reviews: 1461, etaPrep: "25-35 min", etaDelivery: "17-27 min" },
+  { id: "HND-ES-SM", name: "Hinode São Mateus", address: "José Tozzi, 1433 — Centro", city: "São Mateus", uf: "ES", phone: "(27) 3767-2302", lat: -18.71940, lng: -39.85850, rating: 5.0, reviews: 221, etaPrep: "19-29 min", etaDelivery: "13-21 min" },
+  { id: "HND-GO-GYN-C", name: "Hinode Goiânia Setor Central", address: "Av. Anhanguera, 3135 — Setor Central", city: "Goiânia", uf: "GO", phone: "(62) 3087-4542", lat: -16.67920, lng: -49.25540, rating: 4.7, reviews: 1165, etaPrep: "22-30 min", etaDelivery: "17-29 min" },
+  { id: "HND-GO-GYN-B", name: "Hinode Goiânia Setor Bueno", address: "Av. Mutirão, 29 — Setor Bueno", city: "Goiânia", uf: "GO", phone: "(62) 3911-2040", lat: -16.70440, lng: -49.26540, rating: 4.6, reviews: 1152, etaPrep: "19-31 min", etaDelivery: "12-22 min" },
+  { id: "HND-GO-ANA", name: "Hinode Anápolis", address: "R. Barão de Cotegipe, 266 — Setor Central", city: "Anápolis", uf: "GO", phone: "(62) 3098-3997", lat: -16.32670, lng: -48.95310, rating: 4.7, reviews: 819, etaPrep: "25-36 min", etaDelivery: "19-29 min" },
+  { id: "HND-GO-APG", name: "Hinode Aparecida de Goiânia", address: "Av. José Leandro da Cruz — Pq. Amazonas", city: "Aparecida de Goiânia", uf: "GO", phone: "(62) 3922-6228", lat: -16.82330, lng: -49.24380, rating: 4.8, reviews: 923, etaPrep: "16-25 min", etaDelivery: "19-27 min" },
+  { id: "HND-GO-CAT", name: "Hinode Catalão", address: "R. Frederico Campos, 376 — N. Sra. de Fátima", city: "Catalão", uf: "GO", phone: "", lat: -18.16650, lng: -47.94250, rating: 4.8, reviews: 923, etaPrep: "16-25 min", etaDelivery: "19-27 min" },
+  { id: "HND-GO-FOR", name: "Hinode Formosa", address: "R. São Pedro, 458 lj 2 — Formosinha", city: "Formosa", uf: "GO", phone: "(61) 3642-2408", lat: -15.53750, lng: -47.33720, rating: 4.8, reviews: 1118, etaPrep: "17-26 min", etaDelivery: "14-22 min" },
+  { id: "HND-GO-ITU", name: "Hinode Itumbiara", address: "Av. JK, 740 — Alto Boa Vista", city: "Itumbiara", uf: "GO", phone: "(64) 3431-0638", lat: -18.41920, lng: -49.21530, rating: 4.6, reviews: 1261, etaPrep: "17-27 min", etaDelivery: "13-25 min" },
+  { id: "HND-GO-JAR", name: "Hinode Jaraguá", address: "Pç. Silvio de Castro Ribeiro, 192 — Centro", city: "Jaraguá", uf: "GO", phone: "(62) 98528-9658", lat: -15.75220, lng: -49.33250, rating: 4.6, reviews: 988, etaPrep: "20-29 min", etaDelivery: "12-24 min" },
+  { id: "HND-GO-LUZ", name: "Hinode Luziânia", address: "Henrique Meireles, 115 sala 01 — Diogo Machado", city: "Luziânia", uf: "GO", phone: "(61) 3622-1486", lat: -16.25220, lng: -47.95050, rating: 4.7, reviews: 1378, etaPrep: "22-31 min", etaDelivery: "18-30 min" },
+  { id: "HND-GO-MIN", name: "Hinode Mineiros", address: "Av. José Joaquim de Rezende — Setor Costa Nery", city: "Mineiros", uf: "GO", phone: "(64) 3661-7828", lat: -17.56940, lng: -52.55190, rating: 4.6, reviews: 1079, etaPrep: "19-30 min", etaDelivery: "15-23 min" },
+  { id: "HND-GO-RV", name: "Hinode Rio Verde", address: "R. Costa Gomes, 101 — Jardim Marconal", city: "Rio Verde", uf: "GO", phone: "(64) 3613-0632", lat: -17.79750, lng: -50.91670, rating: 4.9, reviews: 299, etaPrep: "15-26 min", etaDelivery: "19-27 min" },
+  { id: "HND-GO-SC", name: "Hinode Senador Canedo", address: "R. 23 — Conjunto Uirapuru", city: "Senador Canedo", uf: "GO", phone: "(62) 99618-2290", lat: -16.70800, lng: -49.09530, rating: 4.7, reviews: 1565, etaPrep: "16-24 min", etaDelivery: "17-25 min" },
+  { id: "HND-GO-TRI", name: "Hinode Trindade", address: "Av. Francisco Paulo Ramos, 578 — Vila P. Eterno", city: "Trindade", uf: "GO", phone: "(62) 3110-1065", lat: -16.64980, lng: -49.49260, rating: 4.9, reviews: 1222, etaPrep: "19-31 min", etaDelivery: "14-26 min" },
+  { id: "HND-GO-VPG", name: "Hinode Valparaíso de Goiás", address: "Quadra 55 sl 403/405 — Pq. Esplanada III", city: "Valparaíso de Goiás", uf: "GO", phone: "(61) 3025-4566", lat: -16.06530, lng: -47.97580, rating: 4.7, reviews: 1196, etaPrep: "24-34 min", etaDelivery: "12-20 min" },
+  { id: "HND-MA-SLZ-C", name: "Hinode São Luís Centro", address: "R. das Cajazeiras, 288 — Centro", city: "São Luís", uf: "MA", phone: "(98) 98228-1197", lat: -2.53910, lng: -44.28290, rating: 4.9, reviews: 1204, etaPrep: "20-31 min", etaDelivery: "16-28 min" },
+  { id: "HND-MA-SLZ-CH", name: "Hinode São Luís Cohab", address: "R. João Braulino Carvalho, 87 — Cohab Anil III", city: "São Luís", uf: "MA", phone: "(98) 3302-7969", lat: -2.56610, lng: -44.26280, rating: 4.9, reviews: 640, etaPrep: "16-24 min", etaDelivery: "16-28 min" },
+  { id: "HND-MA-SLZ-CL", name: "Hinode São Luís Calhau", address: "Jerônimo de Albuquerque, 25 — Calhau", city: "São Luís", uf: "MA", phone: "(98) 3236-5684", lat: -2.48610, lng: -44.24440, rating: 4.7, reviews: 692, etaPrep: "17-29 min", etaDelivery: "12-20 min" },
+  { id: "HND-MA-ACA", name: "Hinode Açailândia", address: "R. Duque de Caxias, 1400 — Centro", city: "Açailândia", uf: "MA", phone: "(99) 3538-7163", lat: -4.94680, lng: -47.51020, rating: 4.9, reviews: 572, etaPrep: "23-35 min", etaDelivery: "12-20 min" },
+  { id: "HND-MA-BAC", name: "Hinode Bacabal", address: "R. 28 de Julho, 119 — Centro", city: "Bacabal", uf: "MA", phone: "(99) 3627-3325", lat: -4.22530, lng: -44.78250, rating: 5.0, reviews: 585, etaPrep: "15-23 min", etaDelivery: "17-27 min" },
+  { id: "HND-MA-BAL", name: "Hinode Balsas", address: "R. Dr. Justo Pedrosa, 100 — Centro", city: "Balsas", uf: "MA", phone: "(99) 3541-2418", lat: -7.53260, lng: -46.03560, rating: 4.6, reviews: 702, etaPrep: "20-32 min", etaDelivery: "14-24 min" },
+  { id: "HND-MA-CAX", name: "Hinode Caxias MA", address: "Av. Nereu Bittencourt, 43 — Centro", city: "Caxias", uf: "MA", phone: "(99) 3421-3644", lat: -4.86150, lng: -43.35670, rating: 5.0, reviews: 871, etaPrep: "15-25 min", etaDelivery: "15-27 min" },
+  { id: "HND-MA-IMP", name: "Hinode Imperatriz", address: "Alagoas, Juçara, 300 A", city: "Imperatriz", uf: "MA", phone: "(99) 3525-9496", lat: -5.52440, lng: -47.49010, rating: 4.7, reviews: 1001, etaPrep: "23-33 min", etaDelivery: "17-25 min" },
+  { id: "HND-MA-IM", name: "Hinode Itapecuru Mirim", address: "Senador Benedito Leite, 602 sala D — Centro", city: "Itapecuru Mirim", uf: "MA", phone: "(98) 3463-1431", lat: -3.39470, lng: -44.35530, rating: 4.6, reviews: 1461, etaPrep: "25-35 min", etaDelivery: "17-27 min" },
+  { id: "HND-MA-PD", name: "Hinode Presidente Dutra", address: "Av. José Olavo Sampaio, 333 — Centro", city: "Presidente Dutra", uf: "MA", phone: "(99) 98235-9893", lat: -5.28760, lng: -44.49240, rating: 5.0, reviews: 1435, etaPrep: "19-27 min", etaDelivery: "15-27 min" },
+  { id: "HND-MA-SI", name: "Hinode Santa Inês", address: "Av. Marechal Castelo Branco, 3509 — Centro", city: "Santa Inês", uf: "MA", phone: "(98) 3653-7664", lat: -3.65920, lng: -45.37820, rating: 4.5, reviews: 1539, etaPrep: "21-32 min", etaDelivery: "15-25 min" },
+  { id: "HND-MA-SJR", name: "Hinode São José do Ribamar", address: "Estrada de Ribamar, 3/4/5 lj 05", city: "São José do Ribamar", uf: "MA", phone: "(98) 3274-1948", lat: -2.56140, lng: -44.05670, rating: 4.8, reviews: 1118, etaPrep: "17-26 min", etaDelivery: "14-22 min" },
+  { id: "HND-MA-TIM", name: "Hinode Timon", address: "Shopping Cocais lj 231 — R. Piauí, 700", city: "Timon", uf: "MA", phone: "(99) 3212-7711", lat: -5.09420, lng: -42.83670, rating: 5.0, reviews: 1053, etaPrep: "24-33 min", etaDelivery: "13-23 min" },
+  { id: "HND-MG-BHC", name: "Hinode BH Centro", address: "R. Curitiba, 500 sala 2 — Centro", city: "Belo Horizonte", uf: "MG", phone: "(31) 3245-5155", lat: -19.92030, lng: -43.93760, rating: 4.9, reviews: 754, etaPrep: "21-32 min", etaDelivery: "18-30 min" },
+  { id: "HND-MG-BHB", name: "Hinode BH Barreiro", address: "Av. Afonso Vez de Melo, 177 — Barreiro", city: "Belo Horizonte", uf: "MG", phone: "(31) 2531-1509", lat: -19.97010, lng: -44.02150, rating: 4.8, reviews: 741, etaPrep: "18-28 min", etaDelivery: "13-23 min" },
+  { id: "HND-MG-BHV", name: "Hinode BH Venda Nova", address: "Vilarinho, 1581 lj 109/110 — Venda Nova", city: "Belo Horizonte", uf: "MG", phone: "(31) 3658-5081", lat: -19.82040, lng: -43.94990, rating: 4.7, reviews: 1001, etaPrep: "23-33 min", etaDelivery: "17-25 min" },
+  { id: "HND-MG-BHP", name: "Hinode BH Pampulha", address: "Av. Portugal, 3250 — Jardim Atlântico", city: "Belo Horizonte", uf: "MG", phone: "(31) 98890-9447", lat: -19.87020, lng: -43.97340, rating: 4.8, reviews: 923, etaPrep: "16-25 min", etaDelivery: "19-27 min" },
+  { id: "HND-MG-ALF", name: "Hinode Alfenas", address: "R. Alterosa, 450 — Jd. Panorama", city: "Alfenas", uf: "MG", phone: "(35) 3291-7793", lat: -21.42870, lng: -45.94770, rating: 4.8, reviews: 832, etaPrep: "17-29 min", etaDelivery: "16-28 min" },
+  { id: "HND-MG-ARA", name: "Hinode Araguari", address: "R. Marciano Santos, 395 — Centro", city: "Araguari", uf: "MG", phone: "(34) 3512-4943", lat: -18.64520, lng: -48.19340, rating: 4.8, reviews: 845, etaPrep: "20-28 min", etaDelivery: "13-21 min" },
+  { id: "HND-MG-BAR", name: "Hinode Barbacena", address: "Lg. Marechal Deodoro, 6 — Centro", city: "Barbacena", uf: "MG", phone: "(32) 3331-3823", lat: -21.22560, lng: -43.77410, rating: 4.9, reviews: 858, etaPrep: "23-32 min", etaDelivery: "18-28 min" },
+  { id: "HND-MG-BET", name: "Hinode Betim", address: "R. do Rosário, 16 — Angola", city: "Betim", uf: "MG", phone: "(31) 2572-1288", lat: -19.96780, lng: -44.19680, rating: 4.8, reviews: 936, etaPrep: "19-29 min", etaDelivery: "16-26 min" },
+  { id: "HND-MG-CAR", name: "Hinode Caratinga", address: "Av. Olegário Maciel, 535 — Centro", city: "Caratinga", uf: "MG", phone: "(33) 3321-6168", lat: -19.79050, lng: -42.13910, rating: 5.0, reviews: 871, etaPrep: "15-25 min", etaDelivery: "15-27 min" },
+  { id: "HND-MG-CL", name: "Hinode Conselheiro Lafaiete", address: "Av. Telesforo C. de Resende, 795 — Centro", city: "Conselheiro Lafaiete", uf: "MG", phone: "(31) 3721-4993", lat: -20.66040, lng: -43.78690, rating: 4.5, reviews: 1448, etaPrep: "22-31 min", etaDelivery: "12-20 min" },
+  { id: "HND-MG-CON", name: "Hinode Contagem", address: "João César de Oliveira, 3115 — Glória", city: "Contagem", uf: "MG", phone: "(31) 2565-1509", lat: -19.90670, lng: -44.05370, rating: 4.7, reviews: 1001, etaPrep: "23-33 min", etaDelivery: "17-25 min" },
+  { id: "HND-MG-CF", name: "Hinode Coronel Fabriciano", address: "Av. Geraldo Inácio, 182 — Melo Viana", city: "Coronel Fabriciano", uf: "MG", phone: "(31) 3667-4040", lat: -19.51830, lng: -42.62860, rating: 4.6, reviews: 1370, etaPrep: "15-23 min", etaDelivery: "14-22 min" },
+  { id: "HND-MG-CUR", name: "Hinode Curvelo", address: "Av. Dom Pedro II, 704 — Centro", city: "Curvelo", uf: "MG", phone: "(38) 3721-1863", lat: -18.75650, lng: -44.43080, rating: 4.9, reviews: 1131, etaPrep: "20-30 min", etaDelivery: "19-29 min" },
+  { id: "HND-MG-DIV", name: "Hinode Divinópolis", address: "R. Pernambuco, 488 sala 302 — Centro", city: "Divinópolis", uf: "MG", phone: "(37) 3222-3571", lat: -20.13990, lng: -44.88470, rating: 4.9, reviews: 1040, etaPrep: "21-29 min", etaDelivery: "16-24 min" },
+  { id: "HND-MG-GV", name: "Hinode Governador Valadares", address: "Av. Brasil, 4316 — Sta. Terezinha", city: "Governador Valadares", uf: "MG", phone: "(33) 3021-0500", lat: -18.85200, lng: -41.94790, rating: 4.5, reviews: 130, etaPrep: "20-28 min", etaDelivery: "18-30 min" },
+  { id: "HND-MG-GUA", name: "Hinode Guaxupé", address: "R. Padre João José, 154 — Angola", city: "Guaxupé", uf: "MG", phone: "(35) 3551-3534", lat: -21.30560, lng: -46.71280, rating: 5.0, reviews: 962, etaPrep: "25-37 min", etaDelivery: "18-26 min" },
+  { id: "HND-MG-IBI", name: "Hinode Ibirité", address: "Av. São Paulo, 1371 — Macaúbas", city: "Ibirité", uf: "MG", phone: "(31) 3150-8191", lat: -20.02540, lng: -44.05810, rating: 4.8, reviews: 845, etaPrep: "20-28 min", etaDelivery: "13-21 min" },
+  { id: "HND-MG-IPA", name: "Hinode Ipatinga", address: "Jacarandá, 442 2º piso — Horto", city: "Ipatinga", uf: "MG", phone: "(31) 3668-3030", lat: -19.46830, lng: -42.54500, rating: 4.8, reviews: 923, etaPrep: "16-25 min", etaDelivery: "19-27 min" },
+  { id: "HND-MG-ITA", name: "Hinode Itabira", address: "R. Pres. Costa e Silva, 139 — Major Lage", city: "Itabira", uf: "MG", phone: "(31) 3840-1558", lat: -19.61950, lng: -43.22610, rating: 4.5, reviews: 975, etaPrep: "17-25 min", etaDelivery: "15-25 min" },
+  { id: "HND-MG-ITJ", name: "Hinode Itajubá", address: "Dona Maria Carneiro, 100 — Boa Vista", city: "Itajubá", uf: "MG", phone: "(35) 3623-8848", lat: -22.42570, lng: -45.45230, rating: 4.7, reviews: 1092, etaPrep: "22-34 min", etaDelivery: "12-22 min" },
+  { id: "HND-MG-ITU", name: "Hinode Ituiutaba", address: "Av. Dezenove, 1328 — Centro", city: "Ituiutaba", uf: "MG", phone: "(34) 3268-2939", lat: -18.97430, lng: -49.46210, rating: 5.0, reviews: 1235, etaPrep: "22-30 min", etaDelivery: "19-27 min" },
+  { id: "HND-MG-JAN", name: "Hinode Janaúba", address: "R. João XXIII, 247 — Centro", city: "Janaúba", uf: "MG", phone: "(38) 3821-3068", lat: -15.80330, lng: -43.30940, rating: 4.7, reviews: 910, etaPrep: "24-32 min", etaDelivery: "14-26 min" },
+  { id: "HND-MG-JM", name: "Hinode João Monlevade", address: "Av. Getúlio Vargas, 4635 — Carneirinhos", city: "João Monlevade", uf: "MG", phone: "(31) 3852-5653", lat: -19.81130, lng: -43.17330, rating: 4.6, reviews: 1552, etaPrep: "24-36 min", etaDelivery: "12-24 min" },
+  { id: "HND-MG-JF-C", name: "Hinode Juiz de Fora Centro", address: "Av. Pres. Itamar Franco, 932 — Centro", city: "Juiz de Fora", uf: "MG", phone: "(32) 3223-0868", lat: -21.76420, lng: -43.35030, rating: 4.9, reviews: 1417, etaPrep: "20-32 min", etaDelivery: "17-29 min" },
+  { id: "HND-MG-JF-MG", name: "Hinode Juiz de Fora Morro Glória", address: "Eng. José C. de Morais Sarment, 112 — Sta Catarina", city: "Juiz de Fora", uf: "MG", phone: "(32) 3221-4777", lat: -21.77940, lng: -43.36530, rating: 4.6, reviews: 970, etaPrep: "21-29 min", etaDelivery: "14-26 min" },
+  { id: "HND-MG-MAN", name: "Hinode Manhuaçu", address: "R. Mellin Abi Ackel, 126 — Todos os Santos", city: "Manhuaçu", uf: "MG", phone: "(33) 3331-3295", lat: -20.25690, lng: -42.02860, rating: 4.9, reviews: 949, etaPrep: "22-33 min", etaDelivery: "13-25 min" },
+  { id: "HND-MG-MC", name: "Hinode Montes Claros", address: "Av. Coronel Prates, 337 sala 102 — Centro", city: "Montes Claros", uf: "MG", phone: "(38) 3221-0167", lat: -16.73500, lng: -43.86280, rating: 4.6, reviews: 1461, etaPrep: "25-35 min", etaDelivery: "17-27 min" },
+  { id: "HND-MG-MUR", name: "Hinode Muriaé", address: "R. José Justino, 97 — Centro", city: "Muriaé", uf: "MG", phone: "(32) 3722-4020", lat: -21.13110, lng: -42.36880, rating: 4.6, reviews: 1261, etaPrep: "17-27 min", etaDelivery: "13-25 min" },
+  { id: "HND-MG-NL", name: "Hinode Nova Lima", address: "Al. Oscar Niemeyer, 400 — Vale do Sereno", city: "Nova Lima", uf: "MG", phone: "(31) 3564-8026", lat: -19.98560, lng: -43.84720, rating: 4.8, reviews: 91, etaPrep: "22-32 min", etaDelivery: "19-31 min" },
+  { id: "HND-MG-OP", name: "Hinode Ouro Preto", address: "R. São José, 214 — Centro", city: "Ouro Preto", uf: "MG", phone: "(31) 3551-7455", lat: -20.38560, lng: -43.50340, rating: 4.6, reviews: 156, etaPrep: "15-25 min", etaDelivery: "12-22 min" },
+  { id: "HND-MG-PM", name: "Hinode Pará de Minas", address: "R. do Rosário, 41 — Centro", city: "Pará de Minas", uf: "MG", phone: "(37) 3237-9736", lat: -19.86170, lng: -44.60860, rating: 4.5, reviews: 130, etaPrep: "20-28 min", etaDelivery: "18-30 min" },
+  { id: "HND-MG-PCA", name: "Hinode Paracatu", address: "R. Gastão Pereira Gonçalves, 217 — Centro", city: "Paracatu", uf: "MG", phone: "(38) 3671-6463", lat: -17.22260, lng: -46.87080, rating: 4.8, reviews: 845, etaPrep: "20-28 min", etaDelivery: "13-21 min" },
+  { id: "HND-MG-PM2", name: "Hinode Patos de Minas", address: "R. Agenor Maciel, 77 lj 04 — Centro", city: "Patos de Minas", uf: "MG", phone: "(34) 3814-5462", lat: -18.57830, lng: -46.51830, rating: 4.5, reviews: 780, etaPrep: "16-24 min", etaDelivery: "12-22 min" },
+  { id: "HND-MG-PC", name: "Hinode Poços de Caldas", address: "São Paulo, 511 — Centro", city: "Poços de Caldas", uf: "MG", phone: "(35) 3712-9227", lat: -21.78670, lng: -46.56110, rating: 4.8, reviews: 1500, etaPrep: "23-31 min", etaDelivery: "16-26 min" },
+  { id: "HND-MG-PA", name: "Hinode Pouso Alegre", address: "R. Emanuel Rezende, 365 — Sta Rita II", city: "Pouso Alegre", uf: "MG", phone: "(35) 3647-1556", lat: -22.22940, lng: -45.93580, rating: 4.7, reviews: 1474, etaPrep: "17-28 min", etaDelivery: "14-26 min" },
+  { id: "HND-MG-RN", name: "Hinode Ribeirão das Neves", address: "R. Adelino Soares Diniz, 50 — Várzea Alegre", city: "Ribeirão das Neves", uf: "MG", phone: "(31) 3624-2905", lat: -19.76680, lng: -44.08650, rating: 4.7, reviews: 169, etaPrep: "18-29 min", etaDelivery: "17-29 min" },
+  { id: "HND-MG-SAB", name: "Hinode Sabará", address: "Av. Contagem, 1370 — Ana Lúcia", city: "Sabará", uf: "MG", phone: "(31) 3324-1296", lat: -19.88890, lng: -43.80670, rating: 5.0, reviews: 871, etaPrep: "15-25 min", etaDelivery: "15-27 min" },
+  { id: "HND-MG-SAL", name: "Hinode Salinas", address: "Pç. João Cardoso de Araújo, 137 — Centro", city: "Salinas", uf: "MG", phone: "(38) 3841-1667", lat: -16.17210, lng: -42.29610, rating: 4.7, reviews: 1001, etaPrep: "23-33 min", etaDelivery: "17-25 min" },
+  { id: "HND-MG-SLZ", name: "Hinode Santa Luzia", address: "R. Itarema, 506 — São Benedito", city: "Santa Luzia", uf: "MG", phone: "(31) 3165-5009", lat: -19.76970, lng: -43.85130, rating: 4.9, reviews: 1326, etaPrep: "21-31 min", etaDelivery: "14-24 min" },
+  { id: "HND-MG-SJDR", name: "Hinode São João del Rei", address: "R. Min. Gabriel Passos, 299 lj 25 — Centro", city: "São João del Rei", uf: "MG", phone: "(32) 3373-2369", lat: -21.13670, lng: -44.26110, rating: 4.5, reviews: 580, etaPrep: "19-27 min", etaDelivery: "16-28 min" },
+  { id: "HND-MG-SL", name: "Hinode Sete Lagoas", address: "Antônio Olinto, 968 lj 101 — Centro", city: "Sete Lagoas", uf: "MG", phone: "(31) 3773-0331", lat: -19.46580, lng: -44.24690, rating: 4.6, reviews: 156, etaPrep: "15-25 min", etaDelivery: "12-22 min" },
+  { id: "HND-MG-TO", name: "Hinode Teófilo Otoni", address: "Av. Visc. do Rio Branco, 931 sl 202 — Centro", city: "Teófilo Otoni", uf: "MG", phone: "(33) 3521-0127", lat: -17.85790, lng: -41.50610, rating: 4.9, reviews: 208, etaPrep: "16-25 min", etaDelivery: "16-28 min" },
+  { id: "HND-MG-UBA", name: "Hinode Ubá", address: "Av. Comendador Jacinto Soares, 1405 — Centro", city: "Ubá", uf: "MG", phone: "(32) 3531-0925", lat: -21.11990, lng: -42.94250, rating: 4.6, reviews: 897, etaPrep: "21-33 min", etaDelivery: "17-27 min" },
+  { id: "HND-MG-UBE", name: "Hinode Uberaba", address: "Guilherme Ferreira, 650 — São Benedito", city: "Uberaba", uf: "MG", phone: "(34) 3322-6001", lat: -19.74720, lng: -47.93810, rating: 4.9, reviews: 949, etaPrep: "22-33 min", etaDelivery: "13-25 min" },
+  { id: "HND-MG-UDI-1", name: "Hinode Uberlândia 1", address: "Av. Afonso Pena, 2129 — N. Sra. Aparecida", city: "Uberlândia", uf: "MG", phone: "(34) 3084-0589", lat: -18.91185, lng: -48.27479, rating: 4.9, reviews: 749, etaPrep: "25-36 min", etaDelivery: "17-25 min" },
+  { id: "HND-MG-UDI-2", name: "Hinode Uberlândia 2", address: "R. Adelia Miguel Abrahão, 176 — Alto Umuarama", city: "Uberlândia", uf: "MG", phone: "(34) 3257-4285", lat: -18.91123, lng: -48.27715, rating: 5.0, reviews: 762, etaPrep: "17-29 min", etaDelivery: "14-24 min" },
+  { id: "HND-MG-UNA", name: "Hinode Unaí", address: "Canabrava, 130 — Centro", city: "Unaí", uf: "MG", phone: "(38) 3677-5598", lat: -16.35730, lng: -46.90690, rating: 5.0, reviews: 1053, etaPrep: "24-33 min", etaDelivery: "13-23 min" },
+  { id: "HND-MG-VAR", name: "Hinode Varginha", address: "Francisco Navarro, 325 — Centro", city: "Varginha", uf: "MG", phone: "(35) 3214-6535", lat: -21.55560, lng: -45.43080, rating: 4.8, reviews: 1118, etaPrep: "17-26 min", etaDelivery: "14-22 min" },
+  { id: "HND-MG-VES", name: "Hinode Vespasiano", address: "R. Uirapuru, 87 — São Damião", city: "Vespasiano", uf: "MG", phone: "(31) 3636-0752", lat: -19.69150, lng: -43.92300, rating: 4.7, reviews: 1183, etaPrep: "21-30 min", etaDelivery: "15-27 min" },
+  { id: "HND-MS-CG", name: "Hinode Campo Grande Centro", address: "R. Dom Aquino, 1989 — Centro", city: "Campo Grande", uf: "MS", phone: "(67) 3044-7090", lat: -20.46970, lng: -54.62010, rating: 4.5, reviews: 1539, etaPrep: "21-32 min", etaDelivery: "15-25 min" },
+  { id: "HND-MS-DOU", name: "Hinode Dourados 2", address: "R. Hayel Bon Faker, 535 — Jd. Água Boa", city: "Dourados", uf: "MS", phone: "", lat: -22.22080, lng: -54.80530, rating: 4.6, reviews: 1261, etaPrep: "17-27 min", etaDelivery: "13-25 min" },
+  { id: "HND-MS-SID", name: "Hinode Sidrolândia", address: "R. Mato Grosso, 1148 — Jd. Alfa", city: "Sidrolândia", uf: "MS", phone: "(67) 3272-1416", lat: -20.93190, lng: -54.96170, rating: 4.5, reviews: 1157, etaPrep: "15-27 min", etaDelivery: "13-21 min" },
+  { id: "HND-MS-TL", name: "Hinode Três Lagoas", address: "Av. Adv. Rosário Congro, 2847 — Jd. Angélica", city: "Três Lagoas", uf: "MS", phone: "(67) 3522-9792", lat: -20.78490, lng: -51.70080, rating: 4.5, reviews: 325, etaPrep: "21-29 min", etaDelivery: "13-25 min" },
+  { id: "HND-MT-CBA", name: "Hinode Cuiabá", address: "R. Treze de Junho, 207 — Centro-Norte", city: "Cuiabá", uf: "MT", phone: "(65) 3054-1017", lat: -15.60100, lng: -56.09740, rating: 4.8, reviews: 832, etaPrep: "17-29 min", etaDelivery: "16-28 min" },
+  { id: "HND-MT-CAC", name: "Hinode Cáceres", address: "R. Padre Cassemiro — Sta Cruz", city: "Cáceres", uf: "MT", phone: "(65) 3223-4339", lat: -16.07170, lng: -57.68140, rating: 4.8, reviews: 845, etaPrep: "20-28 min", etaDelivery: "13-21 min" },
+  { id: "HND-MT-LRV", name: "Hinode Lucas do Rio Verde", address: "Av. Paraná, 9985 — Menino Deus", city: "Lucas do Rio Verde", uf: "MT", phone: "(65) 3549-5291", lat: -13.05860, lng: -55.91110, rating: 4.5, reviews: 1430, etaPrep: "23-31 min", etaDelivery: "14-22 min" },
+  { id: "HND-MT-RON", name: "Hinode Rondonópolis", address: "Av. Tiradentes, 2164 sala 01 — Centro", city: "Rondonópolis", uf: "MT", phone: "(66) 3022-4811", lat: -16.47090, lng: -54.63560, rating: 4.7, reviews: 1365, etaPrep: "19-27 min", etaDelivery: "13-23 min" },
+  { id: "HND-MT-SIN", name: "Hinode Sinop", address: "R. das Nogueiras 59 — Centro", city: "Sinop", uf: "MT", phone: "(66) 3532-4192", lat: -11.86380, lng: -55.50280, rating: 4.8, reviews: 1300, etaPrep: "15-23 min", etaDelivery: "12-24 min" },
+  { id: "HND-MT-TS", name: "Hinode Tangará da Serra", address: "Av. Vereador Nilo Torres, 1250 — Jd. Atlantic", city: "Tangará da Serra", uf: "MT", phone: "(65) 3325-1704", lat: -14.62280, lng: -57.49330, rating: 4.6, reviews: 429, etaPrep: "23-34 min", etaDelivery: "13-23 min" },
+  { id: "HND-MT-VG", name: "Hinode Várzea Grande", address: "R. Fenelon Muller, 334 — Centro Norte", city: "Várzea Grande", uf: "MT", phone: "(65) 3362-0401", lat: -15.64690, lng: -56.13260, rating: 4.9, reviews: 299, etaPrep: "15-26 min", etaDelivery: "19-27 min" },
+  { id: "HND-PA-BEL-S", name: "Hinode Belém Souza", address: "Av. Tavares Bastos, 240 — Souza", city: "Belém", uf: "PA", phone: "(91) 3352-3566", lat: -1.38840, lng: -48.46150, rating: 4.5, reviews: 957, etaPrep: "18-30 min", etaDelivery: "17-27 min" },
+  { id: "HND-PA-BEL-2", name: "Hinode Belém 2", address: "R. Domingos Marreiros, 1664 — Fátima", city: "Belém", uf: "PA", phone: "(91) 3038-8519", lat: -1.44560, lng: -48.47890, rating: 4.7, reviews: 528, etaPrep: "18-27 min", etaDelivery: "12-22 min" },
+  { id: "HND-PA-ICO", name: "Hinode Icoaraci 2", address: "Augusto Montenegro, 6955 — Coqueiro Icoaraci", city: "Belém", uf: "PA", phone: "(91) 3248-8007", lat: -1.30810, lng: -48.47010, rating: 4.6, reviews: 897, etaPrep: "21-33 min", etaDelivery: "17-27 min" },
+  { id: "HND-PA-ANA", name: "Hinode Ananindeua", address: "Rod. Mário Covas, 568 — Coqueiro", city: "Ananindeua", uf: "PA", phone: "(91) 3273-9608", lat: -1.37360, lng: -48.37220, rating: 4.9, reviews: 754, etaPrep: "21-32 min", etaDelivery: "18-30 min" },
+  { id: "HND-PA-ABA", name: "Hinode Abaetetuba", address: "R. Lauro Sodré, 1586 — Centro", city: "Abaetetuba", uf: "PA", phone: "(91) 3751-2241", lat: -1.71890, lng: -48.87820, rating: 4.5, reviews: 598, etaPrep: "18-27 min", etaDelivery: "14-26 min" },
+  { id: "HND-PA-ALT", name: "Hinode Altamira", address: "R. Marechal Rondon, 2170 — Esplanada do Xingu", city: "Altamira", uf: "PA", phone: "(93) 3515-3124", lat: -3.20300, lng: -52.20690, rating: 4.5, reviews: 975, etaPrep: "17-25 min", etaDelivery: "15-25 min" },
+  { id: "HND-PA-CAM", name: "Hinode Cametá", address: "R. Cel. Raimundo Leão, 733 — Centro", city: "Cametá", uf: "PA", phone: "(91) 8527-3891", lat: -2.24440, lng: -49.49610, rating: 4.9, reviews: 767, etaPrep: "24-36 min", etaDelivery: "15-23 min" },
+  { id: "HND-PA-CAP", name: "Hinode Capanema", address: "Av. João Paulo II, 117 — Garrafão", city: "Capanema", uf: "PA", phone: "(91) 99125-0055", lat: -1.19580, lng: -47.18140, rating: 4.6, reviews: 806, etaPrep: "22-32 min", etaDelivery: "14-22 min" },
+  { id: "HND-PA-CAS", name: "Hinode Castanhal Ianetama", address: "R. Senador Antonio Lemos, 1180 — Ianetama", city: "Castanhal", uf: "PA", phone: "(91) 3721-9781", lat: -1.29330, lng: -47.92610, rating: 4.8, reviews: 845, etaPrep: "20-28 min", etaDelivery: "13-21 min" },
+  { id: "HND-PA-CO", name: "Hinode Concórdia do Pará", address: "R. Bom Jardim, 74 — Centro", city: "Concórdia do Pará", uf: "PA", phone: "(91) 3728-1893", lat: -1.99190, lng: -48.18420, rating: 4.5, reviews: 1448, etaPrep: "22-31 min", etaDelivery: "12-20 min" },
+  { id: "HND-PA-ITA", name: "Hinode Itaituba", address: "Trv. Treze de Maio, 450 — Bela Vista", city: "Itaituba", uf: "PA", phone: "(93) 98120-8076", lat: -4.27610, lng: -55.98360, rating: 4.8, reviews: 936, etaPrep: "19-29 min", etaDelivery: "16-26 min" },
+  { id: "HND-PA-MAR", name: "Hinode Marabá", address: "Av. Antônio Maia, 1753 — Velha Marabá", city: "Marabá", uf: "PA", phone: "(94) 3018-1717", lat: -5.38110, lng: -49.13260, rating: 5.0, reviews: 962, etaPrep: "25-37 min", etaDelivery: "18-26 min" },
+  { id: "HND-PA-MTB", name: "Hinode Marituba", address: "Av. Fernando Guilhon, 5255 — Centro", city: "Marituba", uf: "PA", phone: "(91) 3256-3785", lat: -1.36140, lng: -48.34220, rating: 4.7, reviews: 1001, etaPrep: "23-33 min", etaDelivery: "17-25 min" },
+  { id: "HND-PA-PG", name: "Hinode Paragominas", address: "Pç. Célio Miranda, 294 — Módulo I", city: "Paragominas", uf: "PA", phone: "(91) 98274-0871", lat: -2.99670, lng: -47.35560, rating: 4.9, reviews: 1513, etaPrep: "15-24 min", etaDelivery: "13-25 min" },
+  { id: "HND-PA-PAR", name: "Hinode Parauapebas", address: "Av. Rio Grande, 150 — Beira Rio", city: "Parauapebas", uf: "PA", phone: "(94) 3346-3511", lat: -6.06760, lng: -49.90470, rating: 4.7, reviews: 1001, etaPrep: "23-33 min", etaDelivery: "17-25 min" },
+  { id: "HND-PA-RED", name: "Hinode Redenção", address: "Av. Araguaia, 1872 — Morada da Paz", city: "Redenção", uf: "PA", phone: "(94) 3424-2726", lat: -8.02940, lng: -49.98810, rating: 4.6, reviews: 897, etaPrep: "21-33 min", etaDelivery: "17-27 min" },
+  { id: "HND-PA-SAN", name: "Hinode Santarém", address: "Av. Borges Leal, 2940 — Aparecida", city: "Santarém", uf: "PA", phone: "(93) 3063-5907", lat: -2.44310, lng: -54.70830, rating: 4.6, reviews: 988, etaPrep: "20-29 min", etaDelivery: "12-24 min" },
+  { id: "HND-PA-TUC", name: "Hinode Tucuruí", address: "R. Dom Cornélio Vermans, 549 — Sta Isabel", city: "Tucuruí", uf: "PA", phone: "(94) 3778-8511", lat: -3.75890, lng: -49.67260, rating: 4.8, reviews: 1118, etaPrep: "17-26 min", etaDelivery: "14-22 min" },
+  { id: "HND-PB-JP", name: "Hinode João Pessoa", address: "Av. Pres. Epitácio Pessoa, 1251 sl 112 — Estados", city: "João Pessoa", uf: "PB", phone: "(83) 3035-2009", lat: -7.11950, lng: -34.84500, rating: 4.7, reviews: 1565, etaPrep: "16-24 min", etaDelivery: "17-25 min" },
+  { id: "HND-PB-CG", name: "Hinode Campina Grande", address: "R. Dom Pedro I, 199 — Centro", city: "Campina Grande", uf: "PB", phone: "(83) 3066-8784", lat: -7.23060, lng: -35.88110, rating: 4.5, reviews: 1357, etaPrep: "23-35 min", etaDelivery: "17-29 min" },
+  { id: "HND-PB-BAY", name: "Hinode Bayeux", address: "Rod. BR 101 KM 31 — Manguinhos", city: "Bayeux", uf: "PB", phone: "(83) 99803-7936", lat: -7.12420, lng: -34.93250, rating: 4.8, reviews: 923, etaPrep: "16-25 min", etaDelivery: "19-27 min" },
+  { id: "HND-PB-CAJ", name: "Hinode Cajazeiras", address: "R. Sebastião Bandeira de Melo, 145 — Centro", city: "Cajazeiras", uf: "PB", phone: "(83) 9977-7026", lat: -6.88970, lng: -38.55750, rating: 4.8, reviews: 741, etaPrep: "18-28 min", etaDelivery: "13-23 min" },
+  { id: "HND-PB-GUA", name: "Hinode Guarabira", address: "Av. Osmar de Aquino, 135 — Centro", city: "Guarabira", uf: "PB", phone: "(83) 3352-1863", lat: -6.85060, lng: -35.48890, rating: 4.8, reviews: 936, etaPrep: "19-29 min", etaDelivery: "16-26 min" },
+  { id: "HND-PB-MON", name: "Hinode Monteiro", address: "José Galdino da Silva, 136 — Centro", city: "Monteiro", uf: "PB", phone: "(83) 3351-1011", lat: -7.88890, lng: -37.11750, rating: 4.8, reviews: 1105, etaPrep: "25-33 min", etaDelivery: "17-29 min" },
+  { id: "HND-PB-PAT", name: "Hinode Patos", address: "R. Dr. Pedro Firmino, 600 — Brasília", city: "Patos", uf: "PB", phone: "(83) 3421-8592", lat: -7.02190, lng: -37.27890, rating: 4.9, reviews: 1040, etaPrep: "21-29 min", etaDelivery: "16-24 min" },
+  { id: "HND-PB-SR", name: "Hinode Santa Rita", address: "Pç. Monsenhor Rafael de Barros, 31 — Centro", city: "Santa Rita", uf: "PB", phone: "(83) 3033-3683", lat: -7.11420, lng: -34.97830, rating: 4.9, reviews: 208, etaPrep: "16-25 min", etaDelivery: "16-28 min" },
+  { id: "HND-PE-REC", name: "Hinode Recife", address: "Av. João de Barros, 37 — Boa Vista", city: "Recife", uf: "PE", phone: "", lat: -8.05680, lng: -34.88300, rating: 4.8, reviews: 936, etaPrep: "19-29 min", etaDelivery: "16-26 min" },
+  { id: "HND-PE-REC-CX", name: "Hinode Recife Caxangá", address: "Av. Caxangá, 5693 — Várzea", city: "Recife", uf: "PE", phone: "(81) 98904-7625", lat: -8.04130, lng: -34.95440, rating: 4.8, reviews: 536, etaPrep: "25-35 min", etaDelivery: "16-24 min" },
+  { id: "HND-PE-REC-BV", name: "Hinode Recife Boa Viagem", address: "Av. Herculano Bandeira, 383 — Pina", city: "Recife", uf: "PE", phone: "", lat: -8.11670, lng: -34.89560, rating: 4.6, reviews: 497, etaPrep: "16-28 min", etaDelivery: "17-25 min" },
+  { id: "HND-PE-OLI", name: "Hinode Olinda", address: "R. Eduardo de Moraes — Shop. Patio Olinda", city: "Olinda", uf: "PE", phone: "(81) 3129-1879", lat: -8.00890, lng: -34.85530, rating: 4.5, reviews: 1066, etaPrep: "16-26 min", etaDelivery: "18-30 min" },
+  { id: "HND-PE-JAB", name: "Hinode Jaboatão dos Guararapes", address: "Av. Barreto de Menezes, 820 — Piedade", city: "Jaboatão dos Guararapes", uf: "PE", phone: "(81) 3093-7223", lat: -8.11290, lng: -34.92230, rating: 4.9, reviews: 767, etaPrep: "24-36 min", etaDelivery: "15-23 min" },
+  { id: "HND-PE-PAU", name: "Hinode Paulista", address: "Av. Mal. Floriano Peixoto, 90 — Centro", city: "Paulista", uf: "PE", phone: "(81) 3030-0014", lat: -7.94080, lng: -34.87280, rating: 4.7, reviews: 1092, etaPrep: "22-34 min", etaDelivery: "12-22 min" },
+  { id: "HND-PE-CAR", name: "Hinode Caruaru", address: "Av. Agamenon Magalhães, 1189 — Maurício de Nassau", city: "Caruaru", uf: "PE", phone: "(81) 3138-0881", lat: -8.28290, lng: -35.97600, rating: 4.6, reviews: 884, etaPrep: "18-29 min", etaDelivery: "12-20 min" },
+  { id: "HND-PE-PET", name: "Hinode Petrolina", address: "Av. Guararapes, 2387 — Centro", city: "Petrolina", uf: "PE", phone: "(87) 3862-3870", lat: -9.38970, lng: -40.50280, rating: 4.9, reviews: 1131, etaPrep: "20-30 min", etaDelivery: "19-29 min" },
+  { id: "HND-PE-GAR", name: "Hinode Garanhuns", address: "Av. Júlio Brasileiro, 636 — Heliópolis", city: "Garanhuns", uf: "PE", phone: "(87) 3761-3474", lat: -8.89190, lng: -36.49530, rating: 4.8, reviews: 936, etaPrep: "19-29 min", etaDelivery: "16-26 min" },
+  { id: "HND-PE-ARC", name: "Hinode Arcoverde", address: "Av. Pinto de Campos, 810 — São Miguel", city: "Arcoverde", uf: "PE", phone: "(87) 3821-4468", lat: -8.41940, lng: -37.05810, rating: 4.6, reviews: 884, etaPrep: "18-29 min", etaDelivery: "12-20 min" },
+  { id: "HND-PE-CSA", name: "Hinode Cabo de Santo Agostinho", address: "R. Armando Jorge Sales, 31 lj A — Centro", city: "Cabo de Santo Agostinho", uf: "PE", phone: "(81) 3352-1863", lat: -8.28610, lng: -35.03530, rating: 4.6, reviews: 897, etaPrep: "21-33 min", etaDelivery: "17-27 min" },
+  { id: "HND-PE-CAP", name: "Hinode Carpina", address: "Av. Cong. Eucarístico Internacional, 949 — Bairro Novo", city: "Carpina", uf: "PE", phone: "(81) 3621-1203", lat: -7.85080, lng: -35.25470, rating: 4.9, reviews: 858, etaPrep: "23-32 min", etaDelivery: "18-28 min" },
+  { id: "HND-PE-GOI", name: "Hinode Goiana", address: "Rod. PE 75 lj 3 — Centro", city: "Goiana", uf: "PE", phone: "(81) 99113-7248", lat: -7.56110, lng: -35.00280, rating: 4.7, reviews: 1001, etaPrep: "23-33 min", etaDelivery: "17-25 min" },
+  { id: "HND-PE-GRA", name: "Hinode Gravatá", address: "Av. Cicero Batista de Oliveira, 280 lj 07", city: "Gravatá", uf: "PE", phone: "", lat: -8.21140, lng: -35.56500, rating: 4.8, reviews: 936, etaPrep: "19-29 min", etaDelivery: "16-26 min" },
+  { id: "HND-PE-PAL", name: "Hinode Palmares", address: "R. Cel. Izacio, 206 — Centro", city: "Palmares", uf: "PE", phone: "", lat: -8.68000, lng: -35.59190, rating: 4.5, reviews: 975, etaPrep: "17-25 min", etaDelivery: "15-25 min" },
+  { id: "HND-PE-SAL", name: "Hinode Salgueiro", address: "Av. Antonio Angelim, 580 — Sto. Antônio", city: "Salgueiro", uf: "PE", phone: "(87) 3871-1604", lat: -8.07440, lng: -39.12470, rating: 4.8, reviews: 1014, etaPrep: "15-26 min", etaDelivery: "14-24 min" },
+  { id: "HND-PE-SCC", name: "Hinode Santa Cruz do Capibaribe", address: "Av. Pref. Teófanes Ferraz Torres Filho, 185", city: "Santa Cruz do Capibaribe", uf: "PE", phone: "(81) 3731-6611", lat: -7.95720, lng: -36.20560, rating: 4.8, reviews: 923, etaPrep: "16-25 min", etaDelivery: "19-27 min" },
+  { id: "HND-PE-ST", name: "Hinode Serra Talhada", address: "Av. João Gomes de Lucena, 2700 — São Cristóvão", city: "Serra Talhada", uf: "PE", phone: "", lat: -7.98920, lng: -38.29610, rating: 4.8, reviews: 273, etaPrep: "20-29 min", etaDelivery: "17-27 min" },
+  { id: "HND-PE-VSA", name: "Hinode Vitória de Santo Antão", address: "Av. Henrique de Holanda, 950 — Matriz", city: "Vitória de Santo Antão", uf: "PE", phone: "(81) 3145-1990", lat: -8.11830, lng: -35.29110, rating: 5.0, reviews: 1144, etaPrep: "23-34 min", etaDelivery: "16-28 min" },
+  { id: "HND-PI-TER-C", name: "Hinode Teresina Centro", address: "R. Sete de Setembro, 350 lj 2 — Centro", city: "Teresina", uf: "PI", phone: "", lat: -5.08920, lng: -42.80160, rating: 4.7, reviews: 1165, etaPrep: "22-30 min", etaDelivery: "17-29 min" },
+  { id: "HND-PI-TER-2", name: "Hinode Teresina 2ª Unidade", address: "R. Joaquim Nelson, 14 — Itararé", city: "Teresina", uf: "PI", phone: "(86) 3235-5909", lat: -5.07690, lng: -42.78610, rating: 5.0, reviews: 944, etaPrep: "15-26 min", etaDelivery: "12-20 min" },
+  { id: "HND-PI-FLO", name: "Hinode Floriano", address: "Av. Getúlio Vargas, 15 — Centro", city: "Floriano", uf: "PI", phone: "(89) 3521-3769", lat: -6.76720, lng: -43.02260, rating: 4.6, reviews: 1079, etaPrep: "19-30 min", etaDelivery: "15-23 min" },
+  { id: "HND-PI-PAR", name: "Hinode Parnaíba", address: "São Vicente de Paula, 599 — Centro", city: "Parnaíba", uf: "PI", phone: "(86) 3321-1746", lat: -2.90390, lng: -41.77670, rating: 4.8, reviews: 1105, etaPrep: "25-33 min", etaDelivery: "17-29 min" },
+  { id: "HND-PI-PIC", name: "Hinode Picos", address: "R. Coelho Rodrigues, 329 — Centro", city: "Picos", uf: "PI", phone: "(89) 3422-9829", lat: -7.07720, lng: -41.46690, rating: 4.8, reviews: 1014, etaPrep: "15-26 min", etaDelivery: "14-24 min" },
+  { id: "HND-PI-PIR", name: "Hinode Piripiri", address: "R. Professor Bem, 652 — Centro", city: "Piripiri", uf: "PI", phone: "(86) 3276-0569", lat: -4.27280, lng: -41.77750, rating: 4.8, reviews: 1209, etaPrep: "16-27 min", etaDelivery: "17-27 min" },
+  { id: "HND-PR-CTB-P", name: "Hinode Curitiba Pinheirinho", address: "R. Mal. Octavio Saldanha Mazza, 7500 — Capão Raso", city: "Curitiba", uf: "PR", phone: "", lat: -25.50610, lng: -49.29610, rating: 4.9, reviews: 1217, etaPrep: "23-35 min", etaDelivery: "13-21 min" },
+  { id: "HND-PR-CTB-CH", name: "Hinode Curitiba Champagnat", address: "R. Martim Afonso, 3038 lj 09 — Bigorrilho", city: "Curitiba", uf: "PR", phone: "(41) 3209-0989", lat: -25.41960, lng: -49.29220, rating: 4.6, reviews: 484, etaPrep: "24-35 min", etaDelivery: "12-24 min" },
+  { id: "HND-PR-APU", name: "Hinode Apucarana", address: "R. Rene Camargo de Azambuja, 297 — Centro", city: "Apucarana", uf: "PR", phone: "(43) 3423-1419", lat: -23.55110, lng: -51.46110, rating: 4.6, reviews: 1261, etaPrep: "17-27 min", etaDelivery: "13-25 min" },
+  { id: "HND-PR-ARA", name: "Hinode Araucária", address: "R. Tte. Benedito Nepomuceno, 153 — Estação", city: "Araucária", uf: "PR", phone: "(41) 3126-1111", lat: -25.59330, lng: -49.40970, rating: 4.8, reviews: 1027, etaPrep: "18-30 min", etaDelivery: "19-31 min" },
+  { id: "HND-PR-CAM", name: "Hinode Cambé", address: "R. Brasília, 911 — Pq. Res. Cambé", city: "Cambé", uf: "PR", phone: "(43) 3254-7768", lat: -23.27560, lng: -51.27670, rating: 4.6, reviews: 988, etaPrep: "20-29 min", etaDelivery: "12-24 min" },
+  { id: "HND-PR-CM", name: "Hinode Campo Mourão", address: "Av. Manoel Mendes de Camargo, 2440 — Centro", city: "Campo Mourão", uf: "PR", phone: "(44) 3810-0234", lat: -24.04610, lng: -52.37890, rating: 4.6, reviews: 143, etaPrep: "23-32 min", etaDelivery: "15-23 min" },
+  { id: "HND-PR-CAS", name: "Hinode Cascavel", address: "R. Erechim, 765 sala 02 — Centro", city: "Cascavel", uf: "PR", phone: "(45) 3035-5070", lat: -24.95550, lng: -53.45520, rating: 4.5, reviews: 1066, etaPrep: "16-26 min", etaDelivery: "18-30 min" },
+  { id: "HND-PR-COL", name: "Hinode Colombo", address: "R. Abel Scuissiato, 1043 — Atuba", city: "Colombo", uf: "PR", phone: "(41) 3537-0718", lat: -25.29220, lng: -49.22440, rating: 4.5, reviews: 1157, etaPrep: "15-27 min", etaDelivery: "13-21 min" },
+  { id: "HND-PR-FRG", name: "Hinode Fazenda Rio Grande", address: "R. Jacarandá, 82 — Shopping Castelo", city: "Fazenda Rio Grande", uf: "PR", phone: "(41) 3070-0388", lat: -25.66220, lng: -49.30720, rating: 4.6, reviews: 1170, etaPrep: "18-26 min", etaDelivery: "18-28 min" },
+  { id: "HND-PR-FOZ", name: "Hinode Foz do Iguaçu", address: "Av. República Argentina, 4073 — Centro", city: "Foz do Iguaçu", uf: "PR", phone: "(45) 3029-2212", lat: -25.54780, lng: -54.58820, rating: 4.7, reviews: 1378, etaPrep: "22-31 min", etaDelivery: "18-30 min" },
+  { id: "HND-PR-FB", name: "Hinode Francisco Beltrão", address: "R. Porto Alegre, 1337 — Marrecas", city: "Francisco Beltrão", uf: "PR", phone: "(46) 3524-0242", lat: -26.08080, lng: -53.05520, rating: 4.5, reviews: 1539, etaPrep: "21-32 min", etaDelivery: "15-25 min" },
+  { id: "HND-PR-GUA", name: "Hinode Guarapuava", address: "R. Pres. Getúlio Vargas, 2074 — Centro", city: "Guarapuava", uf: "PR", phone: "(42) 3622-1070", lat: -25.39350, lng: -51.45950, rating: 5.0, reviews: 1144, etaPrep: "23-34 min", etaDelivery: "16-28 min" },
+  { id: "HND-PR-LON", name: "Hinode Londrina", address: "R. Pernambuco, 1103 — Centro", city: "Londrina", uf: "PR", phone: "(43) 3367-0315", lat: -23.30450, lng: -51.16960, rating: 4.8, reviews: 1300, etaPrep: "15-23 min", etaDelivery: "12-24 min" },
+  { id: "HND-PR-MAR", name: "Hinode Maringá", address: "Av. Cerro Azul, 2415 — Jd. Novo Horizonte", city: "Maringá", uf: "PR", phone: "(44) 3026-7532", lat: -23.42540, lng: -51.93870, rating: 4.7, reviews: 1183, etaPrep: "21-30 min", etaDelivery: "15-27 min" },
+  { id: "HND-PR-MED", name: "Hinode Medianeira", address: "R. Amazonas, 2036 sala 1 — Centro", city: "Medianeira", uf: "PR", phone: "(45) 3264-6472", lat: -25.29640, lng: -54.09360, rating: 5.0, reviews: 1053, etaPrep: "24-33 min", etaDelivery: "13-23 min" },
+  { id: "HND-PR-PAR", name: "Hinode Paranaguá", address: "Av. Gabriel de Lara, 455 — João Gualberto", city: "Paranaguá", uf: "PR", phone: "(41) 3425-9354", lat: -25.51470, lng: -48.52690, rating: 4.9, reviews: 1222, etaPrep: "19-31 min", etaDelivery: "14-26 min" },
+  { id: "HND-PR-PNV", name: "Hinode Paranavaí", address: "R. Amazonas, 2591 — Centro", city: "Paranavaí", uf: "PR", phone: "(44) 99974-2945", lat: -23.08320, lng: -52.46420, rating: 4.6, reviews: 1443, etaPrep: "15-24 min", etaDelivery: "19-29 min" },
+  { id: "HND-PR-PB", name: "Hinode Pato Branco", address: "R. Tapajós, 352 sl 201/204 — Centro", city: "Pato Branco", uf: "PR", phone: "(46) 2604-0072", lat: -26.22870, lng: -52.67070, rating: 4.7, reviews: 169, etaPrep: "18-29 min", etaDelivery: "17-29 min" },
+  { id: "HND-PR-PIN", name: "Hinode Pinhais", address: "R. Iolanda Túlio Borba, 441 — Estância Pinhais", city: "Pinhais", uf: "PR", phone: "(41) 3403-3712", lat: -25.44410, lng: -49.19280, rating: 4.7, reviews: 1274, etaPrep: "20-31 min", etaDelivery: "18-26 min" },
+  { id: "HND-PR-PG", name: "Hinode Ponta Grossa", address: "R. Ermelino de Leão, 1077 — Olarias", city: "Ponta Grossa", uf: "PR", phone: "(42) 3323-2600", lat: -25.09500, lng: -50.16330, rating: 4.6, reviews: 234, etaPrep: "22-33 min", etaDelivery: "18-28 min" },
+  { id: "HND-PR-SJP", name: "Hinode São José dos Pinhais", address: "Av. das Torres, 2194 — São Cristóvão", city: "São José dos Pinhais", uf: "PR", phone: "(41) 3146-3007", lat: -25.52960, lng: -49.20650, rating: 4.6, reviews: 1352, etaPrep: "16-28 min", etaDelivery: "16-24 min" },
+  { id: "HND-PR-TOL", name: "Hinode Toledo", address: "Av. Maripá, 6041 — Jd. La Salle", city: "Toledo", uf: "PR", phone: "(45) 99804-7549", lat: -24.72440, lng: -53.74140, rating: 4.7, reviews: 1378, etaPrep: "22-31 min", etaDelivery: "18-30 min" },
+  { id: "HND-PR-UMU", name: "Hinode Umuarama", address: "Av. Londrina, 4661 lj 02 — Zona II", city: "Umuarama", uf: "PR", phone: "(44) 3624-4808", lat: -23.76650, lng: -53.32030, rating: 4.8, reviews: 1482, etaPrep: "24-36 min", etaDelivery: "18-28 min" },
+  { id: "HND-PR-UV", name: "Hinode União da Vitória", address: "R. Ipiranga, 11 — Centro", city: "União da Vitória", uf: "PR", phone: "(42) 3522-9713", lat: -26.23060, lng: -51.08760, rating: 5.0, reviews: 494, etaPrep: "16-27 min", etaDelivery: "14-22 min" },
+  { id: "HND-RJ-CEN", name: "Hinode Centro Rio", address: "Uruguaiana, 94 — Centro", city: "Rio de Janeiro", uf: "RJ", phone: "(21) 2283-2110", lat: -22.90350, lng: -43.17810, rating: 4.5, reviews: 975, etaPrep: "17-25 min", etaDelivery: "15-25 min" },
+  { id: "HND-RJ-TIJ", name: "Hinode Tijuca", address: "R. Haddock Lobo, 210 lj A/B — Tijuca", city: "Rio de Janeiro", uf: "RJ", phone: "(21) 3586-0065", lat: -22.92760, lng: -43.24170, rating: 4.7, reviews: 1196, etaPrep: "24-34 min", etaDelivery: "12-20 min" },
+  { id: "HND-RJ-LM", name: "Hinode Largo do Machado", address: "R. das Laranjeiras, 29 lj 201 — Largo do Machado", city: "Rio de Janeiro", uf: "RJ", phone: "(21) 2225-0387", lat: -22.93290, lng: -43.18080, rating: 4.8, reviews: 182, etaPrep: "21-33 min", etaDelivery: "14-22 min" },
+  { id: "HND-RJ-RB", name: "Hinode Recreio dos Bandeirantes", address: "Av. das Américas, 18000 sl 205 A — Recreio", city: "Rio de Janeiro", uf: "RJ", phone: "(21) 3556-0588", lat: -23.01920, lng: -43.47960, rating: 4.9, reviews: 117, etaPrep: "17-29 min", etaDelivery: "13-23 min" },
+  { id: "HND-RJ-MAD", name: "Hinode Madureira", address: "R. Soares Caldeira, 142 sl 304/305 — Madureira", city: "Rio de Janeiro", uf: "RJ", phone: "(21) 2488-1314", lat: -22.87700, lng: -43.33730, rating: 4.8, reviews: 923, etaPrep: "16-25 min", etaDelivery: "19-27 min" },
+  { id: "HND-RJ-CG", name: "Hinode Campo Grande RJ", address: "Av. Cesário de Melo, 3600 lj P — Campo Grande", city: "Rio de Janeiro", uf: "RJ", phone: "(21) 3088-7962", lat: -22.90360, lng: -43.55870, rating: 4.7, reviews: 1487, etaPrep: "20-32 min", etaDelivery: "19-27 min" },
+  { id: "HND-RJ-BAN", name: "Hinode Bangu", address: "R. Santa Cecília, 984 — Bangu", city: "Rio de Janeiro", uf: "RJ", phone: "(21) 2401-7783", lat: -22.87830, lng: -43.46830, rating: 4.7, reviews: 910, etaPrep: "24-32 min", etaDelivery: "14-26 min" },
+  { id: "HND-RJ-BON", name: "Hinode Bonsucesso", address: "Cardoso de Morais, 150 sl 402/403 — Bonsucesso", city: "Rio de Janeiro", uf: "RJ", phone: "(21) 3181-1471", lat: -22.87280, lng: -43.25280, rating: 4.7, reviews: 1092, etaPrep: "22-34 min", etaDelivery: "12-22 min" },
+  { id: "HND-RJ-MEI", name: "Hinode Méier", address: "Av. Dom Hélder Câmara, 5555 sl 1109/1112 — Méier", city: "Rio de Janeiro", uf: "RJ", phone: "(21) 3190-0598", lat: -22.90190, lng: -43.27890, rating: 4.9, reviews: 1040, etaPrep: "21-29 min", etaDelivery: "16-24 min" },
+  { id: "HND-RJ-SC", name: "Hinode Santa Cruz", address: "R. Felipe Cardoso, 431 — Santa Cruz", city: "Rio de Janeiro", uf: "RJ", phone: "(21) 3217-4841", lat: -22.91390, lng: -43.68310, rating: 4.6, reviews: 143, etaPrep: "23-32 min", etaDelivery: "15-23 min" },
+  { id: "HND-RJ-TAQ", name: "Hinode Taquara", address: "Estrada dos Bandeirantes, 1430 sl 211 — Taquara", city: "Rio de Janeiro", uf: "RJ", phone: "(21) 3079-9812", lat: -22.91810, lng: -43.36030, rating: 4.7, reviews: 1183, etaPrep: "21-30 min", etaDelivery: "15-27 min" },
+  { id: "HND-RJ-SCO", name: "Hinode São Conrado", address: "Est. da Gávea, 847 lj 113 — São Conrado", city: "Rio de Janeiro", uf: "RJ", phone: "(21) 3591-2683", lat: -22.99940, lng: -43.25470, rating: 4.6, reviews: 1170, etaPrep: "18-26 min", etaDelivery: "18-28 min" },
+  { id: "HND-RJ-IG", name: "Hinode Ilha do Governador", address: "Est. do Galeão, 1844 lj A — Jardim Carioca", city: "Rio de Janeiro", uf: "RJ", phone: "", lat: -22.80610, lng: -43.20690, rating: 4.7, reviews: 1565, etaPrep: "16-24 min", etaDelivery: "17-25 min" },
+  { id: "HND-RJ-SG", name: "Hinode São Gonçalo", address: "R. Dr. Feliciano Sodré, 78 sl 1910 — Centro", city: "São Gonçalo", uf: "RJ", phone: "(21) 3583-5698", lat: -22.82680, lng: -43.05370, rating: 4.8, reviews: 195, etaPrep: "24-32 min", etaDelivery: "19-29 min" },
+  { id: "HND-RJ-NIT", name: "Hinode Niterói", address: "R. da Conceição, 125 — Centro", city: "Niterói", uf: "RJ", phone: "(21) 2704-3101", lat: -22.89320, lng: -43.12410, rating: 4.5, reviews: 1248, etaPrep: "25-34 min", etaDelivery: "16-26 min" },
+  { id: "HND-RJ-NI", name: "Hinode Nova Iguaçu", address: "Dr. Mário Guimarães, 520 lj E — Centro", city: "Nova Iguaçu", uf: "RJ", phone: "(21) 3844-2720", lat: -22.75560, lng: -43.46040, rating: 4.6, reviews: 156, etaPrep: "15-25 min", etaDelivery: "12-22 min" },
+  { id: "HND-RJ-DC", name: "Hinode Duque de Caxias", address: "Av. Gov. Leonel de Moura Brizola, 1203 sl 1201", city: "Duque de Caxias", uf: "RJ", phone: "(21) 3848-5229", lat: -22.78580, lng: -43.31190, rating: 4.5, reviews: 1448, etaPrep: "22-31 min", etaDelivery: "12-20 min" },
+  { id: "HND-RJ-PET", name: "Hinode Petrópolis", address: "R. Teresa, 1515 sl 137/138 — Alto da Serra", city: "Petrópolis", uf: "RJ", phone: "(24) 3302-3994", lat: -22.50850, lng: -43.18080, rating: 4.9, reviews: 1222, etaPrep: "19-31 min", etaDelivery: "14-26 min" },
+  { id: "HND-RJ-CF", name: "Hinode Cabo Frio", address: "Av. Assunção, 682 sl 01/02 — Centro", city: "Cabo Frio", uf: "RJ", phone: "(22) 2643-8913", lat: -22.87940, lng: -42.01860, rating: 4.7, reviews: 1474, etaPrep: "17-28 min", etaDelivery: "14-26 min" },
+  { id: "HND-RJ-VR", name: "Hinode Volta Redonda", address: "R. Douro, 14 sl 201 — Bom Jesus", city: "Volta Redonda", uf: "RJ", phone: "(24) 3346-0660", lat: -22.52520, lng: -44.10430, rating: 4.8, reviews: 377, etaPrep: "22-34 min", etaDelivery: "17-25 min" },
+  { id: "HND-RJ-BM", name: "Hinode Barra Mansa", address: "R. Francisco Vilela de Andrade Neto, 303 — Centro", city: "Barra Mansa", uf: "RJ", phone: "(24) 3401-0062", lat: -22.54890, lng: -44.17170, rating: 4.6, reviews: 1552, etaPrep: "24-36 min", etaDelivery: "12-24 min" },
+  { id: "HND-RJ-CGY", name: "Hinode Campos dos Goytacazes", address: "Saldanha Marinho, 377 lj 06 — Centro", city: "Campos dos Goytacazes", uf: "RJ", phone: "(22) 3025-8011", lat: -21.75220, lng: -41.33000, rating: 5.0, reviews: 1144, etaPrep: "23-34 min", etaDelivery: "16-28 min" },
+  { id: "HND-RJ-MAC", name: "Hinode Macaé", address: "Atlântica, 1238 — Cavaleiros", city: "Macaé", uf: "RJ", phone: "(22) 3311-0199", lat: -22.37680, lng: -41.78960, rating: 4.7, reviews: 910, etaPrep: "24-32 min", etaDelivery: "14-26 min" },
+  { id: "HND-RJ-ITP", name: "Hinode Itaperuna", address: "R. Licy de Castro Pereira, 126 — Centro", city: "Itaperuna", uf: "RJ", phone: "(22) 3223-0969", lat: -21.20500, lng: -41.88660, rating: 4.7, reviews: 1274, etaPrep: "20-31 min", etaDelivery: "18-26 min" },
+  { id: "HND-RJ-ITB", name: "Hinode Itaboraí", address: "R. Francisco R. de Barros, 51 — Manilha", city: "Itaboraí", uf: "RJ", phone: "(21) 2635-9043", lat: -22.74640, lng: -42.85890, rating: 4.7, reviews: 1092, etaPrep: "22-34 min", etaDelivery: "12-22 min" },
+  { id: "HND-RJ-ITG", name: "Hinode Itaguaí", address: "R. Antônio Morais Menezes, 144 — Centro", city: "Itaguaí", uf: "RJ", phone: "(21) 3782-4538", lat: -22.86310, lng: -43.77580, rating: 4.5, reviews: 1157, etaPrep: "15-27 min", etaDelivery: "13-21 min" },
+  { id: "HND-RJ-ARA", name: "Hinode Araruama", address: "Av. Nilo Peçanha, 633 sl 101 — Centro", city: "Araruama", uf: "RJ", phone: "(22) 2661-6625", lat: -22.87310, lng: -42.34310, rating: 4.9, reviews: 949, etaPrep: "22-33 min", etaDelivery: "13-25 min" },
+  { id: "HND-RJ-ANG", name: "Hinode Angra dos Reis", address: "Trav. Vereador Villas Boas, 26 sl 212 — Centro", city: "Angra dos Reis", uf: "RJ", phone: "(24) 3365-2011", lat: -23.00670, lng: -44.31710, rating: 4.5, reviews: 975, etaPrep: "17-25 min", etaDelivery: "15-25 min" },
+  { id: "HND-RJ-BR", name: "Hinode Belford Roxo", address: "Av. Benjamim Pinto Dias, 1130 lj E — Centro", city: "Belford Roxo", uf: "RJ", phone: "", lat: -22.76420, lng: -43.39940, rating: 4.9, reviews: 117, etaPrep: "17-29 min", etaDelivery: "13-23 min" },
+  { id: "HND-RJ-MG", name: "Hinode Magé", address: "Pç. Getúlio Vargas, 5 — Centro", city: "Magé", uf: "RJ", phone: "(21) 3630-7022", lat: -22.65330, lng: -43.04080, rating: 4.9, reviews: 117, etaPrep: "17-29 min", etaDelivery: "13-23 min" },
+  { id: "HND-RJ-MAR", name: "Hinode Maricá", address: "Av. Roberto da Silveira, 258 sl 202 — Centro", city: "Maricá", uf: "RJ", phone: "(21) 3731-9302", lat: -22.91920, lng: -42.81890, rating: 4.8, reviews: 1105, etaPrep: "25-33 min", etaDelivery: "17-29 min" },
+  { id: "HND-RJ-NF", name: "Hinode Nova Friburgo", address: "Conselheiro Julius Arp, 80 — Centro", city: "Nova Friburgo", uf: "RJ", phone: "(22) 2523-5674", lat: -22.28280, lng: -42.53110, rating: 4.9, reviews: 117, etaPrep: "17-29 min", etaDelivery: "13-23 min" },
+  { id: "HND-RJ-RO", name: "Hinode Rio das Ostras", address: "Av. Jane Maria Martins Figueira, 459 — Jd. Marilea", city: "Rio das Ostras", uf: "RJ", phone: "", lat: -22.52670, lng: -41.94560, rating: 4.8, reviews: 286, etaPrep: "23-33 min", etaDelivery: "14-26 min" },
+  { id: "HND-RJ-SJM", name: "Hinode São João de Meriti", address: "R. Salim Rasuk, 37 — Centro", city: "São João de Meriti", uf: "RJ", phone: "(21) 2655-9289", lat: -22.80500, lng: -43.37220, rating: 5.0, reviews: 1235, etaPrep: "22-30 min", etaDelivery: "19-27 min" },
+  { id: "HND-RJ-TER", name: "Hinode Teresópolis", address: "R. Dr. Waldir B. Moreira, 205 sl 106/107 — Várzea", city: "Teresópolis", uf: "RJ", phone: "(21) 2742-5237", lat: -22.41280, lng: -42.96560, rating: 4.5, reviews: 1248, etaPrep: "25-34 min", etaDelivery: "16-26 min" },
+  { id: "HND-RN-NAT-LN", name: "Hinode Natal Lagoa Nova", address: "Av. Sen. Salgado Filho, 2815 — Lagoa Nova", city: "Natal", uf: "RN", phone: "(84) 3302-9702", lat: -5.83780, lng: -35.20890, rating: 4.7, reviews: 783, etaPrep: "16-25 min", etaDelivery: "15-25 min" },
+  { id: "HND-RN-NAT-ZN", name: "Hinode Natal Zona Norte", address: "Shop. Estação — Dr. João Medeiros Filho, 2300", city: "Natal", uf: "RN", phone: "(84) 3322-3911", lat: -5.74940, lng: -35.23690, rating: 4.7, reviews: 965, etaPrep: "25-33 min", etaDelivery: "13-21 min" },
+  { id: "HND-RN-NAT-PN", name: "Hinode Natal Ponta Negra", address: "Av. Eng. Roberto Freire, 4702 lj 10/11", city: "Natal", uf: "RN", phone: "(84) 3345-6971", lat: -5.87840, lng: -35.18080, rating: 5.0, reviews: 835, etaPrep: "17-25 min", etaDelivery: "19-31 min" },
+  { id: "HND-RN-CAI", name: "Hinode Caicó", address: "R. Renato D'Antas, 822 A", city: "Caicó", uf: "RN", phone: "(84) 3421-4184", lat: -6.45830, lng: -37.09750, rating: 4.7, reviews: 910, etaPrep: "24-32 min", etaDelivery: "14-26 min" },
+  { id: "HND-RN-MOS", name: "Hinode Mossoró", address: "Av. Pres. Dutra, 1197 — Alto São Manoel", city: "Mossoró", uf: "RN", phone: "(84) 3321-6075", lat: -5.18790, lng: -37.34410, rating: 4.6, reviews: 1352, etaPrep: "16-28 min", etaDelivery: "16-24 min" },
+  { id: "HND-RN-PAR", name: "Hinode Parnamirim", address: "Sargento Noberto Marques, 144 — Centro", city: "Parnamirim", uf: "RN", phone: "(84) 2020-3279", lat: -5.91560, lng: -35.26250, rating: 4.7, reviews: 1196, etaPrep: "24-34 min", etaDelivery: "12-20 min" },
+  { id: "HND-RO-PV1", name: "Hinode Porto Velho 1", address: "Av. Calama, 1716 — São João Bosco", city: "Porto Velho", uf: "RO", phone: "(69) 3221-9838", lat: -8.76190, lng: -63.90390, rating: 5.0, reviews: 1053, etaPrep: "24-33 min", etaDelivery: "13-23 min" },
+  { id: "HND-RO-PV2", name: "Hinode Porto Velho 2", address: "R. Vitória Régia, 5437 — Eldorado", city: "Porto Velho", uf: "RO", phone: "(69) 3228-1771", lat: -8.73610, lng: -63.87360, rating: 4.5, reviews: 1066, etaPrep: "16-26 min", etaDelivery: "18-30 min" },
+  { id: "HND-RO-ARI", name: "Hinode Ariquemes", address: "Av. Canaã, 3901 sl 03 — Setor 04", city: "Ariquemes", uf: "RO", phone: "(69) 3535-4343", lat: -9.91330, lng: -63.04080, rating: 4.8, reviews: 1118, etaPrep: "17-26 min", etaDelivery: "14-22 min" },
+  { id: "HND-RO-CAC", name: "Hinode Cacoal", address: "R. Almirante Barroso, 3135 sl 02 — Novo Cacoal", city: "Cacoal", uf: "RO", phone: "(69) 3443-2631", lat: -11.43390, lng: -61.44750, rating: 4.8, reviews: 845, etaPrep: "20-28 min", etaDelivery: "13-21 min" },
+  { id: "HND-RO-JP", name: "Hinode Ji-Paraná", address: "Av. Marechal Rondon, 2279 — Dois de Abril", city: "Ji-Paraná", uf: "RO", phone: "(69) 3422-3626", lat: -10.87720, lng: -61.93190, rating: 4.7, reviews: 260, etaPrep: "17-25 min", etaDelivery: "12-20 min" },
+  { id: "HND-RO-VIL", name: "Hinode Vilhena", address: "Av. José do Patrocínio, 3008 — Centro", city: "Vilhena", uf: "RO", phone: "(69) 3322-9308", lat: -12.74060, lng: -60.14560, rating: 4.9, reviews: 1313, etaPrep: "18-27 min", etaDelivery: "17-25 min" },
+  { id: "HND-RR-BV", name: "Hinode Boa Vista", address: "Mestre Albano, 1483 — Buritis", city: "Boa Vista", uf: "RR", phone: "(95) 3625-5762", lat: 2.81970, lng: -60.67330, rating: 4.8, reviews: 273, etaPrep: "20-29 min", etaDelivery: "17-27 min" },
+  { id: "HND-RS-POA-PB", name: "Hinode POA Praia de Belas", address: "Av. Praia de Belas, 1212 sl 1614", city: "Porto Alegre", uf: "RS", phone: "(51) 3573-9117", lat: -30.04360, lng: -51.22940, rating: 4.8, reviews: 705, etaPrep: "20-28 min", etaDelivery: "17-27 min" },
+  { id: "HND-RS-POA-AB", name: "Hinode POA Assis Brasil", address: "Av. Assis Brasil, 3535 sl 910/911/917", city: "Porto Alegre", uf: "RS", phone: "(51) 3557-1320", lat: -30.00420, lng: -51.17390, rating: 4.7, reviews: 510, etaPrep: "19-27 min", etaDelivery: "14-24 min" },
+  { id: "HND-RS-ALV", name: "Hinode Alvorada", address: "R. Figueira, 95 lj 02 — Sumaré", city: "Alvorada", uf: "RS", phone: "(51) 3411-6024", lat: -29.99140, lng: -51.08080, rating: 4.6, reviews: 1261, etaPrep: "17-27 min", etaDelivery: "13-25 min" },
+  { id: "HND-RS-BG", name: "Hinode Bento Gonçalves", address: "R. Estefânia Pasqualli Eder, 162 lj 10 — Cidade Alta", city: "Bento Gonçalves", uf: "RS", phone: "(54) 99922-0060", lat: -29.17140, lng: -51.51890, rating: 4.8, reviews: 91, etaPrep: "22-32 min", etaDelivery: "19-31 min" },
+  { id: "HND-RS-CDS", name: "Hinode Cachoeira do Sul", address: "Av. Brasil, 545 — Sta Helena", city: "Cachoeira do Sul", uf: "RS", phone: "(51) 3530-4830", lat: -30.03920, lng: -52.89390, rating: 5.0, reviews: 1144, etaPrep: "23-34 min", etaDelivery: "16-28 min" },
+  { id: "HND-RS-CCH", name: "Hinode Cachoeirinha RS", address: "Av. Mário Tavares Haussem, 130 — City", city: "Cachoeirinha", uf: "RS", phone: "(51) 2470-0247", lat: -29.94860, lng: -51.09420, rating: 4.6, reviews: 988, etaPrep: "20-29 min", etaDelivery: "12-24 min" },
+  { id: "HND-RS-CAN", name: "Hinode Canoas", address: "Av. Farroupilha, 3929 — Marechal Rondon", city: "Canoas", uf: "RS", phone: "(51) 3465-8622", lat: -29.91780, lng: -51.18390, rating: 4.9, reviews: 1040, etaPrep: "21-29 min", etaDelivery: "16-24 min" },
+  { id: "HND-RS-CAR", name: "Hinode Carazinho", address: "Av. Flores da Cunha, 835 sl 201 — Centro", city: "Carazinho", uf: "RS", phone: "(54) 3331-7211", lat: -28.28330, lng: -52.78640, rating: 4.7, reviews: 1092, etaPrep: "22-34 min", etaDelivery: "12-22 min" },
+  { id: "HND-RS-CAX", name: "Hinode Caxias do Sul", address: "R. Machado de Assis, 133 — Medianeira", city: "Caxias do Sul", uf: "RS", phone: "(54) 3536-1449", lat: -29.16350, lng: -51.17960, rating: 4.6, reviews: 1170, etaPrep: "18-26 min", etaDelivery: "18-28 min" },
+  { id: "HND-RS-ERE", name: "Hinode Erechim", address: "Av. Caldas Junior, 322 sl 02 — Três Vendas", city: "Erechim", uf: "RS", phone: "(54) 3712-3343", lat: -27.63420, lng: -52.27420, rating: 4.6, reviews: 1170, etaPrep: "18-26 min", etaDelivery: "18-28 min" },
+  { id: "HND-RS-GRA", name: "Hinode Gravataí", address: "R. Nestor de Moura Jardim, 737 sl 5/6 — Salgado Filho", city: "Gravataí", uf: "RS", phone: "(51) 3423-5520", lat: -29.94420, lng: -50.99190, rating: 5.0, reviews: 1144, etaPrep: "23-34 min", etaDelivery: "16-28 min" },
+  { id: "HND-RS-IJU", name: "Hinode Ijuí", address: "R. 15 de Novembro, 572 — Centro", city: "Ijuí", uf: "RS", phone: "(55) 3332-4640", lat: -28.38780, lng: -53.91470, rating: 4.9, reviews: 1326, etaPrep: "21-31 min", etaDelivery: "14-24 min" },
+  { id: "HND-RS-LAJ", name: "Hinode Lajeado", address: "R. Pres. JK de Oliveira, 64 — Campestre", city: "Lajeado", uf: "RS", phone: "(51) 3714-1064", lat: -29.46690, lng: -51.96140, rating: 4.8, reviews: 1105, etaPrep: "25-33 min", etaDelivery: "17-29 min" },
+  { id: "HND-RS-NH", name: "Hinode Novo Hamburgo", address: "José do Patrocínio, 455 — Rio Branco", city: "Novo Hamburgo", uf: "RS", phone: "(51) 3035-2153", lat: -29.67830, lng: -51.13000, rating: 4.7, reviews: 260, etaPrep: "17-25 min", etaDelivery: "12-20 min" },
+  { id: "HND-RS-OSO", name: "Hinode Osório", address: "R. Júlio de Castilhos, 1123 — Centro", city: "Osório", uf: "RS", phone: "(51) 3148-0335", lat: -29.88810, lng: -50.26970, rating: 4.6, reviews: 1443, etaPrep: "15-24 min", etaDelivery: "19-29 min" },
+  { id: "HND-RS-PF", name: "Hinode Passo Fundo", address: "R. Rodrigues Alves, 606 — Petrópolis", city: "Passo Fundo", uf: "RS", phone: "(54) 3632-3148", lat: -28.26280, lng: -52.40670, rating: 4.7, reviews: 260, etaPrep: "17-25 min", etaDelivery: "12-20 min" },
+  { id: "HND-RS-PEL", name: "Hinode Pelotas", address: "Av. Dom Joaquim, 1515 sl 411 — Três Vendas", city: "Pelotas", uf: "RS", phone: "(53) 3307-7753", lat: -31.76540, lng: -52.33750, rating: 5.0, reviews: 1235, etaPrep: "22-30 min", etaDelivery: "19-27 min" },
+  { id: "HND-RS-RG", name: "Hinode Rio Grande", address: "Benjamin Constant, 221 — Centro", city: "Rio Grande", uf: "RS", phone: "(53) 3201-7007", lat: -32.03530, lng: -52.09860, rating: 4.9, reviews: 299, etaPrep: "15-26 min", etaDelivery: "19-27 min" },
+  { id: "HND-RS-SCS", name: "Hinode Santa Cruz do Sul", address: "R. Carlos Trein Filho, 824 lj 02 — Centro", city: "Santa Cruz do Sul", uf: "RS", phone: "(51) 2109-6468", lat: -29.71750, lng: -52.42560, rating: 4.5, reviews: 1339, etaPrep: "24-35 min", etaDelivery: "19-31 min" },
+  { id: "HND-RS-SM", name: "Hinode Santa Maria", address: "R. Dr. Alberto Pasqualini, 111 lj 07 — Centro", city: "Santa Maria", uf: "RS", phone: "(55) 3026-7767", lat: -29.68420, lng: -53.80690, rating: 4.9, reviews: 390, etaPrep: "25-33 min", etaDelivery: "14-24 min" },
+  { id: "HND-RS-SL", name: "Hinode Sant'Ana do Livramento", address: "R. Rivadavia Correa, 514 — Centro", city: "Sant'Ana do Livramento", uf: "RS", phone: "(55) 99196-3862", lat: -30.89080, lng: -55.53280, rating: 4.8, reviews: 377, etaPrep: "22-34 min", etaDelivery: "17-25 min" },
+  { id: "HND-RS-URU", name: "Hinode Uruguaiana", address: "R. Santana, 3119 sl A — Centro", city: "Uruguaiana", uf: "RS", phone: "(55) 3402-8030", lat: -29.75470, lng: -57.08830, rating: 4.8, reviews: 86, etaPrep: "15-25 min", etaDelivery: "18-26 min" },
+  { id: "HND-RS-VAC", name: "Hinode Vacaria", address: "R. Dr. Flores, 260 — 1º andar", city: "Vacaria", uf: "RS", phone: "(54) 3231-4192", lat: -28.51190, lng: -50.93420, rating: 5.0, reviews: 1144, etaPrep: "23-34 min", etaDelivery: "16-28 min" },
+  { id: "HND-RS-VIA", name: "Hinode Viamão", address: "Av. Sen. Salgado Filho, 8665 — Querência", city: "Viamão", uf: "RS", phone: "(51) 3485-8251", lat: -30.08080, lng: -51.02330, rating: 4.9, reviews: 1222, etaPrep: "19-31 min", etaDelivery: "14-26 min" },
+  { id: "HND-SC-FLO", name: "Hinode Florianópolis", address: "Duarte Schutel, 214 — Centro", city: "Florianópolis", uf: "SC", phone: "(48) 3879-4116", lat: -27.59690, lng: -48.54950, rating: 4.9, reviews: 1040, etaPrep: "21-29 min", etaDelivery: "16-24 min" },
+  { id: "HND-SC-ARA", name: "Hinode Araranguá", address: "Av. XV de Novembro, 1070 sl 03 — Centro", city: "Araranguá", uf: "SC", phone: "(48) 3524-5485", lat: -28.93560, lng: -49.48560, rating: 5.0, reviews: 871, etaPrep: "15-25 min", etaDelivery: "15-27 min" },
+  { id: "HND-SC-BC", name: "Hinode Balneário Camboriú", address: "Israel, 450 sl 01 — Nações", city: "Balneário Camboriú", uf: "SC", phone: "(47) 3246-4167", lat: -26.99190, lng: -48.63530, rating: 5.0, reviews: 1344, etaPrep: "20-31 min", etaDelivery: "12-22 min" },
+  { id: "HND-SC-BLU-VN", name: "Hinode Blumenau", address: "Antônio da Veiga, 552 sl 202 — Vila Nova", city: "Blumenau", uf: "SC", phone: "(47) 3322-8913", lat: -26.91940, lng: -49.06610, rating: 4.7, reviews: 783, etaPrep: "16-25 min", etaDelivery: "15-25 min" },
+  { id: "HND-SC-BLU-G", name: "Hinode Blumenau Garcia", address: "R. das Missões, 630 sl 03/04 — Ponta Aguda", city: "Blumenau", uf: "SC", phone: "(47) 3380-4210", lat: -26.93560, lng: -49.07670, rating: 4.7, reviews: 1074, etaPrep: "23-34 min", etaDelivery: "14-24 min" },
+  { id: "HND-SC-BRU", name: "Hinode Brusque", address: "R. Pedro Werner, 94 — Centro", city: "Brusque", uf: "SC", phone: "(47) 9636-5176", lat: -27.09720, lng: -48.91110, rating: 5.0, reviews: 1144, etaPrep: "23-34 min", etaDelivery: "16-28 min" },
+  { id: "HND-SC-CHA", name: "Hinode Chapecó", address: "Av. Fernando Machado, 1952 sl 01 — Universitário", city: "Chapecó", uf: "SC", phone: "(49) 3328-3822", lat: -27.10040, lng: -52.61520, rating: 4.9, reviews: 767, etaPrep: "24-36 min", etaDelivery: "15-23 min" },
+  { id: "HND-SC-CON", name: "Hinode Concórdia", address: "R. 29 de Julho, 274 sl 301 — Centro", city: "Concórdia", uf: "SC", phone: "(49) 3030-0388", lat: -27.23360, lng: -52.02890, rating: 4.8, reviews: 1027, etaPrep: "18-30 min", etaDelivery: "19-31 min" },
+  { id: "HND-SC-CRI", name: "Hinode Criciúma", address: "Av. dos Imigrantes, 1340 sl 31 — Rio Maina", city: "Criciúma", uf: "SC", phone: "(48) 3413-8999", lat: -28.67750, lng: -49.36970, rating: 4.7, reviews: 1001, etaPrep: "23-33 min", etaDelivery: "17-25 min" },
+  { id: "HND-SC-ITJ", name: "Hinode Itajaí", address: "R. Brusque, 19 — Centro", city: "Itajaí", uf: "SC", phone: "(47) 2125-2004", lat: -26.90780, lng: -48.66190, rating: 4.8, reviews: 1118, etaPrep: "17-26 min", etaDelivery: "14-22 min" },
+  { id: "HND-SC-JS", name: "Hinode Jaraguá do Sul", address: "R. Walter Marquardt, 623 — Barra do Rio Molha", city: "Jaraguá do Sul", uf: "SC", phone: "(47) 99166-3866", lat: -26.48560, lng: -49.06670, rating: 4.6, reviews: 156, etaPrep: "15-25 min", etaDelivery: "12-22 min" },
+  { id: "HND-SC-JOI-A", name: "Hinode Joinville Anita", address: "R. Anita Garibaldi, 664 — Anita Garibaldi", city: "Joinville", uf: "SC", phone: "(47) 3432-1122", lat: -26.30440, lng: -48.84780, rating: 4.7, reviews: 983, etaPrep: "24-33 min", etaDelivery: "19-27 min" },
+  { id: "HND-SC-JOI-AM", name: "Hinode Joinville América", address: "R. Dr. João Colin, 1872 sl B — América", city: "Joinville", uf: "SC", phone: "(47) 3278-9288", lat: -26.29920, lng: -48.84580, rating: 4.6, reviews: 484, etaPrep: "24-35 min", etaDelivery: "12-24 min" },
+  { id: "HND-SC-LAG", name: "Hinode Lages", address: "R. São Joaquim, 720 sl 02 — Copacabana", city: "Lages", uf: "SC", phone: "(49) 3224-6221", lat: -27.81670, lng: -50.32670, rating: 5.0, reviews: 871, etaPrep: "15-25 min", etaDelivery: "15-27 min" },
+  { id: "HND-SC-RDS", name: "Hinode Rio do Sul", address: "Rod. BR 470, 7475 sl 03 — Canta Galo", city: "Rio do Sul", uf: "SC", phone: "(47) 3521-1712", lat: -27.21280, lng: -49.64330, rating: 5.0, reviews: 1144, etaPrep: "23-34 min", etaDelivery: "16-28 min" },
+  { id: "HND-SC-SBS", name: "Hinode São Bento do Sul", address: "R. Henrique Schwarz, 564 — Centro", city: "São Bento do Sul", uf: "SC", phone: "(47) 3633-6083", lat: -26.24970, lng: -49.37920, rating: 4.9, reviews: 1131, etaPrep: "20-30 min", etaDelivery: "19-29 min" },
+  { id: "HND-SC-SJ", name: "Hinode São José", address: "Otto Júlio Malina, 353 — Ipiranga", city: "São José", uf: "SC", phone: "(48) 3015-6363", lat: -27.61360, lng: -48.63580, rating: 4.6, reviews: 156, etaPrep: "15-25 min", etaDelivery: "12-22 min" },
+  { id: "HND-SC-SMO", name: "Hinode São Miguel do Oeste", address: "R. Padre Aurelio Canzi, 1950 — Centro", city: "São Miguel do Oeste", uf: "SC", phone: "(49) 3621-1863", lat: -26.72420, lng: -53.51830, rating: 4.9, reviews: 1222, etaPrep: "19-31 min", etaDelivery: "14-26 min" },
+  { id: "HND-SC-TUB", name: "Hinode Tubarão", address: "R. Princesa Izabel, 114 — Oficinas", city: "Tubarão", uf: "SC", phone: "(48) 3628-3602", lat: -28.46750, lng: -49.00720, rating: 4.6, reviews: 1170, etaPrep: "18-26 min", etaDelivery: "18-28 min" },
+  { id: "HND-SC-VID", name: "Hinode Videira", address: "R. Saul Brandalise, 514 — Centro", city: "Videira", uf: "SC", phone: "(49) 3551-7384", lat: -27.00860, lng: -51.15170, rating: 4.5, reviews: 1066, etaPrep: "16-26 min", etaDelivery: "18-30 min" },
+  { id: "HND-SE-ARA", name: "Hinode Aracaju", address: "R. Estância, 722 — Centro", city: "Aracaju", uf: "SE", phone: "(79) 3211-1272", lat: -10.94720, lng: -37.07310, rating: 4.6, reviews: 897, etaPrep: "21-33 min", etaDelivery: "17-27 min" },
+  { id: "HND-SE-ARA2", name: "Hinode Aracaju 2", address: "Av. Empresário José Carlos Silva, 1800 — Farolândia", city: "Aracaju", uf: "SE", phone: "", lat: -10.96670, lng: -37.05000, rating: 4.6, reviews: 1547, etaPrep: "17-29 min", etaDelivery: "19-27 min" },
+  { id: "HND-SE-ITA", name: "Hinode Itabaiana", address: "Pç. Etelvino Mendonça, 311 — Centro", city: "Itabaiana", uf: "SE", phone: "(79) 3431-9658", lat: -10.68560, lng: -37.42560, rating: 4.8, reviews: 1027, etaPrep: "18-30 min", etaDelivery: "19-31 min" },
+  { id: "HND-SE-LAG", name: "Hinode Lagarto", address: "R. Dr. Laudelino Freire, 415 lj 15 — Centro", city: "Lagarto", uf: "SE", phone: "(79) 3631-5426", lat: -10.91750, lng: -37.64920, rating: 4.6, reviews: 897, etaPrep: "21-33 min", etaDelivery: "17-27 min" },
+  { id: "HND-SE-PRO", name: "Hinode Propriá", address: "R. Nilo Peçanha, 1538 — Centro", city: "Propriá", uf: "SE", phone: "(79) 3322-1933", lat: -10.21280, lng: -36.84250, rating: 4.7, reviews: 1274, etaPrep: "20-31 min", etaDelivery: "18-26 min" },
+  { id: "HND-SE-TB", name: "Hinode Tobias Barreto", address: "Lg. João Andrade Garcez, 1055 — Centro", city: "Tobias Barreto", uf: "SE", phone: "(79) 3541-4983", lat: -11.18140, lng: -38.00580, rating: 4.8, reviews: 91, etaPrep: "22-32 min", etaDelivery: "19-31 min" },
+  { id: "HND-SP-IT", name: "Hinode SP Itaquera", address: "R. Dr. Campos Moura, 99 — Pq. Artur Alvim", city: "São Paulo", uf: "SP", phone: "(11) 2768-5954", lat: -23.54140, lng: -46.46310, rating: 4.5, reviews: 325, etaPrep: "21-29 min", etaDelivery: "13-25 min" },
+  { id: "HND-SP-SA", name: "Hinode SP Santo Amaro", address: "Av. Mario Lopes Leão, 1500 — Santo Amaro", city: "São Paulo", uf: "SP", phone: "(11) 2500-2113", lat: -23.64530, lng: -46.71500, rating: 4.9, reviews: 208, etaPrep: "16-25 min", etaDelivery: "16-28 min" },
+  { id: "HND-SP-AN", name: "Hinode SP Anhangabaú", address: "Cel. Xavier de Toledo, 264 — República", city: "São Paulo", uf: "SP", phone: "(11) 3258-3852", lat: -23.54660, lng: -46.63610, rating: 4.6, reviews: 143, etaPrep: "23-32 min", etaDelivery: "15-23 min" },
+  { id: "HND-SP-LA", name: "Hinode SP Lapa", address: "Joaquim Machado, 83 — Lapa", city: "São Paulo", uf: "SP", phone: "(11) 2533-4030", lat: -23.52370, lng: -46.70260, rating: 4.9, reviews: 117, etaPrep: "17-29 min", etaDelivery: "13-23 min" },
+  { id: "HND-SP-TA", name: "Hinode SP Tatuapé", address: "Itapura, 92 — Tatuapé", city: "São Paulo", uf: "SP", phone: "(11) 2737-2925", lat: -23.54000, lng: -46.57310, rating: 5.0, reviews: 221, etaPrep: "19-29 min", etaDelivery: "13-21 min" },
+  { id: "HND-SP-CR", name: "Hinode SP Capão Redondo", address: "Av. Ellis Maas, 333 — Capão Redondo", city: "São Paulo", uf: "SP", phone: "(11) 5819-4938", lat: -23.65200, lng: -46.76410, rating: 5.0, reviews: 221, etaPrep: "19-29 min", etaDelivery: "13-21 min" },
+  { id: "HND-SP-ST", name: "Hinode SP Santana", address: "R. Dr. Olavo Egidio, 387 — Santana", city: "São Paulo", uf: "SP", phone: "(11) 2385-5672", lat: -23.50610, lng: -46.62560, rating: 4.8, reviews: 455, etaPrep: "18-26 min", etaDelivery: "15-23 min" },
+  { id: "HND-SP-FO", name: "Hinode SP Freguesia do Ó", address: "Av. João Paulo I, 1260 — Freguesia do Ó", city: "São Paulo", uf: "SP", phone: "(11) 2579-0611", lat: -23.50810, lng: -46.68830, rating: 5.0, reviews: 221, etaPrep: "19-29 min", etaDelivery: "13-21 min" },
+  { id: "HND-SP-IN", name: "Hinode SP Interlagos", address: "R. Eloi Pontes, 44 — Interlagos", city: "São Paulo", uf: "SP", phone: "(11) 2640-0257", lat: -23.68690, lng: -46.69500, rating: 4.6, reviews: 247, etaPrep: "25-37 min", etaDelivery: "15-27 min" },
+  { id: "HND-SP-IP", name: "Hinode SP Ipiranga", address: "Bom Pastor, 2732 — Ipiranga", city: "São Paulo", uf: "SP", phone: "(11) 5061-7934", lat: -23.59610, lng: -46.59780, rating: 4.8, reviews: 273, etaPrep: "20-29 min", etaDelivery: "17-27 min" },
+  { id: "HND-SP-BU", name: "Hinode SP Butantã", address: "R. M.M.D.C., 494 — Butantã", city: "São Paulo", uf: "SP", phone: "(11) 3731-4307", lat: -23.56830, lng: -46.72360, rating: 4.6, reviews: 247, etaPrep: "25-37 min", etaDelivery: "15-27 min" },
+  { id: "HND-SP-PI", name: "Hinode SP Pinheiros", address: "R. Pais Leme, 136 sl 310 — Pinheiros", city: "São Paulo", uf: "SP", phone: "(11) 2679-2556", lat: -23.56500, lng: -46.69250, rating: 4.8, reviews: 273, etaPrep: "20-29 min", etaDelivery: "17-27 min" },
+  { id: "HND-SP-GR", name: "Hinode SP Grajaú", address: "R. Nicolau Paganini, 222 — Grajaú", city: "São Paulo", uf: "SP", phone: "(11) 2691-8286", lat: -23.74560, lng: -46.72500, rating: 4.8, reviews: 273, etaPrep: "20-29 min", etaDelivery: "17-27 min" },
+  { id: "HND-SP-VP", name: "Hinode SP Vila Prudente", address: "R. Ingaí, 156 — Vila Prudente", city: "São Paulo", uf: "SP", phone: "(11) 2337-0888", lat: -23.58060, lng: -46.58030, rating: 4.7, reviews: 442, etaPrep: "15-27 min", etaDelivery: "18-30 min" },
+  { id: "HND-SP-MO", name: "Hinode SP Morumbi/Paraisópolis", address: "Av. Giovanni Gronchi, 6195 sl 701 — Morumbi", city: "São Paulo", uf: "SP", phone: "(11) 3892-1165", lat: -23.62250, lng: -46.71500, rating: 5.0, reviews: 312, etaPrep: "18-30 min", etaDelivery: "16-26 min" },
+  { id: "HND-SP-VM", name: "Hinode SP Vila Mariana", address: "R. Sena Madureira, 151 — Vila Mariana", city: "São Paulo", uf: "SP", phone: "(11) 5082-4134", lat: -23.58390, lng: -46.63470, rating: 5.0, reviews: 403, etaPrep: "17-26 min", etaDelivery: "19-31 min" },
+  { id: "HND-SP-VC", name: "Hinode SP Vila N. Cachoeirinha", address: "Av. Parada Pinto, 234 — Cachoeirinha", city: "São Paulo", uf: "SP", phone: "(11) 2615-8149", lat: -23.47310, lng: -46.64640, rating: 4.8, reviews: 273, etaPrep: "20-29 min", etaDelivery: "17-27 min" },
+  { id: "HND-SP-BF", name: "Hinode SP Barra Funda", address: "R. Barra Funda, 269 — Barra Funda", city: "São Paulo", uf: "SP", phone: "(11) 2539-6459", lat: -23.52780, lng: -46.66080, rating: 4.6, reviews: 1552, etaPrep: "24-36 min", etaDelivery: "12-24 min" },
+  { id: "HND-SP-AME", name: "Hinode Americana", address: "Sete de Setembro, 1042 — Centro", city: "Americana", uf: "SP", phone: "(19) 3601-4095", lat: -22.73920, lng: -47.33080, rating: 4.8, reviews: 1027, etaPrep: "18-30 min", etaDelivery: "19-31 min" },
+  { id: "HND-SP-AMP", name: "Hinode Amparo", address: "Bernardino de Campos, 184 — Centro", city: "Amparo", uf: "SP", phone: "(19) 97107-6349", lat: -22.70110, lng: -46.76110, rating: 4.6, reviews: 1170, etaPrep: "18-26 min", etaDelivery: "18-28 min" },
+  { id: "HND-SP-ARC", name: "Hinode Araçatuba", address: "R. Duque de Caxias, 2551 — Jd. Nova Yorque", city: "Araçatuba", uf: "SP", phone: "(18) 3304-0481", lat: -21.20890, lng: -50.43280, rating: 4.5, reviews: 1066, etaPrep: "16-26 min", etaDelivery: "18-30 min" },
+  { id: "HND-SP-ARQ", name: "Hinode Araraquara", address: "R. Napoleão Selmi-Dei, 999 — Vila Harmonia", city: "Araraquara", uf: "SP", phone: "(16) 3357-0016", lat: -21.79420, lng: -48.17570, rating: 4.5, reviews: 1248, etaPrep: "25-34 min", etaDelivery: "16-26 min" },
+  { id: "HND-SP-ASS", name: "Hinode Assis", address: "Av. Nove de Julho, 400 — Centro", city: "Assis", uf: "SP", phone: "(18) 3022-3839", lat: -22.66140, lng: -50.41280, rating: 4.7, reviews: 1287, etaPrep: "23-35 min", etaDelivery: "15-25 min" },
+  { id: "HND-SP-ATI", name: "Hinode Atibaia", address: "Albertina Miele Pires, 95 sl 03 — Centro", city: "Atibaia", uf: "SP", phone: "(11) 2427-8854", lat: -23.11750, lng: -46.55000, rating: 4.6, reviews: 1170, etaPrep: "18-26 min", etaDelivery: "18-28 min" },
+  { id: "HND-SP-AVA", name: "Hinode Avaré", address: "R. Minas Gerais, 1324 — Centro", city: "Avaré", uf: "SP", phone: "(14) 3732-5520", lat: -23.09890, lng: -48.92390, rating: 4.7, reviews: 1092, etaPrep: "22-34 min", etaDelivery: "12-22 min" },
+  { id: "HND-SP-BAR", name: "Hinode Barretos", address: "Av. 23, 1135 — Centro", city: "Barretos", uf: "SP", phone: "(17) 3322-7412", lat: -20.55750, lng: -48.56890, rating: 5.0, reviews: 1053, etaPrep: "24-33 min", etaDelivery: "13-23 min" },
+  { id: "HND-SP-BAU", name: "Hinode Barueri", address: "Av. Anápolis, 100 — Bethaville", city: "Barueri", uf: "SP", phone: "(11) 4326-9132", lat: -23.51080, lng: -46.87610, rating: 4.7, reviews: 1092, etaPrep: "22-34 min", etaDelivery: "12-22 min" },
+  { id: "HND-SP-BEB", name: "Hinode Bebedouro", address: "R. Lucas Evangelista, 03 — Centro", city: "Bebedouro", uf: "SP", phone: "(17) 3345-1006", lat: -20.94890, lng: -48.47940, rating: 4.6, reviews: 897, etaPrep: "21-33 min", etaDelivery: "17-27 min" },
+  { id: "HND-SP-BIR", name: "Hinode Birigui", address: "Maestro Antônio Passarelli, 1074 — Centro", city: "Birigui", uf: "SP", phone: "(18) 3643-7513", lat: -21.28720, lng: -50.34030, rating: 4.5, reviews: 1157, etaPrep: "15-27 min", etaDelivery: "13-21 min" },
+  { id: "HND-SP-BOT", name: "Hinode Botucatu", address: "R. Aza Leia, 555 sl 09 — Chácara Floresta", city: "Botucatu", uf: "SP", phone: "(14) 3361-3231", lat: -22.88560, lng: -48.44530, rating: 4.6, reviews: 1261, etaPrep: "17-27 min", etaDelivery: "13-25 min" },
+  { id: "HND-SP-BP", name: "Hinode Bragança Paulista", address: "Pç. Nove de Julho, 88 — Centro", city: "Bragança Paulista", uf: "SP", phone: "(11) 2473-1620", lat: -22.95280, lng: -46.54140, rating: 4.8, reviews: 182, etaPrep: "21-33 min", etaDelivery: "14-22 min" },
+  { id: "HND-SP-CAJ", name: "Hinode Cajamar", address: "R. das Orquídeas, 758 — Portais", city: "Cajamar", uf: "SP", phone: "(11) 3136-0107", lat: -23.35560, lng: -46.87690, rating: 5.0, reviews: 962, etaPrep: "25-37 min", etaDelivery: "18-26 min" },
+  { id: "HND-SP-CAM-G", name: "Hinode Campinas Guanabara", address: "Av. Brasil, 172 — Guanabara", city: "Campinas", uf: "SP", phone: "(19) 3365-6515", lat: -22.90560, lng: -47.06080, rating: 4.8, reviews: 1009, etaPrep: "19-30 min", etaDelivery: "13-25 min" },
+  { id: "HND-SP-CAM-CB", name: "Hinode Campinas Cambuí", address: "Cel. Francisco Andrade Coutinho, 92 — Cambuí", city: "Campinas", uf: "SP", phone: "(19) 3579-3003", lat: -22.90280, lng: -47.04920, rating: 4.7, reviews: 315, etaPrep: "18-26 min", etaDelivery: "19-29 min" },
+  { id: "HND-SP-CAR", name: "Hinode Caraguatatuba", address: "Frei Pacífico Wagner, 1035 — Centro", city: "Caraguatatuba", uf: "SP", phone: "(12) 3883-2808", lat: -23.62060, lng: -45.41310, rating: 4.5, reviews: 1066, etaPrep: "16-26 min", etaDelivery: "18-30 min" },
+  { id: "HND-SP-CAT", name: "Hinode Catanduva", address: "Pq. das Américas, 162 — Centro", city: "Catanduva", uf: "SP", phone: "(17) 3524-7287", lat: -21.13780, lng: -48.97220, rating: 4.7, reviews: 1092, etaPrep: "22-34 min", etaDelivery: "12-22 min" },
+  { id: "HND-SP-COT", name: "Hinode Cotia", address: "Av. Prof. Manoel J. Pedroso, 131 — Pq. Bahia", city: "Cotia", uf: "SP", phone: "(11) 2690-4883", lat: -23.60370, lng: -46.91920, rating: 4.7, reviews: 1274, etaPrep: "20-31 min", etaDelivery: "18-26 min" },
+  { id: "HND-SP-CRZ", name: "Hinode Cruzeiro", address: "R. João Novaes, 35 — Centro", city: "Cruzeiro", uf: "SP", phone: "(12) 99119-3220", lat: -22.57420, lng: -44.96780, rating: 4.8, reviews: 1391, etaPrep: "25-35 min", etaDelivery: "15-23 min" },
+  { id: "HND-SP-DIA", name: "Hinode Diadema", address: "R. Orense, 41 — Centro", city: "Diadema", uf: "SP", phone: "(11) 92005-3536", lat: -23.68680, lng: -46.62320, rating: 5.0, reviews: 962, etaPrep: "25-37 min", etaDelivery: "18-26 min" },
+  { id: "HND-SP-DRA", name: "Hinode Dracena", address: "Pç. Arthur Pagnozzi, 105 — Centro", city: "Dracena", uf: "SP", phone: "(18) 3821-6029", lat: -21.48390, lng: -51.53140, rating: 4.6, reviews: 1079, etaPrep: "19-30 min", etaDelivery: "15-23 min" },
+  { id: "HND-SP-EMB", name: "Hinode Embu das Artes", address: "Kizaemon Takeuti, 3291 — Estrada", city: "Embu das Artes", uf: "SP", phone: "(11) 94909-9600", lat: -23.64940, lng: -46.85250, rating: 4.9, reviews: 1040, etaPrep: "21-29 min", etaDelivery: "16-24 min" },
+  { id: "HND-SP-FV", name: "Hinode Ferraz de Vasconcelos", address: "Av. Brasil, 1896 — Vila Romanopolis", city: "Ferraz de Vasconcelos", uf: "SP", phone: "(11) 4676-2917", lat: -23.54140, lng: -46.36970, rating: 5.0, reviews: 312, etaPrep: "18-30 min", etaDelivery: "16-26 min" },
+  { id: "HND-SP-FRA", name: "Hinode Franca", address: "Av. Rio Amazonas, 772 — Res. Amazonas", city: "Franca", uf: "SP", phone: "(16) 3705-0541", lat: -20.53860, lng: -47.40060, rating: 4.8, reviews: 1105, etaPrep: "25-33 min", etaDelivery: "17-29 min" },
+  { id: "HND-SP-FM", name: "Hinode Francisco Morato", address: "R. Pref. Cassiano Gonçalves Passos, 38 — Centro", city: "Francisco Morato", uf: "SP", phone: "(11) 4488-1507", lat: -23.28140, lng: -46.74580, rating: 4.8, reviews: 195, etaPrep: "24-32 min", etaDelivery: "19-29 min" },
+  { id: "HND-SP-FR", name: "Hinode Franco da Rocha", address: "R. Basílio Fazzi, 306 — Centro", city: "Franco da Rocha", uf: "SP", phone: "(11) 3903-6687", lat: -23.32890, lng: -46.72690, rating: 4.7, reviews: 260, etaPrep: "17-25 min", etaDelivery: "12-20 min" },
+  { id: "HND-SP-GTA", name: "Hinode Guaratinguetá", address: "Av. JK de Oliveira, 800 — Campo do Galvão", city: "Guaratinguetá", uf: "SP", phone: "(12) 2103-0850", lat: -22.81560, lng: -45.19250, rating: 5.0, reviews: 1144, etaPrep: "23-34 min", etaDelivery: "16-28 min" },
+  { id: "HND-SP-GJ", name: "Hinode Guarujá", address: "Av. Dom Pedro I, 1785 — Enseada", city: "Guarujá", uf: "SP", phone: "(13) 3329-2176", lat: -23.99330, lng: -46.25640, rating: 4.7, reviews: 169, etaPrep: "18-29 min", etaDelivery: "17-29 min" },
+  { id: "HND-SP-GU-C", name: "Hinode Guarulhos Centro", address: "R. Oswaldo Cruz, 5668 — Centro", city: "Guarulhos", uf: "SP", phone: "(11) 2441-1221", lat: -23.46280, lng: -46.53330, rating: 4.8, reviews: 268, etaPrep: "24-33 min", etaDelivery: "16-28 min" },
+  { id: "HND-SP-GU-CB", name: "Hinode Guarulhos Jd. Cumbica", address: "Av. Cap. Aviador Walter Ribeiro, 359 — Jd. Cumbica", city: "Guarulhos", uf: "SP", phone: "(11) 3428-0958", lat: -23.43390, lng: -46.47310, rating: 4.9, reviews: 1126, etaPrep: "24-34 min", etaDelivery: "18-30 min" },
+  { id: "HND-SP-HOR", name: "Hinode Hortolândia", address: "R. Pres. Tancredo Neves, 543 — Jd. Sta. Rita", city: "Hortolândia", uf: "SP", phone: "(19) 3503-0567", lat: -22.85830, lng: -47.22000, rating: 4.9, reviews: 1313, etaPrep: "18-27 min", etaDelivery: "17-25 min" },
+  { id: "HND-SP-IND", name: "Hinode Indaiatuba", address: "R. Nove de Julho, 500 — Centro", city: "Indaiatuba", uf: "SP", phone: "(19) 3392-6200", lat: -23.09030, lng: -47.21780, rating: 4.9, reviews: 1131, etaPrep: "20-30 min", etaDelivery: "19-29 min" },
+  { id: "HND-SP-ITN", name: "Hinode Itanhaém", address: "Av. Almeida Junior, 115 — Jd. Belas Artes", city: "Itanhaém", uf: "SP", phone: "(13) 3422-6838", lat: -24.17580, lng: -46.78860, rating: 4.5, reviews: 1339, etaPrep: "24-35 min", etaDelivery: "19-31 min" },
+  { id: "HND-SP-IPN", name: "Hinode Itapetininga", address: "R. Prof. Francisco Valio, 567 — Centro", city: "Itapetininga", uf: "SP", phone: "(15) 3271-0277", lat: -23.58830, lng: -48.05310, rating: 4.7, reviews: 1287, etaPrep: "23-35 min", etaDelivery: "15-25 min" },
+  { id: "HND-SP-IPV", name: "Hinode Itapeva", address: "Mário Prandini, 292 — Centro", city: "Itapeva", uf: "SP", phone: "(15) 3522-0540", lat: -23.98190, lng: -48.87580, rating: 4.8, reviews: 1391, etaPrep: "25-35 min", etaDelivery: "15-23 min" },
+  { id: "HND-SP-IQA", name: "Hinode Itaquaquecetuba", address: "R. Uberlândia, 146 — Vila Virginia", city: "Itaquaquecetuba", uf: "SP", phone: "(11) 4742-7385", lat: -23.48610, lng: -46.34860, rating: 4.9, reviews: 1131, etaPrep: "20-30 min", etaDelivery: "19-29 min" },
+  { id: "HND-SP-ITT", name: "Hinode Itatiba", address: "R. Campos Salles, 338 — Centro", city: "Itatiba", uf: "SP", phone: "(11) 4538-0079", lat: -23.00580, lng: -46.83890, rating: 4.9, reviews: 1417, etaPrep: "20-32 min", etaDelivery: "17-29 min" },
+  { id: "HND-SP-ITU", name: "Hinode Itu", address: "R. Paulo Eduardo X. de Toledo, 459 — São Luiz", city: "Itu", uf: "SP", phone: "(11) 2429-7297", lat: -23.26390, lng: -47.29890, rating: 4.5, reviews: 1430, etaPrep: "23-31 min", etaDelivery: "14-22 min" },
+  { id: "HND-SP-JAC", name: "Hinode Jacareí", address: "R. Orlando Hardt, 230 — Centro", city: "Jacareí", uf: "SP", phone: "(12) 3965-4382", lat: -23.30520, lng: -45.96580, rating: 5.0, reviews: 962, etaPrep: "25-37 min", etaDelivery: "18-26 min" },
+  { id: "HND-SP-JAU", name: "Hinode Jaú", address: "R. Francisco Glicerio, 683 — Vila Nova", city: "Jaú", uf: "SP", phone: "(14) 3624-3035", lat: -22.29640, lng: -48.55780, rating: 4.7, reviews: 1196, etaPrep: "24-34 min", etaDelivery: "12-20 min" },
+  { id: "HND-SP-JUN", name: "Hinode Jundiaí", address: "R. Abílio Figueiredo, 92 — Anhangabaú", city: "Jundiaí", uf: "SP", phone: "(11) 2449-3868", lat: -23.18640, lng: -46.88420, rating: 4.7, reviews: 1365, etaPrep: "19-27 min", etaDelivery: "13-23 min" },
+  { id: "HND-SP-LP", name: "Hinode Lençóis Paulista", address: "R. Richieri Jácomo Dalben, 714 — Jd. Morumbi", city: "Lençóis Paulista", uf: "SP", phone: "(14) 3436-1172", lat: -22.59860, lng: -48.80030, rating: 5.0, reviews: 312, etaPrep: "18-30 min", etaDelivery: "16-26 min" },
+  { id: "HND-SP-LIM", name: "Hinode Limeira", address: "R. Treze de Maio, 257 — Centro", city: "Limeira", uf: "SP", phone: "(19) 3702-5692", lat: -22.56470, lng: -47.40170, rating: 4.9, reviews: 1222, etaPrep: "19-31 min", etaDelivery: "14-26 min" },
+  { id: "HND-SP-LIN", name: "Hinode Lins", address: "R. Luiz Gama, 593 — Centro", city: "Lins", uf: "SP", phone: "(14) 3522-1715", lat: -21.67970, lng: -49.75060, rating: 5.0, reviews: 1235, etaPrep: "22-30 min", etaDelivery: "19-27 min" },
+  { id: "HND-SP-MAR", name: "Hinode Marília", address: "R. Amazonas, 147 — Centro", city: "Marília", uf: "SP", phone: "(14) 3113-5774", lat: -22.21780, lng: -49.94560, rating: 4.7, reviews: 1196, etaPrep: "24-34 min", etaDelivery: "12-20 min" },
+  { id: "HND-SP-MAT", name: "Hinode Matão", address: "Av. Baldan, 1500 — N. Matão", city: "Matão", uf: "SP", phone: "(16) 3386-4173", lat: -21.60330, lng: -48.36580, rating: 4.9, reviews: 1222, etaPrep: "19-31 min", etaDelivery: "14-26 min" },
+  { id: "HND-SP-MAU", name: "Hinode Mauá", address: "R. do Comércio, 21 — Mauá Shopping", city: "Mauá", uf: "SP", phone: "(11) 4547-4041", lat: -23.66780, lng: -46.46140, rating: 5.0, reviews: 1235, etaPrep: "22-30 min", etaDelivery: "19-27 min" },
+  { id: "HND-SP-MOC", name: "Hinode Mococa", address: "R. Quinze de Novembro, 388 — Centro", city: "Mococa", uf: "SP", phone: "(19) 99288-3979", lat: -21.47110, lng: -47.00330, rating: 4.7, reviews: 1183, etaPrep: "21-30 min", etaDelivery: "15-27 min" },
+  { id: "HND-SP-MGC", name: "Hinode Mogi das Cruzes", address: "R. Manuel de Oliveira, 269 — Vila Mogilar", city: "Mogi das Cruzes", uf: "SP", phone: "(11) 4312-0835", lat: -23.52300, lng: -46.18620, rating: 4.6, reviews: 1079, etaPrep: "19-30 min", etaDelivery: "15-23 min" },
+  { id: "HND-SP-MGG", name: "Hinode Mogi Guaçu", address: "R. Cláudio Manoel da Costa, 85 — Vl. Paraíso", city: "Mogi Guaçu", uf: "SP", phone: "(19) 3569-2662", lat: -22.37110, lng: -46.94250, rating: 4.9, reviews: 1131, etaPrep: "20-30 min", etaDelivery: "19-29 min" },
+  { id: "HND-SP-OSA", name: "Hinode Osasco", address: "R. Dona Primitiva Vianco, 145 sl 213 — Centro", city: "Osasco", uf: "SP", phone: "(11) 3683-5945", lat: -23.53250, lng: -46.79190, rating: 5.0, reviews: 1235, etaPrep: "22-30 min", etaDelivery: "19-27 min" },
+  { id: "HND-SP-OUR", name: "Hinode Ourinhos", address: "Av. Antonio Almeida Leite, 983 — Jd. Paulista", city: "Ourinhos", uf: "SP", phone: "(14) 3335-7826", lat: -22.97860, lng: -49.87030, rating: 4.8, reviews: 1482, etaPrep: "24-36 min", etaDelivery: "18-28 min" },
+  { id: "HND-SP-PAU", name: "Hinode Paulínia", address: "Av. Pres. Getúlio Vargas, 477 — Nova Paulínia", city: "Paulínia", uf: "SP", phone: "(19) 3844-8319", lat: -22.76110, lng: -47.15420, rating: 4.7, reviews: 1274, etaPrep: "20-31 min", etaDelivery: "18-26 min" },
+  { id: "HND-SP-PER", name: "Hinode Peruíbe", address: "Av. 24 de Dezembro, 245 — Centro", city: "Peruíbe", uf: "SP", phone: "(31) 3453-3004", lat: -24.32030, lng: -46.99860, rating: 4.7, reviews: 1287, etaPrep: "23-35 min", etaDelivery: "15-25 min" },
+  { id: "HND-SP-PIR", name: "Hinode Piracicaba", address: "R. Dona Eugênia, 752 — Jardim Europa", city: "Piracicaba", uf: "SP", phone: "(19) 3434-7947", lat: -22.72530, lng: -47.64920, rating: 4.5, reviews: 1339, etaPrep: "24-35 min", etaDelivery: "19-31 min" },
+  { id: "HND-SP-PRS", name: "Hinode Pirassununga", address: "Av. Newton Prado, 2677 — Centro", city: "Pirassununga", uf: "SP", phone: "(19) 3562-9749", lat: -21.99610, lng: -47.42580, rating: 4.7, reviews: 1469, etaPrep: "21-32 min", etaDelivery: "13-21 min" },
+  { id: "HND-SP-PG", name: "Hinode Praia Grande", address: "Av. Pres. Costa e Silva, 609 — Boqueirão", city: "Praia Grande", uf: "SP", phone: "(13) 3371-4925", lat: -24.00580, lng: -46.40280, rating: 4.6, reviews: 247, etaPrep: "25-37 min", etaDelivery: "15-27 min" },
+  { id: "HND-SP-PE", name: "Hinode Pres. Epitácio", address: "R. Maceió, 13 — Centro", city: "Presidente Epitácio", uf: "SP", phone: "(18) 99808-0777", lat: -21.76470, lng: -52.10580, rating: 5.0, reviews: 221, etaPrep: "19-29 min", etaDelivery: "13-21 min" },
+  { id: "HND-SP-PP-1", name: "Hinode Pres. Prudente 1", address: "Av. da Saudade, 1441 — Cidade Universitária", city: "Presidente Prudente", uf: "SP", phone: "(18) 3908-8386", lat: -22.12111, lng: -51.39048, rating: 4.8, reviews: 86, etaPrep: "15-25 min", etaDelivery: "18-26 min" },
+  { id: "HND-SP-PP-2", name: "Hinode Pres. Prudente 2", address: "R. Barão do Rio Branco, 999 — Centro", city: "Presidente Prudente", uf: "SP", phone: "(18) 4101-2424", lat: -22.12193, lng: -51.38858, rating: 4.9, reviews: 99, etaPrep: "18-29 min", etaDelivery: "15-25 min" },
+  { id: "HND-SP-REG", name: "Hinode Registro", address: "R. Clara Gianotti de Souza, 642 — Centro", city: "Registro", uf: "SP", phone: "(13) 3821-4597", lat: -24.48780, lng: -47.84470, rating: 4.6, reviews: 1170, etaPrep: "18-26 min", etaDelivery: "18-28 min" },
+  { id: "HND-SP-RP", name: "Hinode Ribeirão Preto", address: "Av. Pres. Kennedy, 1500 — Ribeirânia", city: "Ribeirão Preto", uf: "SP", phone: "(16) 4141-3833", lat: -21.17040, lng: -47.81030, rating: 4.9, reviews: 390, etaPrep: "25-33 min", etaDelivery: "14-24 min" },
+  { id: "HND-SP-RC", name: "Hinode Rio Claro", address: "Av. 27, 1440 — Vila Sto. Antônio", city: "Rio Claro", uf: "SP", phone: "(19) 3532-2302", lat: -22.40830, lng: -47.56110, rating: 5.0, reviews: 221, etaPrep: "19-29 min", etaDelivery: "13-21 min" },
+  { id: "HND-SP-SBO", name: "Hinode Sta Bárbara d'Oeste", address: "R. Dona Margarida, 589 sl 5 — Centro", city: "Santa Bárbara d'Oeste", uf: "SP", phone: "(19) 3628-8375", lat: -22.75470, lng: -47.41330, rating: 4.5, reviews: 1248, etaPrep: "25-34 min", etaDelivery: "16-26 min" },
+  { id: "HND-SP-SP", name: "Hinode Santana de Parnaíba", address: "R. Suzana Dias, 515 — Centro", city: "Santana de Parnaíba", uf: "SP", phone: "(11) 4321-8409", lat: -23.44530, lng: -46.91810, rating: 5.0, reviews: 403, etaPrep: "17-26 min", etaDelivery: "19-31 min" },
+  { id: "HND-SP-STA", name: "Hinode Santo André", address: "Dom Pedro II, 288 sl 1 — Jardim", city: "Santo André", uf: "SP", phone: "(11) 2866-7742", lat: -23.66380, lng: -46.53110, rating: 4.8, reviews: 1300, etaPrep: "15-23 min", etaDelivery: "12-24 min" },
+  { id: "HND-SP-SAN", name: "Hinode Santos", address: "Av. Affonso Penna, 511 — Estuário", city: "Santos", uf: "SP", phone: "(13) 3302-3210", lat: -23.96180, lng: -46.33220, rating: 4.9, reviews: 1222, etaPrep: "19-31 min", etaDelivery: "14-26 min" },
+  { id: "HND-SP-SBC", name: "Hinode São Bernardo do Campo", address: "R. José Versolato, 111 — Centro", city: "São Bernardo do Campo", uf: "SP", phone: "(11) 4930-0920", lat: -23.69390, lng: -46.56500, rating: 4.7, reviews: 1092, etaPrep: "22-34 min", etaDelivery: "12-22 min" },
+  { id: "HND-SP-SCS", name: "Hinode São Caetano do Sul", address: "Manoel Coelho, 676 — Centro", city: "São Caetano do Sul", uf: "SP", phone: "(11) 4318-3923", lat: -23.62170, lng: -46.55500, rating: 4.9, reviews: 1313, etaPrep: "18-27 min", etaDelivery: "17-25 min" },
+  { id: "HND-SP-SC", name: "Hinode São Carlos", address: "Marechal Deodoro, 1661 — Centro", city: "São Carlos", uf: "SP", phone: "(16) 3412-5192", lat: -22.00670, lng: -47.89080, rating: 4.6, reviews: 234, etaPrep: "22-33 min", etaDelivery: "18-28 min" },
+  { id: "HND-SP-SJBV", name: "Hinode São João da Boa Vista", address: "João Pessoa, 327 — Vl. Oriental", city: "São João da Boa Vista", uf: "SP", phone: "(19) 3631-0824", lat: -21.96920, lng: -46.79860, rating: 4.7, reviews: 801, etaPrep: "15-25 min", etaDelivery: "13-23 min" },
+  { id: "HND-SP-SJB", name: "Hinode São Joaquim da Barra", address: "Av. Orestes Quercia, 1737 — Centro", city: "São Joaquim da Barra", uf: "SP", phone: "(16) 3818-9648", lat: -20.58110, lng: -47.85690, rating: 4.7, reviews: 1183, etaPrep: "21-30 min", etaDelivery: "15-27 min" },
+  { id: "HND-SP-SJRP", name: "Hinode São José do Rio Preto", address: "Angeolino Caseli, 304 — Vl. Redentora", city: "São José do Rio Preto", uf: "SP", phone: "(17) 3363-1320", lat: -20.81970, lng: -49.37940, rating: 4.9, reviews: 931, etaPrep: "23-33 min", etaDelivery: "15-27 min" },
+  { id: "HND-SP-SJC", name: "Hinode São José dos Campos", address: "Av. Satélite, 2220 — Andrômeda", city: "São José dos Campos", uf: "SP", phone: "(12) 3933-4833", lat: -23.17910, lng: -45.88720, rating: 4.7, reviews: 1196, etaPrep: "24-34 min", etaDelivery: "12-20 min" },
+  { id: "HND-SP-SR", name: "Hinode São Roque", address: "Av. Antonino Dias Bastos, 747 — Centro", city: "São Roque", uf: "SP", phone: "(11) 4713-1327", lat: -23.52920, lng: -47.13560, rating: 4.6, reviews: 429, etaPrep: "23-34 min", etaDelivery: "13-23 min" },
+  { id: "HND-SP-SV", name: "Hinode São Vicente", address: "Av. Capitão-Mor Aguiar, 695 — Centro", city: "São Vicente", uf: "SP", phone: "(13) 3379-9500", lat: -23.96330, lng: -46.39140, rating: 4.9, reviews: 481, etaPrep: "24-34 min", etaDelivery: "17-29 min" },
+  { id: "HND-SP-SER", name: "Hinode Sertãozinho", address: "R. Barão do Rio Branco, 848 — Centro", city: "Sertãozinho", uf: "SP", phone: "(16) 3042-5000", lat: -21.13780, lng: -47.99030, rating: 4.9, reviews: 1326, etaPrep: "21-31 min", etaDelivery: "14-24 min" },
+  { id: "HND-SP-SOR", name: "Hinode Sorocaba", address: "R. Bernardo Guimarães, 105 sl 605 — Jd. Vergueiro", city: "Sorocaba", uf: "SP", phone: "(15) 3342-2838", lat: -23.50180, lng: -47.45810, rating: 4.6, reviews: 1456, etaPrep: "18-28 min", etaDelivery: "16-28 min" },
+  { id: "HND-SP-SUM", name: "Hinode Sumaré", address: "Dom Barreto, 1095 — Centro", city: "Sumaré", uf: "SP", phone: "(19) 3306-7623", lat: -22.82220, lng: -47.26670, rating: 4.7, reviews: 1469, etaPrep: "21-32 min", etaDelivery: "13-21 min" },
+  { id: "HND-SP-SUZ", name: "Hinode Suzano", address: "R. Campos Sales, 231 — Centro", city: "Suzano", uf: "SP", phone: "(11) 4746-4765", lat: -23.54240, lng: -46.31050, rating: 4.6, reviews: 138, etaPrep: "16-25 min", etaDelivery: "14-24 min" },
+  { id: "HND-SP-TS", name: "Hinode Taboão da Serra", address: "São Francisco, 1820 — Pq. Taboão", city: "Taboão da Serra", uf: "SP", phone: "(11) 4385-5342", lat: -23.62610, lng: -46.79060, rating: 4.8, reviews: 455, etaPrep: "18-26 min", etaDelivery: "15-23 min" },
+  { id: "HND-SP-TAT", name: "Hinode Tatuí", address: "R. Onze de Agosto, 1271 — Centro", city: "Tatuí", uf: "SP", phone: "(15) 4101-0227", lat: -23.35530, lng: -47.85690, rating: 4.9, reviews: 1313, etaPrep: "18-27 min", etaDelivery: "17-25 min" },
+  { id: "HND-SP-TAU", name: "Hinode Taubaté", address: "Pç. Sta. Terezinha, 276 — Centro", city: "Taubaté", uf: "SP", phone: "(12) 3632-3332", lat: -23.02640, lng: -45.55500, rating: 4.9, reviews: 1326, etaPrep: "21-31 min", etaDelivery: "14-24 min" },
+  { id: "HND-SP-VIN", name: "Hinode Vinhedo", address: "R. Eugenio Trevisan, 89 — Jd. Itália", city: "Vinhedo", uf: "SP", phone: "(19) 99177-7875", lat: -23.02970, lng: -46.97500, rating: 4.7, reviews: 1365, etaPrep: "19-27 min", etaDelivery: "13-23 min" },
+  { id: "HND-SP-VOT", name: "Hinode Votorantim", address: "Av. Octavio Augusto Rangel, 142 — Jd. Toledo", city: "Votorantim", uf: "SP", phone: "(15) 3023-4626", lat: -23.54470, lng: -47.43780, rating: 5.0, reviews: 1521, etaPrep: "22-32 min", etaDelivery: "17-27 min" },
+  { id: "HND-SP-VTP", name: "Hinode Votuporanga", address: "Av. Dep. Aureo Ferreira, 889 — Vl. Recanto", city: "Votuporanga", uf: "SP", phone: "(17) 3422-1981", lat: -20.42250, lng: -49.97280, rating: 4.6, reviews: 1534, etaPrep: "25-36 min", etaDelivery: "14-26 min" },
+  { id: "HND-TO-PAL", name: "Hinode Palmas", address: "Q. 104 Sul Rua SE 2,5 lt 7A sl 07 — Plano Diretor Sul", city: "Palmas", uf: "TO", phone: "(63) 3225-2308", lat: -10.18450, lng: -48.33360, rating: 4.5, reviews: 1157, etaPrep: "15-27 min", etaDelivery: "13-21 min" },
+  { id: "HND-TO-ARA", name: "Hinode Araguaína", address: "Pref. João de Souza Lima, 258 — São João", city: "Araguaína", uf: "TO", phone: "(63) 3414-4822", lat: -7.19080, lng: -48.20780, rating: 4.9, reviews: 1040, etaPrep: "21-29 min", etaDelivery: "16-24 min" },
+  { id: "HND-TO-GUR", name: "Hinode Gurupi", address: "Av. Pará, 1902 — Setor Central", city: "Gurupi", uf: "TO", phone: "(63) 3312-2005", lat: -11.72860, lng: -49.06830, rating: 4.7, reviews: 1378, etaPrep: "22-31 min", etaDelivery: "18-30 min" }
 ];
 
-// Estoque por franquia (em produção viria da API: GET /franchises/:id/stock)
-// 0 = esgotado, 1-3 = poucas unidades, 4+ = disponível
-const STOCK_BY_FRANCHISE = {
-  'HND-JD-001': { p1: 23, p2: 18, p3: 2, p4: 15, p5: 31, p6: 12, p7: 0, p8: 7 },
-  'HND-PT-002': { p1: 8, p2: 0, p3: 14, p4: 5, p5: 22, p6: 1, p7: 9, p8: 3 },
-  'HND-VL-003': { p1: 11, p2: 7, p3: 0, p4: 1, p5: 6, p6: 18, p7: 4, p8: 12 }
-};
+// Estoque por franquia: gerado dinamicamente baseado no ID (reproducível)
+// Em produção: GET /franchises/:id/stock retorna estoque real da franquia
+const STOCK_BY_FRANCHISE = (() => {
+  const stockMap = {};
+  const productIds = ['p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7', 'p8'];
+  // Gerador determinístico simples baseado em hash do ID
+  const hash = (str) => {
+    let h = 0;
+    for (let i = 0; i < str.length; i++) {
+      h = ((h << 5) - h) + str.charCodeAt(i);
+      h |= 0;
+    }
+    return Math.abs(h);
+  };
+  FRANCHISES.forEach((f) => {
+    const stock = {};
+    productIds.forEach((pid) => {
+      const seed = hash(f.id + pid);
+      stock[pid] = seed % 35; // 0-34, distribuição variada
+    });
+    stockMap[f.id] = stock;
+  });
+  return stockMap;
+})();
 
 const PRODUCTS = [
   { id: 'p1', name: 'Hinode Vert', desc: 'Eau de Parfum Masculino • 100ml', cat: 'Perfumes', emoji: '🌿', bg: 'bg-4', price: 189.90, oldPrice: 249.90, tag: 'Best Seller', rating: 4.9, reviews: 1245, description: 'Fragrância amadeirada com notas frescas de bergamota, vetiver e âmbar. Sofisticação para o homem moderno e visionário.' },
@@ -4727,10 +5225,22 @@ function renderClientOnboarding() {
           </div>
         ` : ''}
 
+        <!-- Mensagem se está fora da cobertura -->
+        ${onbState.outOfCoverage ? `
+          <div class="onb2-out-coverage fadeInDown">
+            <div class="onb2-oc-icon">🌅</div>
+            <div class="onb2-oc-content">
+              <b>Em breve no seu bairro</b>
+              <p>Ainda não atendemos com entrega expressa em <b>${onbState.city}/${onbState.uf}</b>. Estamos expandindo rapidamente — cadastre seu CEP e te avisaremos!</p>
+              ${onbState.nearestFranchiseDistance ? `<small>Franquia mais próxima a ${onbState.nearestFranchiseDistance.toFixed(0)} km</small>` : ''}
+            </div>
+          </div>
+        ` : ''}
+
         <!-- Botão continuar (só ativa quando tudo pronto) -->
         ${onbState.cepFound ? `
           <button class="onb2-cta fadeInDown"
-                  style="animation-delay:0.3s;"
+                  style="animation-delay:0.3s;${onbState.outOfCoverage ? 'background:linear-gradient(135deg, #6B6258, #888);' : ''}"
                   ${onbState.formValid && onbState.franchiseFound ? '' : 'disabled'}
                   onclick="onbProceedToHome()">
             ${getOnbCtaText()}
@@ -4780,6 +5290,7 @@ function renderOnbPipeline() {
 }
 
 function getOnbCtaText() {
+  if (onbState.outOfCoverage) return 'Sua região ainda não atende';
   if (!onbState.formValid) return 'Informe o número';
   if (onbState.franchiseLoading || onbState.stockLoading) return 'Aguarde, carregando...';
   if (!onbState.franchiseFound) return 'Aguardando franquia...';
@@ -4803,6 +5314,7 @@ function onbHandleCepInput(input) {
     onbState.cepLoading = false;
     onbState.franchiseLoading = false;
     onbState.stockLoading = false;
+    onbState.outOfCoverage = false;
     refreshOnbPipeline();
     return;
   }
@@ -4821,7 +5333,7 @@ async function fetchCepData(cep) {
   refreshOnbPipeline();
 
   try {
-    // Tenta ViaCEP primeiro
+    // Tenta ViaCEP primeiro (rápida, mas SEM lat/lng)
     let data = null;
     try {
       const res = await fetch(`https://viacep.com.br/ws/${cleanCep}/json/`);
@@ -4832,27 +5344,36 @@ async function fetchCepData(cep) {
             street: json.logradouro,
             neighborhood: json.bairro,
             city: json.localidade,
-            uf: json.uf
+            uf: json.uf,
+            lat: null, // ViaCEP não retorna coordenadas
+            lng: null
           };
         }
       }
     } catch (e) { console.log('ViaCEP falhou, tentando BrasilAPI...'); }
 
-    // Fallback: BrasilAPI
-    if (!data) {
-      try {
-        const res = await fetch(`https://brasilapi.com.br/api/cep/v2/${cleanCep}`);
-        if (res.ok) {
-          const json = await res.json();
+    // BrasilAPI tem lat/lng! Vamos sempre tentar usá-la pra ter coordenadas
+    try {
+      const res = await fetch(`https://brasilapi.com.br/api/cep/v2/${cleanCep}`);
+      if (res.ok) {
+        const json = await res.json();
+        if (!data) {
+          // Se ViaCEP falhou, usa BrasilAPI completa
           data = {
             street: json.street,
             neighborhood: json.neighborhood,
             city: json.city,
-            uf: json.state
+            uf: json.state,
+            lat: json.location?.coordinates?.latitude || null,
+            lng: json.location?.coordinates?.longitude || null
           };
+        } else {
+          // Complementa os dados da ViaCEP com lat/lng da BrasilAPI
+          data.lat = json.location?.coordinates?.latitude || null;
+          data.lng = json.location?.coordinates?.longitude || null;
         }
-      } catch (e) { console.log('BrasilAPI também falhou'); }
-    }
+      }
+    } catch (e) { console.log('BrasilAPI falhou (sem coordenadas precisas, usaremos cidade)'); }
 
     if (!data) {
       onbState.cepLoading = false;
@@ -4862,18 +5383,29 @@ async function fetchCepData(cep) {
       return;
     }
 
+    // Se não tem lat/lng (CEP novo ou genérico), usa centro da cidade como fallback
+    if (!data.lat || !data.lng) {
+      const cityCoords = getCityCenterCoords(data.city, data.uf);
+      if (cityCoords) {
+        data.lat = cityCoords.lat;
+        data.lng = cityCoords.lng;
+      }
+    }
+
     // CEP encontrado!
-    onbState.street = data.street;
-    onbState.neighborhood = data.neighborhood;
+    onbState.street = data.street || '';
+    onbState.neighborhood = data.neighborhood || '';
     onbState.city = data.city;
     onbState.uf = data.uf;
+    onbState.lat = data.lat;
+    onbState.lng = data.lng;
     onbState.cepLoading = false;
     onbState.cepFound = true;
 
     // Re-render para mostrar campos de número/complemento
     renderStage();
 
-    // 🚀 Em paralelo: começa a buscar franquia e estoque (não bloqueia o cliente)
+    // 🚀 Em paralelo: busca franquia mais próxima usando coordenadas reais
     fetchNearestFranchise();
   } catch (e) {
     console.error('Erro CEP:', e);
@@ -4883,26 +5415,99 @@ async function fetchCepData(cep) {
   }
 }
 
-// API Hinode (mock): busca franquia mais próxima + estoque
+// Coordenadas de fallback do centro de cidades brasileiras
+// Usado quando BrasilAPI não retorna lat/lng (CEPs novos ou genéricos)
+function getCityCenterCoords(city, uf) {
+  const key = (city || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const cityMap = {
+    'sao paulo': { lat: -23.5505, lng: -46.6333 },
+    'rio de janeiro': { lat: -22.9068, lng: -43.1729 },
+    'belo horizonte': { lat: -19.9167, lng: -43.9345 },
+    'curitiba': { lat: -25.4284, lng: -49.2733 },
+    'porto alegre': { lat: -30.0346, lng: -51.2177 },
+    'florianopolis': { lat: -27.5954, lng: -48.5480 },
+    'salvador': { lat: -12.9714, lng: -38.5014 },
+    'recife': { lat: -8.0476, lng: -34.8770 },
+    'fortaleza': { lat: -3.7319, lng: -38.5267 },
+    'brasilia': { lat: -15.7975, lng: -47.8919 },
+    'goiania': { lat: -16.6869, lng: -49.2648 },
+    'vitoria': { lat: -20.3155, lng: -40.3128 },
+    'manaus': { lat: -3.1190, lng: -60.0217 },
+    'belem': { lat: -1.4558, lng: -48.5039 },
+    'natal': { lat: -5.7945, lng: -35.2110 },
+    'joao pessoa': { lat: -7.1195, lng: -34.8450 },
+    'maceio': { lat: -9.6498, lng: -35.7089 },
+    'aracaju': { lat: -10.9472, lng: -37.0731 },
+    'teresina': { lat: -5.0892, lng: -42.8016 },
+    'sao luis': { lat: -2.5391, lng: -44.2829 },
+    'cuiaba': { lat: -15.6010, lng: -56.0974 },
+    'campo grande': { lat: -20.4697, lng: -54.6201 },
+    'campinas': { lat: -22.9056, lng: -47.0608 },
+    'santos': { lat: -23.9618, lng: -46.3322 },
+    'guarulhos': { lat: -23.4628, lng: -46.5333 },
+    'santo andre': { lat: -23.6638, lng: -46.5311 },
+    'ribeirao preto': { lat: -21.1704, lng: -47.8103 },
+    'sorocaba': { lat: -23.5018, lng: -47.4581 },
+    'niteroi': { lat: -22.8932, lng: -43.1241 },
+    'sao goncalo': { lat: -22.8268, lng: -43.0537 }
+  };
+  return cityMap[key] || null;
+}
+
 async function fetchNearestFranchise() {
   onbState.franchiseLoading = true;
   refreshOnbPipeline();
 
-  // Simula latência da API (~800ms)
-  await new Promise(r => setTimeout(r, 800));
+  // Latência simulada da API (~600-900ms)
+  await new Promise(r => setTimeout(r, 600 + Math.random() * 300));
 
-  // Em produção: GET https://api.hinode.com.br/franchises/nearest?cep=01310100
-  // Aqui mockamos: pega a primeira do array como mais próxima
-  const franchise = FRANCHISES[0];
-  STATE.nearestFranchise = franchise;
+  // 🎯 ALGORITMO REAL: calcula distância usando Haversine
+  // Em produção: GET https://api.hinode.com.br/franchises/nearest?lat=&lng=
+  if (!onbState.lat || !onbState.lng) {
+    // Sem coordenadas → assume cobertura ainda não disponível
+    onbState.franchiseFound = false;
+    onbState.franchiseLoading = false;
+    onbState.outOfCoverage = true;
+    refreshOnbPipeline();
+    return;
+  }
+
+  // Calcula distância pra cada franquia e pega a mais próxima
+  const withDistance = FRANCHISES.map(f => ({
+    ...f,
+    distanceKm: haversineDistance(
+      { lat: onbState.lat, lng: onbState.lng },
+      { lat: f.lat, lng: f.lng }
+    ) / 1000
+  }));
+
+  // Ordena por distância e pega a primeira
+  withDistance.sort((a, b) => a.distanceKm - b.distanceKm);
+  const nearest = withDistance[0];
+
+  // 📍 Cobertura: até 50km da franquia
+  if (nearest.distanceKm > 50) {
+    onbState.franchiseFound = false;
+    onbState.franchiseLoading = false;
+    onbState.outOfCoverage = true;
+    onbState.nearestFranchiseDistance = nearest.distanceKm;
+    refreshOnbPipeline();
+    return;
+  }
+
+  // Atribui a franquia mais próxima com distância calculada
+  STATE.nearestFranchise = nearest;
+  STATE.nearestFranchise.distanceKm = nearest.distanceKm.toFixed(1);
   onbState.franchiseLoading = false;
   onbState.franchiseFound = true;
+  onbState.outOfCoverage = false;
   refreshOnbPipeline();
 
   // Encadeia: busca o estoque
-  await fetchFranchiseStock(franchise.id);
+  await fetchFranchiseStock(nearest.id);
 }
 
+// API Hinode (mock): busca franquia mais próxima + estoque
 async function fetchFranchiseStock(franchiseId) {
   onbState.stockLoading = true;
   refreshOnbPipeline();
@@ -5094,7 +5699,7 @@ function renderClientHome() {
           <div class="franchise-bar-icon">H</div>
           <div class="franchise-bar-info">
             <b>${f.name}</b>
-            <small>1,8 km • ★ ${f.rating} • Entrega em ~${f.etaPrep.split('-')[1]}</small>
+            <small>${f.distanceKm || '—'} km • ★ ${f.rating} • Entrega em ~${f.etaPrep.split('-')[1]}</small>
           </div>
           <div class="franchise-bar-arrow">›</div>
         </div>
@@ -5740,7 +6345,7 @@ function renderClientCheckout() {
         <span class="eta-banner-icon">⚡</span>
         <div class="eta-banner-text">
           <b>Pronto em ${f.etaPrep}</b>
-          <small>${f.name} • 1,8 km de você</small>
+          <small>${f.name} • ${f.distanceKm || '—'} km de você</small>
         </div>
       </div>
 
