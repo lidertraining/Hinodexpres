@@ -1,0 +1,32 @@
+name: 🌹 Sync catálogo Hinode
+on:
+  schedule:
+    - cron: '0 7 * * 1'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  sync-catalogo:
+    name: Sincronizar produtos da Hinode
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Rodar sincronização
+        run: node sync-hinode.js
+        env:
+          LANG: pt_BR.UTF-8
+          LC_ALL: pt_BR.UTF-8
+      - name: Commitar mudanças
+        run: |
+          git config user.name "Hinode Sync Bot"
+          git config user.email "bot@hinodexpress.local"
+          if [[ -n $(git status --porcelain index.html) ]]; then
+            git add index.html
+            git commit -m "🔄 Sync automático Hinode ($(TZ='America/Sao_Paulo' date +'%d/%m/%Y %H:%M'))"
+            git push
+          else
+            echo "Nada mudou."
+          fi
