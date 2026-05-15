@@ -5413,6 +5413,346 @@ html, body {
 
 
 
+
+/* ===================================================================
+   🟢 STATUS BADGE + MODAL FRANQUIA (estilo Hinode)
+   =================================================================== */
+
+.hd-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px 4px 8px;
+  border-radius: 100px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.hd-status-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.hd-status-open {
+  background: rgba(46, 125, 91, 0.18);
+  color: #4ade8a;
+  border: 1px solid rgba(74, 222, 138, 0.35);
+}
+.hd-status-open .hd-status-dot {
+  background: #4ade8a;
+  box-shadow: 0 0 8px rgba(74, 222, 138, 0.6);
+}
+.hd-status-open .hd-status-dot::after {
+  content: '';
+  position: absolute; inset: -4px;
+  border-radius: 50%;
+  background: #4ade8a;
+  opacity: 0.4;
+  animation: hd-ripple 1.8s ease-out infinite;
+}
+@keyframes hd-ripple {
+  0% { transform: scale(0.5); opacity: 0.55; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+.hd-status-closing {
+  background: rgba(201, 123, 31, 0.2);
+  color: #ffb84d;
+  border: 1px solid rgba(255, 184, 77, 0.4);
+}
+.hd-status-closing .hd-status-dot {
+  background: #ffb84d;
+  box-shadow: 0 0 8px rgba(255, 184, 77, 0.5);
+  animation: hd-blink-amber 1s ease-in-out infinite;
+}
+@keyframes hd-blink-amber {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+.hd-status-closed {
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.hd-status-closed .hd-status-dot {
+  background: rgba(255, 255, 255, 0.45);
+}
+
+/* Sob o .franchise-bar, o status fica antes da seta */
+.franchise-bar [data-franchise-status] {
+  margin-right: 4px;
+}
+
+/* ========== MODAL DA FRANQUIA ========== */
+.hd-modal-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(10, 5, 12, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 9999;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.hd-modal-backdrop.hd-modal-visible {
+  opacity: 1;
+}
+.hd-modal-backdrop.hd-modal-visible .hd-modal {
+  transform: translateY(0);
+}
+
+.hd-modal {
+  background: linear-gradient(180deg, #2a0a18 0%, #1f0009 100%);
+  border-top: 1px solid rgba(212, 175, 96, 0.25);
+  border-radius: 28px 28px 0 0;
+  width: 100%;
+  max-width: 480px;
+  max-height: 92vh;
+  overflow-y: auto;
+  padding: 0 20px 32px;
+  position: relative;
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 -10px 50px rgba(0, 0, 0, 0.6);
+}
+.hd-modal::before {
+  content: '';
+  display: block;
+  width: 48px; height: 4px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 4px;
+  margin: 12px auto 0;
+}
+
+.hd-modal-close {
+  position: absolute;
+  top: 16px; right: 16px;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  color: var(--blanc);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  transition: background 0.2s;
+}
+.hd-modal-close:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.hd-modal-hero {
+  text-align: center;
+  padding: 30px 0 20px;
+  border-bottom: 1px solid rgba(212, 175, 96, 0.12);
+  margin-bottom: 18px;
+}
+.hd-modal-icon {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--or-shimmer), var(--or));
+  color: var(--bordeaux);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: 30px;
+  margin: 0 auto 12px;
+  box-shadow: 0 8px 28px rgba(170, 130, 50, 0.4);
+}
+.hd-modal-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--blanc);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+.hd-modal-meta {
+  font-size: 12px;
+  color: var(--gray-mute);
+  margin: 4px 0 14px;
+  letter-spacing: 0.05em;
+}
+
+.hd-status-detail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 14px;
+  border-radius: 14px;
+  margin-bottom: 18px;
+  font-size: 13px;
+  text-align: center;
+}
+.hd-status-detail strong {
+  font-size: 15px;
+  margin-bottom: 4px;
+  font-weight: 700;
+}
+.hd-status-detail span { opacity: 0.8; font-size: 12px; }
+
+.hd-status-detail-open {
+  background: rgba(46, 125, 91, 0.12);
+  border: 1px solid rgba(74, 222, 138, 0.25);
+  color: #4ade8a;
+}
+.hd-status-detail-closing {
+  background: rgba(201, 123, 31, 0.12);
+  border: 1px solid rgba(255, 184, 77, 0.3);
+  color: #ffb84d;
+}
+.hd-status-detail-closed {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.hd-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+.hd-action-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 14px 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(212, 175, 96, 0.18);
+  border-radius: 14px;
+  color: var(--blanc);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.hd-action-btn:hover:not([disabled]) {
+  background: rgba(212, 175, 96, 0.12);
+  border-color: var(--or-light);
+  transform: translateY(-2px);
+}
+.hd-action-btn:active:not([disabled]) {
+  transform: translateY(0) scale(0.97);
+}
+.hd-action-btn[disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.hd-action-icon {
+  font-size: 22px;
+  line-height: 1;
+}
+.hd-action-wa {
+  border-color: rgba(37, 211, 102, 0.3);
+}
+.hd-action-wa:hover:not([disabled]) {
+  background: rgba(37, 211, 102, 0.12);
+  border-color: #25d366;
+}
+
+.hd-info-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 14px;
+  margin-bottom: 10px;
+}
+.hd-info-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+  line-height: 1.2;
+}
+.hd-info-content {
+  flex: 1;
+  min-width: 0;
+}
+.hd-info-label {
+  font-size: 10px;
+  color: var(--gray-mute);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+.hd-info-value {
+  font-size: 14px;
+  color: var(--blanc);
+  font-weight: 500;
+}
+.hd-info-sub {
+  font-size: 12px;
+  color: var(--gray-mute);
+  margin-top: 2px;
+}
+
+.hd-hours-card {
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 14px;
+  margin-top: 10px;
+}
+.hd-hours-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(212, 175, 96, 0.1);
+}
+.hd-hours-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  font-size: 13px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+.hd-hours-row:last-child { border-bottom: none; }
+.hd-hours-day {
+  color: var(--gray-mute);
+  font-size: 12px;
+  letter-spacing: 0.03em;
+}
+.hd-hours-time {
+  color: var(--blanc);
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+}
+.hd-hours-time.hd-hours-closed {
+  color: var(--gray-mute);
+  font-style: italic;
+  font-weight: 400;
+}
+.hd-hours-today .hd-hours-day {
+  color: var(--or-light);
+  font-weight: 700;
+}
+.hd-hours-today .hd-hours-time {
+  color: var(--or-shimmer);
+  font-weight: 700;
+}
+
 </style>
 </head>
 <body>
@@ -5547,232 +5887,263 @@ const STATE = {
   ratedDelivery: false,
 };
 
-// Franquias OFICIAIS da Hinode (lista atualizada — abril/2026)
+// Franquias OFICIAIS da Hinode (atualizado maio/2026 com endereços EXATOS + contatos + horários)
 // Total: 222 unidades em todos os estados do Brasil
+// Campos: id, name, address (completo), street, number, bairro, city, uf,
+//         phone, whatsapp (formato 55XXXXXXXXX), email, lat, lng,
+//         rating, reviews, etaPrep, etaDelivery,
+//         hours: { mon|tue|wed|thu|fri|sat|sun: [openH, openM, closeH, closeM] ou null }
 // Em produção: GET https://api.hinode.com.br/franchises/nearest?lat=&lng=
 const FRANCHISES = [
-  { id: "HND-AC-CRUZ-AABB", name: "Hinode Cruzeiro Do Sul — Aabb", address: "Bairro Aabb", city: "Cruzeiro Do Sul", uf: "AC", phone: "", lat: -7.62850, lng: -72.67470, rating: 4.6, reviews: 84, etaPrep: "19-30 min", etaDelivery: "12-22 min" },
-  { id: "HND-AC-RIOB-BOSQ", name: "Hinode Rio Branco — Bosque", address: "Bairro Bosque", city: "Rio Branco", uf: "AC", phone: "", lat: -9.97440, lng: -67.81970, rating: 4.7, reviews: 383, etaPrep: "22-31 min", etaDelivery: "15-23 min" },
-  { id: "HND-AL-ARAP-BRAS", name: "Hinode Arapiraca — Brasília", address: "Bairro Brasília", city: "Arapiraca", uf: "AL", phone: "", lat: -9.75310, lng: -36.66120, rating: 4.8, reviews: 227, etaPrep: "19-31 min", etaDelivery: "19-27 min" },
-  { id: "HND-AL-ATAL-JOSE", name: "Hinode Atalaia — Jose Paulino", address: "Bairro Jose Paulino", city: "Atalaia", uf: "AL", phone: "", lat: -9.51030, lng: -36.02280, rating: 4.8, reviews: 318, etaPrep: "18-27 min", etaDelivery: "14-24 min" },
-  { id: "HND-AL-MACE-TABU", name: "Hinode Maceió — Tabuleiro Do Martins", address: "Bairro Tabuleiro Do Martins", city: "Maceió", uf: "AL", phone: "", lat: -9.55750, lng: -35.77000, rating: 4.6, reviews: 97, etaPrep: "22-34 min", etaDelivery: "17-29 min" },
-  { id: "HND-AL-PALM-SAOC", name: "Hinode Palmeira Dos Indios — São Cristóvão 2", address: "Bairro São Cristóvão 2", city: "Palmeira Dos Indios", uf: "AL", phone: "", lat: -9.40610, lng: -36.62810, rating: 4.6, reviews: 279, etaPrep: "20-31 min", etaDelivery: "15-25 min" },
-  { id: "HND-AL-SANT-MONU", name: "Hinode Santana Do Ipanema — Monumento", address: "Bairro Monumento", city: "Santana Do Ipanema", uf: "AL", phone: "", lat: -9.37890, lng: -37.24530, rating: 4.7, reviews: 760, etaPrep: "21-29 min", etaDelivery: "16-28 min" },
-  { id: "HND-AM-ITAC-CENT", name: "Hinode Itacoatiara Centro", address: "Bairro Centro", city: "Itacoatiara", uf: "AM", phone: "", lat: -3.14320, lng: -58.44420, rating: 4.8, reviews: 227, etaPrep: "19-31 min", etaDelivery: "19-27 min" },
-  { id: "HND-AM-MANA-ALVO", name: "Hinode Manaus — Alvorada", address: "Bairro Alvorada", city: "Manaus", uf: "AM", phone: "", lat: -3.08090, lng: -60.03560, rating: 4.6, reviews: 279, etaPrep: "20-31 min", etaDelivery: "15-25 min" },
-  { id: "HND-AM-MANA-CENT", name: "Hinode Manaus Centro", address: "Bairro Centro", city: "Manaus", uf: "AM", phone: "", lat: -3.13200, lng: -60.02540, rating: 4.5, reviews: 175, etaPrep: "18-26 min", etaDelivery: "15-27 min" },
-  { id: "HND-AM-MANA-CIDA", name: "Hinode Manaus — Cidade Nova 1", address: "Bairro Cidade Nova 1", city: "Manaus", uf: "AM", phone: "", lat: -3.02030, lng: -60.01330, rating: 4.8, reviews: 1350, etaPrep: "20-28 min", etaDelivery: "18-28 min" },
-  { id: "HND-AM-MANA-TANC", name: "Hinode Manaus — Tancredo Neves", address: "Bairro Tancredo Neves", city: "Manaus", uf: "AM", phone: "", lat: -3.04810, lng: -59.95310, rating: 4.8, reviews: 123, etaPrep: "17-26 min", etaDelivery: "19-29 min" },
-  { id: "HND-AP-MACA-TREM", name: "Hinode Macapá — Trem", address: "Bairro Trem", city: "Macapá", uf: "AP", phone: "", lat: 0.03490, lng: -51.06640, rating: 5.0, reviews: 253, etaPrep: "25-34 min", etaDelivery: "13-25 min" },
-  { id: "HND-BA-ALAG-CENT", name: "Hinode Alagoinhas Centro", address: "Bairro Centro", city: "Alagoinhas", uf: "BA", phone: "", lat: -12.13610, lng: -38.41920, rating: 4.7, reviews: 1428, etaPrep: "16-25 min", etaDelivery: "16-26 min" },
-  { id: "HND-BA-BARR-CENT", name: "Hinode Barreiras — Centro 1", address: "Bairro Centro 1", city: "Barreiras", uf: "BA", phone: "", lat: -12.14800, lng: -44.99250, rating: 5.0, reviews: 162, etaPrep: "15-27 min", etaDelivery: "18-28 min" },
-  { id: "HND-BA-EUCL-CENT", name: "Hinode Euclides Da Cunha Centro", address: "Bairro Centro", city: "Euclides Da Cunha", uf: "BA", phone: "", lat: -10.50740, lng: -39.01480, rating: 4.6, reviews: 188, etaPrep: "21-30 min", etaDelivery: "12-20 min" },
-  { id: "HND-BA-EUNA-CENT", name: "Hinode Eunápolis Centro", address: "Bairro Centro", city: "Eunápolis", uf: "BA", phone: "", lat: -16.37190, lng: -39.58070, rating: 4.6, reviews: 188, etaPrep: "21-30 min", etaDelivery: "12-20 min" },
-  { id: "HND-BA-FEIR-CENT", name: "Hinode Feira De Santana — Centro 3", address: "Bairro Centro 3", city: "Feira De Santana", uf: "BA", phone: "", lat: -12.26660, lng: -38.96670, rating: 4.9, reviews: 149, etaPrep: "23-34 min", etaDelivery: "13-21 min" },
-  { id: "HND-BA-ILHE-CONQ", name: "Hinode Ilhéus — Conquista", address: "Bairro Conquista", city: "Ilhéus", uf: "BA", phone: "", lat: -14.79350, lng: -39.04630, rating: 4.6, reviews: 188, etaPrep: "21-30 min", etaDelivery: "12-20 min" },
-  { id: "HND-BA-IREC-CENT", name: "Hinode Irece — Centro 1", address: "Bairro Centro 1", city: "Irece", uf: "BA", phone: "", lat: -11.30320, lng: -41.85370, rating: 4.7, reviews: 110, etaPrep: "25-33 min", etaDelivery: "14-22 min" },
-  { id: "HND-BA-ITAB-CENT", name: "Hinode Itaberaba Centro", address: "Bairro Centro", city: "Itaberaba", uf: "BA", phone: "", lat: -12.52210, lng: -40.30560, rating: 5.0, reviews: 1571, etaPrep: "16-26 min", etaDelivery: "15-23 min" },
-  { id: "HND-BA-ITAB-JARD", name: "Hinode Itabuna — Jardim Vitoria 1", address: "Bairro Jardim Vitoria 1", city: "Itabuna", uf: "BA", phone: "", lat: -14.78580, lng: -39.28030, rating: 4.9, reviews: 1454, etaPrep: "22-33 min", etaDelivery: "18-26 min" },
-  { id: "HND-BA-JEQU-CENT", name: "Hinode Jequié — Centro 2", address: "Bairro Centro 2", city: "Jequié", uf: "BA", phone: "", lat: -13.85760, lng: -40.08300, rating: 5.0, reviews: 344, etaPrep: "24-35 min", etaDelivery: "16-24 min" },
-  { id: "HND-BA-JUAZ-SANT", name: "Hinode Juazeiro — Santa Maria Goretti", address: "Bairro Santa Maria Goretti", city: "Juazeiro", uf: "BA", phone: "", lat: -9.41170, lng: -40.49860, rating: 4.7, reviews: 565, etaPrep: "20-28 min", etaDelivery: "13-25 min" },
-  { id: "HND-BA-LAUR-CENT", name: "Hinode Lauro De Freitas — Centro 1", address: "Bairro Centro 1", city: "Lauro De Freitas", uf: "BA", phone: "", lat: -12.89460, lng: -38.32510, rating: 4.9, reviews: 331, etaPrep: "21-31 min", etaDelivery: "19-31 min" },
-  { id: "HND-BA-PAUL-VILA", name: "Hinode Paulo Afonso — Vila Poty 1", address: "Bairro Vila Poty 1", city: "Paulo Afonso", uf: "BA", phone: "", lat: -9.40980, lng: -38.22040, rating: 4.9, reviews: 331, etaPrep: "21-31 min", etaDelivery: "19-31 min" },
-  { id: "HND-BA-SALV-CAMI", name: "Hinode Salvador — Caminho Das Árvores 1", address: "Bairro Caminho Das Árvores 1", city: "Salvador", uf: "BA", phone: "", lat: -12.98090, lng: -38.46300, rating: 4.9, reviews: 149, etaPrep: "23-34 min", etaDelivery: "13-21 min" },
-  { id: "HND-BA-SALV-POLI", name: "Hinode Salvador — Politeama", address: "Bairro Politeama", city: "Salvador", uf: "BA", phone: "", lat: -12.97770, lng: -38.50760, rating: 4.7, reviews: 487, etaPrep: "24-36 min", etaDelivery: "15-27 min" },
-  { id: "HND-BA-SALV-URUG", name: "Hinode Salvador — Uruguai", address: "Bairro Uruguai", city: "Salvador", uf: "BA", phone: "", lat: -12.92410, lng: -38.48950, rating: 4.8, reviews: 682, etaPrep: "25-37 min", etaDelivery: "18-30 min" },
-  { id: "HND-BA-SANT-CENT", name: "Hinode Santo Antônio De Jesus Centro", address: "Bairro Centro", city: "Santo Antônio De Jesus", uf: "BA", phone: "", lat: -12.97000, lng: -39.26280, rating: 4.5, reviews: 357, etaPrep: "16-28 min", etaDelivery: "13-23 min" },
-  { id: "HND-BA-SIMO-CENT", name: "Hinode Simões Filho Centro", address: "Bairro Centro", city: "Simões Filho", uf: "BA", phone: "", lat: -12.78210, lng: -38.40420, rating: 4.7, reviews: 383, etaPrep: "22-31 min", etaDelivery: "15-23 min" },
-  { id: "HND-BA-TEIX-CENT", name: "Hinode Teixeira De Freitas — Centro 1", address: "Bairro Centro 1", city: "Teixeira De Freitas", uf: "BA", phone: "", lat: -17.53580, lng: -39.74230, rating: 4.8, reviews: 409, etaPrep: "17-28 min", etaDelivery: "17-29 min" },
-  { id: "HND-BA-VITO-CENT", name: "Hinode Vitória Da Conquista Centro", address: "Bairro Centro", city: "Vitória Da Conquista", uf: "BA", phone: "", lat: -14.86150, lng: -40.84420, rating: 4.9, reviews: 513, etaPrep: "19-28 min", etaDelivery: "17-27 min" },
-  { id: "HND-CE-CRAT-CENT", name: "Hinode Crateús — Centro 1", address: "Bairro Centro 1", city: "Crateús", uf: "CE", phone: "", lat: -5.17720, lng: -40.67700, rating: 4.5, reviews: 266, etaPrep: "17-27 min", etaDelivery: "18-26 min" },
-  { id: "HND-CE-EUSE-CENT", name: "Hinode Eusébio Centro", address: "Bairro Centro", city: "Eusébio", uf: "CE", phone: "", lat: -3.89010, lng: -38.45140, rating: 4.6, reviews: 370, etaPrep: "19-27 min", etaDelivery: "18-30 min" },
-  { id: "HND-CE-FORT-CENT", name: "Hinode Fortaleza Centro", address: "Bairro Centro", city: "Fortaleza", uf: "CE", phone: "", lat: -3.72700, lng: -38.52660, rating: 4.7, reviews: 487, etaPrep: "24-36 min", etaDelivery: "15-27 min" },
-  { id: "HND-CE-FORT-MESS", name: "Hinode Fortaleza — Messejana", address: "Bairro Messejana", city: "Fortaleza", uf: "CE", phone: "", lat: -3.82440, lng: -38.49050, rating: 4.7, reviews: 669, etaPrep: "22-33 min", etaDelivery: "13-23 min" },
-  { id: "HND-CE-IGUA-CENT", name: "Hinode Iguatu Centro", address: "Bairro Centro", city: "Iguatu", uf: "CE", phone: "", lat: -6.35880, lng: -39.29860, rating: 4.8, reviews: 214, etaPrep: "16-27 min", etaDelivery: "14-26 min" },
-  { id: "HND-CE-JUAZ-TIRA", name: "Hinode Juazeiro Do Norte — Tiradentes", address: "Bairro Tiradentes", city: "Juazeiro Do Norte", uf: "CE", phone: "", lat: -7.21280, lng: -39.31580, rating: 4.6, reviews: 552, etaPrep: "17-29 min", etaDelivery: "16-26 min" },
-  { id: "HND-CE-MARA-JERE", name: "Hinode Maracanaú — Jereissati II", address: "Bairro Jereissati II", city: "Maracanaú", uf: "CE", phone: "", lat: -3.87670, lng: -38.62560, rating: 4.6, reviews: 97, etaPrep: "22-34 min", etaDelivery: "17-29 min" },
-  { id: "HND-CE-QUIX-CENT", name: "Hinode Quixadá Centro", address: "Bairro Centro", city: "Quixadá", uf: "CE", phone: "", lat: -4.97110, lng: -39.01600, rating: 4.6, reviews: 643, etaPrep: "16-25 min", etaDelivery: "19-31 min" },
-  { id: "HND-CE-SOBR-CENT", name: "Hinode Sobral Centro", address: "Bairro Centro", city: "Sobral", uf: "CE", phone: "", lat: -3.68680, lng: -40.34960, rating: 4.9, reviews: 422, etaPrep: "20-32 min", etaDelivery: "14-22 min" },
-  { id: "HND-CE-TIAN-CENT", name: "Hinode Tianguá Centro", address: "Bairro Centro", city: "Tianguá", uf: "CE", phone: "", lat: -3.73080, lng: -40.99290, rating: 4.7, reviews: 292, etaPrep: "23-35 min", etaDelivery: "12-24 min" },
-  { id: "HND-DF-BRAS-ASAN", name: "Hinode Brasilia — Asa Norte 1", address: "Bairro Asa Norte 1", city: "Brasilia", uf: "DF", phone: "", lat: -15.75800, lng: -47.88100, rating: 4.5, reviews: 175, etaPrep: "18-26 min", etaDelivery: "15-27 min" },
-  { id: "HND-DF-BRAS-AREA", name: "Hinode Brasília — Areal Águas Claras", address: "Bairro Areal Águas Claras", city: "Brasília", uf: "DF", phone: "", lat: -15.83450, lng: -48.02450, rating: 4.8, reviews: 1545, etaPrep: "21-29 min", etaDelivery: "13-23 min" },
-  { id: "HND-ES-CACH-GUAN", name: "Hinode Cachoeiro De Itapemirim — Guandu", address: "Bairro Guandu", city: "Cachoeiro De Itapemirim", uf: "ES", phone: "", lat: -20.84890, lng: -41.11260, rating: 4.8, reviews: 136, etaPrep: "20-30 min", etaDelivery: "16-28 min" },
-  { id: "HND-ES-CARI-JARD", name: "Hinode Cariacica — Jardim America 1", address: "Bairro Jardim America 1", city: "Cariacica", uf: "ES", phone: "", lat: -20.26250, lng: -40.41780, rating: 4.8, reviews: 214, etaPrep: "16-27 min", etaDelivery: "14-26 min" },
-  { id: "HND-ES-COLA-ESPL", name: "Hinode Colatina — Esplanada 1", address: "Bairro Esplanada 1", city: "Colatina", uf: "ES", phone: "", lat: -19.54440, lng: -40.63060, rating: 4.6, reviews: 461, etaPrep: "18-28 min", etaDelivery: "13-21 min" },
-  { id: "HND-ES-GUAR-PRAI", name: "Hinode Guarapari — Praia Do Morro 1", address: "Bairro Praia Do Morro 1", city: "Guarapari", uf: "ES", phone: "", lat: -20.67130, lng: -40.51080, rating: 4.7, reviews: 565, etaPrep: "20-28 min", etaDelivery: "13-25 min" },
-  { id: "HND-ES-LINH-CENT", name: "Hinode Linhares Centro", address: "Bairro Centro", city: "Linhares", uf: "ES", phone: "", lat: -19.39020, lng: -40.06480, rating: 4.7, reviews: 487, etaPrep: "24-36 min", etaDelivery: "15-27 min" },
-  { id: "HND-ES-SERR-PARQ", name: "Hinode Serra — Parque Residencial Laranjeiras 2", address: "Bairro Parque Residencial Laranjeiras 2", city: "Serra", uf: "ES", phone: "", lat: -20.12890, lng: -40.30780, rating: 4.6, reviews: 838, etaPrep: "17-26 min", etaDelivery: "14-26 min" },
-  { id: "HND-ES-SAOM-CENT", name: "Hinode São Mateus Centro", address: "Bairro Centro", city: "São Mateus", uf: "ES", phone: "", lat: -18.71940, lng: -39.85850, rating: 4.6, reviews: 552, etaPrep: "17-29 min", etaDelivery: "16-26 min" },
-  { id: "HND-ES-VILA-CENT", name: "Hinode Vila Velha — Centro De Vila Velha 1", address: "Bairro Centro De Vila Velha 1", city: "Vila Velha", uf: "ES", phone: "", lat: -20.34170, lng: -40.29250, rating: 4.8, reviews: 500, etaPrep: "16-24 min", etaDelivery: "12-20 min" },
-  { id: "HND-ES-VITO-SANT", name: "Hinode Vitória — Santa Lúcia", address: "Bairro Santa Lúcia", city: "Vitória", uf: "ES", phone: "", lat: -20.30140, lng: -40.29640, rating: 4.7, reviews: 942, etaPrep: "19-31 min", etaDelivery: "14-24 min" },
-  { id: "HND-GO-ANAP-CENT", name: "Hinode Anápolis — Centro 2", address: "Bairro Centro 2", city: "Anápolis", uf: "GO", phone: "", lat: -16.32670, lng: -48.95310, rating: 4.8, reviews: 318, etaPrep: "18-27 min", etaDelivery: "14-24 min" },
-  { id: "HND-GO-APAR-PARQ", name: "Hinode Aparecida De Goiânia — Parque Amazônia", address: "Bairro Parque Amazônia", city: "Aparecida De Goiânia", uf: "GO", phone: "", lat: -16.82330, lng: -49.24380, rating: 4.8, reviews: 500, etaPrep: "16-24 min", etaDelivery: "12-20 min" },
-  { id: "HND-GO-FORM-FORM", name: "Hinode Formosa — Formosinha", address: "Bairro Formosinha", city: "Formosa", uf: "GO", phone: "", lat: -15.53750, lng: -47.33720, rating: 4.9, reviews: 708, etaPrep: "20-29 min", etaDelivery: "12-22 min" },
-  { id: "HND-GO-GOIA-SETO", name: "Hinode Goiania — Setor Central 1", address: "Bairro Setor Central 1", city: "Goiania", uf: "GO", phone: "", lat: -16.67920, lng: -49.25540, rating: 4.5, reviews: 539, etaPrep: "25-36 min", etaDelivery: "19-27 min" },
-  { id: "HND-GO-ITUM-VILA", name: "Hinode Itumbiara — Vila São Sebastião 1", address: "Bairro Vila São Sebastião 1", city: "Itumbiara", uf: "GO", phone: "", lat: -18.41920, lng: -49.21530, rating: 4.6, reviews: 747, etaPrep: "18-30 min", etaDelivery: "19-29 min" },
-  { id: "HND-GO-RIOV-POPU", name: "Hinode Rio Verde — Popular", address: "Bairro Popular", city: "Rio Verde", uf: "GO", phone: "", lat: -17.79750, lng: -50.91670, rating: 4.9, reviews: 1072, etaPrep: "16-28 min", etaDelivery: "16-28 min" },
-  { id: "HND-GO-TRIN-CENT", name: "Hinode Trindade Centro", address: "Bairro Centro", city: "Trindade", uf: "GO", phone: "", lat: -16.64980, lng: -49.49260, rating: 4.8, reviews: 695, etaPrep: "17-25 min", etaDelivery: "15-23 min" },
-  { id: "HND-GO-VALP-PARQ", name: "Hinode Valparaiso De Goiás — Parque esplanada III", address: "Bairro Parque esplanada III", city: "Valparaiso De Goiás", uf: "GO", phone: "", lat: -16.06530, lng: -47.97580, rating: 4.8, reviews: 695, etaPrep: "17-25 min", etaDelivery: "15-23 min" },
-  { id: "HND-MA-ACAI-CENT", name: "Hinode Açailândia — Centro 4", address: "Bairro Centro 4", city: "Açailândia", uf: "MA", phone: "", lat: -4.94680, lng: -47.51020, rating: 4.5, reviews: 1480, etaPrep: "17-25 min", etaDelivery: "12-24 min" },
-  { id: "HND-MA-BACA-CENT", name: "Hinode Bacabal Centro", address: "Bairro Centro", city: "Bacabal", uf: "MA", phone: "", lat: -4.22530, lng: -44.78250, rating: 4.5, reviews: 1389, etaPrep: "18-29 min", etaDelivery: "17-27 min" },
-  { id: "HND-MA-CAXI-CENT", name: "Hinode Caxias Centro", address: "Bairro Centro", city: "Caxias", uf: "MA", phone: "", lat: -4.86150, lng: -43.35670, rating: 4.6, reviews: 279, etaPrep: "20-31 min", etaDelivery: "15-25 min" },
-  { id: "HND-MA-IMPE-CENT", name: "Hinode Imperatriz — Centro 2", address: "Bairro Centro 2", city: "Imperatriz", uf: "MA", phone: "", lat: -5.52440, lng: -47.49010, rating: 4.5, reviews: 357, etaPrep: "16-28 min", etaDelivery: "13-23 min" },
-  { id: "HND-MA-SANT-CENT", name: "Hinode Santa Inês Centro", address: "Bairro Centro", city: "Santa Inês", uf: "MA", phone: "", lat: -3.65920, lng: -45.37820, rating: 4.8, reviews: 500, etaPrep: "16-24 min", etaDelivery: "12-20 min" },
-  { id: "HND-MA-SAOJ-TIJU", name: "Hinode São José De Ribamar — Tijupá Queimado", address: "Bairro Tijupá Queimado", city: "São José De Ribamar", uf: "MA", phone: "", lat: -2.56140, lng: -44.05670, rating: 4.9, reviews: 617, etaPrep: "21-33 min", etaDelivery: "17-25 min" },
-  { id: "HND-MA-SAOL-CALH", name: "Hinode São Luís — Calhau", address: "Bairro Calhau", city: "São Luís", uf: "MA", phone: "", lat: -2.48610, lng: -44.24440, rating: 4.5, reviews: 175, etaPrep: "18-26 min", etaDelivery: "15-27 min" },
-  { id: "HND-MA-TIMO-PARQ", name: "Hinode Timon — Parque Piauí I", address: "Bairro Parque Piauí I", city: "Timon", uf: "MA", phone: "", lat: -5.09420, lng: -42.83670, rating: 4.7, reviews: 669, etaPrep: "22-33 min", etaDelivery: "13-23 min" },
-  { id: "HND-MG-ALFE-JARD", name: "Hinode Alfenas — Jardim Panorama", address: "Bairro Jardim Panorama", city: "Alfenas", uf: "MG", phone: "", lat: -21.42870, lng: -45.94770, rating: 5.0, reviews: 1571, etaPrep: "16-26 min", etaDelivery: "15-23 min" },
-  { id: "HND-MG-BARB-CENT", name: "Hinode Barbacena Centro", address: "Bairro Centro", city: "Barbacena", uf: "MG", phone: "", lat: -21.22560, lng: -43.77410, rating: 4.5, reviews: 175, etaPrep: "18-26 min", etaDelivery: "15-27 min" },
-  { id: "HND-MG-BELO-BARR", name: "Hinode Belo Horizonte — Barreiro", address: "Bairro Barreiro", city: "Belo Horizonte", uf: "MG", phone: "", lat: -19.97010, lng: -44.02150, rating: 4.6, reviews: 279, etaPrep: "20-31 min", etaDelivery: "15-25 min" },
-  { id: "HND-MG-BELO-CENT", name: "Hinode Belo Horizonte Centro", address: "Bairro Centro", city: "Belo Horizonte", uf: "MG", phone: "", lat: -19.92030, lng: -43.93760, rating: 4.8, reviews: 318, etaPrep: "18-27 min", etaDelivery: "14-24 min" },
-  { id: "HND-MG-BELO-GLOR", name: "Hinode Belo Horizonte — Glória", address: "Bairro Glória", city: "Belo Horizonte", uf: "MG", phone: "", lat: -19.90810, lng: -43.98190, rating: 4.5, reviews: 448, etaPrep: "15-24 min", etaDelivery: "16-28 min" },
-  { id: "HND-MG-BELO-PAMP", name: "Hinode Belo Horizonte — Pampulha", address: "Bairro Pampulha", city: "Belo Horizonte", uf: "MG", phone: "", lat: -19.87020, lng: -43.97340, rating: 4.6, reviews: 370, etaPrep: "19-27 min", etaDelivery: "18-30 min" },
-  { id: "HND-MG-BETI-INGA", name: "Hinode Betim — Ingá Alto", address: "Bairro Ingá Alto", city: "Betim", uf: "MG", phone: "", lat: -19.96780, lng: -44.19680, rating: 4.7, reviews: 201, etaPrep: "24-34 min", etaDelivery: "17-27 min" },
-  { id: "HND-MG-CONT-ELDO", name: "Hinode Contagem — Eldorado", address: "Bairro Eldorado", city: "Contagem", uf: "MG", phone: "", lat: -19.90670, lng: -44.05370, rating: 4.7, reviews: 474, etaPrep: "21-32 min", etaDelivery: "18-28 min" },
-  { id: "HND-MG-CURV-CENT", name: "Hinode Curvelo Centro", address: "Bairro Centro", city: "Curvelo", uf: "MG", phone: "", lat: -18.75650, lng: -44.43080, rating: 4.9, reviews: 708, etaPrep: "20-29 min", etaDelivery: "12-22 min" },
-  { id: "HND-MG-JOAO-CARN", name: "Hinode João Monlevade — Carneirinhos", address: "Bairro Carneirinhos", city: "João Monlevade", uf: "MG", phone: "", lat: -19.81130, lng: -43.17330, rating: 4.9, reviews: 331, etaPrep: "21-31 min", etaDelivery: "19-31 min" },
-  { id: "HND-MG-JUIZ-STAC", name: "Hinode Juiz De Fora — Sta Catarina", address: "Bairro Sta Catarina", city: "Juiz De Fora", uf: "MG", phone: "", lat: -21.77940, lng: -43.36530, rating: 4.6, reviews: 747, etaPrep: "18-30 min", etaDelivery: "19-29 min" },
-  { id: "HND-MG-MANH-TODO", name: "Hinode Manhuaçu — Todos Os Santos", address: "Bairro Todos Os Santos", city: "Manhuaçu", uf: "MG", phone: "", lat: -20.25690, lng: -42.02860, rating: 4.8, reviews: 500, etaPrep: "16-24 min", etaDelivery: "12-20 min" },
-  { id: "HND-MG-MONT-CENT", name: "Hinode Montes Claros — Centro 1", address: "Bairro Centro 1", city: "Montes Claros", uf: "MG", phone: "", lat: -16.73500, lng: -43.86280, rating: 4.8, reviews: 682, etaPrep: "25-37 min", etaDelivery: "18-30 min" },
-  { id: "HND-MG-PARA-CENT", name: "Hinode Paracatu Centro", address: "Bairro Centro", city: "Paracatu", uf: "MG", phone: "", lat: -17.22260, lng: -46.87080, rating: 5.0, reviews: 344, etaPrep: "24-35 min", etaDelivery: "16-24 min" },
-  { id: "HND-MG-PASS-MUAR", name: "Hinode Passos — Muarama", address: "Bairro Muarama", city: "Passos", uf: "MG", phone: "", lat: -20.71970, lng: -46.60940, rating: 4.6, reviews: 734, etaPrep: "15-26 min", etaDelivery: "14-22 min" },
-  { id: "HND-MG-PATO-CENT", name: "Hinode Patos De Minas Centro", address: "Bairro Centro", city: "Patos De Minas", uf: "MG", phone: "", lat: -18.57830, lng: -46.51830, rating: 4.6, reviews: 552, etaPrep: "17-29 min", etaDelivery: "16-26 min" },
-  { id: "HND-MG-POCO-CENT", name: "Hinode Poços De Caldas — Centro 1", address: "Bairro Centro 1", city: "Poços De Caldas", uf: "MG", phone: "", lat: -21.78670, lng: -46.56110, rating: 4.9, reviews: 513, etaPrep: "19-28 min", etaDelivery: "17-27 min" },
-  { id: "HND-MG-RIBE-VARZ", name: "Hinode Ribeirão Das Neves — Várzea Alegre", address: "Bairro Várzea Alegre", city: "Ribeirão Das Neves", uf: "MG", phone: "", lat: -19.76680, lng: -44.08650, rating: 4.6, reviews: 643, etaPrep: "16-25 min", etaDelivery: "19-31 min" },
-  { id: "HND-MG-SALI-CENT", name: "Hinode Salinas — Centro 2", address: "Bairro Centro 2", city: "Salinas", uf: "MG", phone: "", lat: -16.17210, lng: -42.29610, rating: 4.8, reviews: 409, etaPrep: "17-28 min", etaDelivery: "17-29 min" },
-  { id: "HND-MG-SAOJ-CENT", name: "Hinode São João Del Rei Centro", address: "Bairro Centro", city: "São João Del Rei", uf: "MG", phone: "", lat: -21.13670, lng: -44.26110, rating: 4.6, reviews: 461, etaPrep: "18-28 min", etaDelivery: "13-21 min" },
-  { id: "HND-MG-UBER-SAOB", name: "Hinode Uberaba — São Benedito 1", address: "Bairro São Benedito 1", city: "Uberaba", uf: "MG", phone: "", lat: -19.74720, lng: -47.93810, rating: 4.8, reviews: 409, etaPrep: "17-28 min", etaDelivery: "17-29 min" },
-  { id: "HND-MG-UBER-NOSS", name: "Hinode Uberlândia — Nossa Senhora Aparecida", address: "Bairro Nossa Senhora Aparecida", city: "Uberlândia", uf: "MG", phone: "", lat: -18.91280, lng: -48.27550, rating: 4.9, reviews: 799, etaPrep: "19-30 min", etaDelivery: "15-27 min" },
-  { id: "HND-MG-UBA-CENT", name: "Hinode Ubá Centro", address: "Bairro Centro", city: "Ubá", uf: "MG", phone: "", lat: -21.11990, lng: -42.94250, rating: 4.6, reviews: 856, etaPrep: "16-26 min", etaDelivery: "12-24 min" },
-  { id: "HND-MG-VARG-CENT", name: "Hinode Varginha Centro", address: "Bairro Centro", city: "Varginha", uf: "MG", phone: "", lat: -21.55560, lng: -45.43080, rating: 4.8, reviews: 500, etaPrep: "16-24 min", etaDelivery: "12-20 min" },
-  { id: "HND-MS-CAMP-JARD", name: "Hinode Campo Grande — Jardim Monte Libano", address: "Bairro Jardim Monte Libano", city: "Campo Grande", uf: "MS", phone: "", lat: -20.46970, lng: -54.62010, rating: 5.0, reviews: 344, etaPrep: "24-35 min", etaDelivery: "16-24 min" },
-  { id: "HND-MS-CORU-AERO", name: "Hinode Corumbá — Aeroporto", address: "Bairro Aeroporto", city: "Corumbá", uf: "MS", phone: "", lat: -19.01170, lng: -57.65330, rating: 4.6, reviews: 734, etaPrep: "15-26 min", etaDelivery: "14-22 min" },
-  { id: "HND-MS-DOUR-JARD", name: "Hinode Dourados — Jardim Caramuru 3", address: "Bairro Jardim Caramuru 3", city: "Dourados", uf: "MS", phone: "", lat: -22.22080, lng: -54.80530, rating: 4.7, reviews: 669, etaPrep: "22-33 min", etaDelivery: "13-23 min" },
-  { id: "HND-MS-TRES-CENT", name: "Hinode Três Lagoas — Centro 2", address: "Bairro Centro 2", city: "Três Lagoas", uf: "MS", phone: "", lat: -20.78490, lng: -51.70080, rating: 4.6, reviews: 838, etaPrep: "17-26 min", etaDelivery: "14-26 min" },
-  { id: "HND-MT-CUIA-ALVO", name: "Hinode Cuiabá — Alvorada 2", address: "Bairro Alvorada 2", city: "Cuiabá", uf: "MT", phone: "", lat: -15.60100, lng: -56.09740, rating: 4.8, reviews: 591, etaPrep: "15-25 min", etaDelivery: "15-25 min" },
-  { id: "HND-MT-CACE-CAVA", name: "Hinode Cáceres — Cavalhada Ii 1", address: "Bairro Cavalhada Ii 1", city: "Cáceres", uf: "MT", phone: "", lat: -16.07170, lng: -57.68140, rating: 4.6, reviews: 1506, etaPrep: "23-33 min", etaDelivery: "14-24 min" },
-  { id: "HND-MT-LUCA-MENI", name: "Hinode Lucas Do Rio Verde — Menino Deus", address: "Bairro Menino Deus", city: "Lucas Do Rio Verde", uf: "MT", phone: "", lat: -13.05860, lng: -55.91110, rating: 4.9, reviews: 513, etaPrep: "19-28 min", etaDelivery: "17-27 min" },
-  { id: "HND-MT-ROND-JARD", name: "Hinode Rondonópolis — Jardim Urupês", address: "Bairro Jardim Urupês", city: "Rondonópolis", uf: "MT", phone: "", lat: -16.47090, lng: -54.63560, rating: 4.8, reviews: 591, etaPrep: "15-25 min", etaDelivery: "15-25 min" },
-  { id: "HND-MT-SINO-SETO", name: "Hinode Sinop — Setor Comercial 1", address: "Bairro Setor Comercial 1", city: "Sinop", uf: "MT", phone: "", lat: -11.86380, lng: -55.50280, rating: 4.5, reviews: 1007, etaPrep: "23-35 min", etaDelivery: "15-23 min" },
-  { id: "HND-MT-TANG-JARD", name: "Hinode Tangará Da Serra — Jardim Dona Julia 1", address: "Bairro Jardim Dona Julia 1", city: "Tangará Da Serra", uf: "MT", phone: "", lat: -14.62280, lng: -57.49330, rating: 4.7, reviews: 474, etaPrep: "21-32 min", etaDelivery: "18-28 min" },
-  { id: "HND-PA-ABAE-CENT", name: "Hinode Abaetetuba Centro", address: "Bairro Centro", city: "Abaetetuba", uf: "PA", phone: "", lat: -1.71890, lng: -48.87820, rating: 4.9, reviews: 1454, etaPrep: "22-33 min", etaDelivery: "18-26 min" },
-  { id: "HND-PA-ALTA-SUDA", name: "Hinode Altamira — Sudam I", address: "Bairro Sudam I", city: "Altamira", uf: "PA", phone: "", lat: -3.20300, lng: -52.20690, rating: 4.8, reviews: 318, etaPrep: "18-27 min", etaDelivery: "14-24 min" },
-  { id: "HND-PA-BELE-COQU", name: "Hinode Belém — Coqueiro Icoaraci 2", address: "Bairro Coqueiro Icoaraci 2", city: "Belém", uf: "PA", phone: "", lat: -1.30810, lng: -48.47010, rating: 4.9, reviews: 331, etaPrep: "21-31 min", etaDelivery: "19-31 min" },
-  { id: "HND-PA-CAPA-GARR", name: "Hinode Capanema — Garrafao 1", address: "Bairro Garrafao 1", city: "Capanema", uf: "PA", phone: "", lat: -1.19580, lng: -47.18140, rating: 4.8, reviews: 136, etaPrep: "20-30 min", etaDelivery: "16-28 min" },
-  { id: "HND-PA-CAST-NOVA", name: "Hinode Castanhal — Nova Olinda 1", address: "Bairro Nova Olinda 1", city: "Castanhal", uf: "PA", phone: "", lat: -1.29330, lng: -47.92610, rating: 4.9, reviews: 526, etaPrep: "22-32 min", etaDelivery: "14-26 min" },
-  { id: "HND-PA-CONC-CENT", name: "Hinode Concórdia Do Pará Centro", address: "Bairro Centro", city: "Concórdia Do Pará", uf: "PA", phone: "", lat: -1.99190, lng: -48.18420, rating: 4.7, reviews: 292, etaPrep: "23-35 min", etaDelivery: "12-24 min" },
-  { id: "HND-PA-ITAI-BELA", name: "Hinode Itaituba — Bela Vista 1", address: "Bairro Bela Vista 1", city: "Itaituba", uf: "PA", phone: "", lat: -4.27610, lng: -55.98360, rating: 4.9, reviews: 1558, etaPrep: "24-33 min", etaDelivery: "18-30 min" },
-  { id: "HND-PA-MARA-VAMA", name: "Hinode Marabá — Va Marabá", address: "Bairro Va Marabá", city: "Marabá", uf: "PA", phone: "", lat: -5.38110, lng: -49.13260, rating: 4.7, reviews: 201, etaPrep: "24-34 min", etaDelivery: "17-27 min" },
-  { id: "HND-PA-MARI-CENT", name: "Hinode Marituba Centro", address: "Bairro Centro", city: "Marituba", uf: "PA", phone: "", lat: -1.36140, lng: -48.34220, rating: 4.6, reviews: 370, etaPrep: "19-27 min", etaDelivery: "18-30 min" },
-  { id: "HND-PA-PARA-BEIR", name: "Hinode Parauapebas — Beira Rio", address: "Bairro Beira Rio", city: "Parauapebas", uf: "PA", phone: "", lat: -6.06760, lng: -49.90470, rating: 4.7, reviews: 201, etaPrep: "24-34 min", etaDelivery: "17-27 min" },
-  { id: "HND-PA-REDE-NUCL", name: "Hinode Redenção — Núcleo Urbano", address: "Bairro Núcleo Urbano", city: "Redenção", uf: "PA", phone: "", lat: -8.02940, lng: -49.98810, rating: 4.5, reviews: 357, etaPrep: "16-28 min", etaDelivery: "13-23 min" },
-  { id: "HND-PA-SANT-APAR", name: "Hinode Santarém — Aparecida", address: "Bairro Aparecida", city: "Santarém", uf: "PA", phone: "", lat: -2.44310, lng: -54.70830, rating: 4.6, reviews: 461, etaPrep: "18-28 min", etaDelivery: "13-21 min" },
-  { id: "HND-PA-TUCU-SANT", name: "Hinode Tucurui — Santa Isabel 2", address: "Bairro Santa Isabel 2", city: "Tucurui", uf: "PA", phone: "", lat: -3.75890, lng: -49.67260, rating: 4.6, reviews: 838, etaPrep: "17-26 min", etaDelivery: "14-26 min" },
-  { id: "HND-PA-VIGI-CENT", name: "Hinode Vigia Centro", address: "Bairro Centro", city: "Vigia", uf: "PA", phone: "", lat: -0.85970, lng: -48.13890, rating: 4.5, reviews: 448, etaPrep: "15-24 min", etaDelivery: "16-28 min" },
-  { id: "HND-PB-CAJA-CENT", name: "Hinode Cajazeiras Centro", address: "Bairro Centro", city: "Cajazeiras", uf: "PB", phone: "", lat: -6.88970, lng: -38.55750, rating: 4.8, reviews: 1545, etaPrep: "21-29 min", etaDelivery: "13-23 min" },
-  { id: "HND-PB-CAMP-SAOJ", name: "Hinode Campina Grande — São José", address: "Bairro São José", city: "Campina Grande", uf: "PB", phone: "", lat: -7.23060, lng: -35.88110, rating: 4.8, reviews: 318, etaPrep: "18-27 min", etaDelivery: "14-24 min" },
-  { id: "HND-PB-JOAO-ESTA", name: "Hinode João Pessoa — Estados 2", address: "Bairro Estados 2", city: "João Pessoa", uf: "PB", phone: "", lat: -7.11950, lng: -34.84500, rating: 4.9, reviews: 422, etaPrep: "20-32 min", etaDelivery: "14-22 min" },
-  { id: "HND-PB-PATO-SANT", name: "Hinode Patos — Santo Antônio", address: "Bairro Santo Antônio", city: "Patos", uf: "PB", phone: "", lat: -7.02190, lng: -37.27890, rating: 4.8, reviews: 682, etaPrep: "25-37 min", etaDelivery: "18-30 min" },
-  { id: "HND-PE-ARCO-SAOM", name: "Hinode Arcoverde — São Miguel", address: "Bairro São Miguel", city: "Arcoverde", uf: "PE", phone: "", lat: -8.41940, lng: -37.05810, rating: 4.5, reviews: 448, etaPrep: "15-24 min", etaDelivery: "16-28 min" },
-  { id: "HND-PE-CARP-CENT", name: "Hinode Carpina — Centro 2", address: "Bairro Centro 2", city: "Carpina", uf: "PE", phone: "", lat: -7.85080, lng: -35.25470, rating: 4.7, reviews: 383, etaPrep: "22-31 min", etaDelivery: "15-23 min" },
-  { id: "HND-PE-CARU-INDI", name: "Hinode Caruaru — Indianópolis 2", address: "Bairro Indianópolis 2", city: "Caruaru", uf: "PE", phone: "", lat: -8.28290, lng: -35.97600, rating: 4.6, reviews: 370, etaPrep: "19-27 min", etaDelivery: "18-30 min" },
-  { id: "HND-PE-GARA-HELI", name: "Hinode Garanhuns — Heliopolis", address: "Bairro Heliopolis", city: "Garanhuns", uf: "PE", phone: "", lat: -8.89190, lng: -36.49530, rating: 4.8, reviews: 136, etaPrep: "20-30 min", etaDelivery: "16-28 min" },
-  { id: "HND-PE-JABO-PIED", name: "Hinode Jaboatão Dos Guararapes — Piedade 1", address: "Bairro Piedade 1", city: "Jaboatão Dos Guararapes", uf: "PE", phone: "", lat: -8.11290, lng: -34.92230, rating: 4.9, reviews: 149, etaPrep: "23-34 min", etaDelivery: "13-21 min" },
-  { id: "HND-PE-PALM-CENT", name: "Hinode Palmares Centro", address: "Bairro Centro", city: "Palmares", uf: "PE", phone: "", lat: -8.68000, lng: -35.59190, rating: 5.0, reviews: 435, etaPrep: "23-31 min", etaDelivery: "19-29 min" },
-  { id: "HND-PE-PAUL-VILA", name: "Hinode Paulista — Vila Torres Galvao", address: "Bairro Vila Torres Galvao", city: "Paulista", uf: "PE", phone: "", lat: -7.94080, lng: -34.87280, rating: 4.7, reviews: 565, etaPrep: "20-28 min", etaDelivery: "13-25 min" },
-  { id: "HND-PE-PETR-CENT", name: "Hinode Petrolina Centro", address: "Bairro Centro", city: "Petrolina", uf: "PE", phone: "", lat: -9.38970, lng: -40.50280, rating: 4.6, reviews: 656, etaPrep: "19-29 min", etaDelivery: "16-24 min" },
-  { id: "HND-PE-RECI-DERB", name: "Hinode Recife — Derby", address: "Bairro Derby", city: "Recife", uf: "PE", phone: "", lat: -8.05680, lng: -34.88300, rating: 4.5, reviews: 175, etaPrep: "18-26 min", etaDelivery: "15-27 min" },
-  { id: "HND-PE-SANT-SAOC", name: "Hinode Santa Cruz do Capibaribe — São Cristóvão", address: "Bairro São Cristóvão", city: "Santa Cruz do Capibaribe", uf: "PE", phone: "", lat: -7.95720, lng: -36.20560, rating: 4.5, reviews: 539, etaPrep: "25-36 min", etaDelivery: "19-27 min" },
-  { id: "HND-PE-VITO-MATR", name: "Hinode Vitoria De Santo Antao — Matriz", address: "Bairro Matriz", city: "Vitoria De Santo Antao", uf: "PE", phone: "", lat: -8.11830, lng: -35.29110, rating: 4.8, reviews: 877, etaPrep: "15-27 min", etaDelivery: "13-25 min" },
-  { id: "HND-PI-PARN-PIAU", name: "Hinode Parnaiba — Piaui", address: "Bairro Piaui", city: "Parnaiba", uf: "PI", phone: "", lat: -2.90390, lng: -41.77670, rating: 4.6, reviews: 643, etaPrep: "16-25 min", etaDelivery: "19-31 min" },
-  { id: "HND-PI-PICO-CENT", name: "Hinode Picos Centro", address: "Bairro Centro", city: "Picos", uf: "PI", phone: "", lat: -7.07720, lng: -41.46690, rating: 4.8, reviews: 500, etaPrep: "16-24 min", etaDelivery: "12-20 min" },
-  { id: "HND-PI-TERE-CABR", name: "Hinode Teresina — Cabral", address: "Bairro Cabral", city: "Teresina", uf: "PI", phone: "", lat: -5.08920, lng: -42.80160, rating: 4.9, reviews: 331, etaPrep: "21-31 min", etaDelivery: "19-31 min" },
-  { id: "HND-PR-ARAU-COST", name: "Hinode Araucária — Costeira", address: "Bairro Costeira", city: "Araucária", uf: "PR", phone: "", lat: -25.59330, lng: -49.40970, rating: 4.8, reviews: 786, etaPrep: "16-26 min", etaDelivery: "18-28 min" },
-  { id: "HND-PR-CAMP-CENT", name: "Hinode Campo Mourão — Centro 1", address: "Bairro Centro 1", city: "Campo Mourão", uf: "PR", phone: "", lat: -24.04610, lng: -52.37890, rating: 4.7, reviews: 487, etaPrep: "24-36 min", etaDelivery: "15-27 min" },
-  { id: "HND-PR-CURI-CENT", name: "Hinode Curitiba — Centro 3", address: "Bairro Centro 3", city: "Curitiba", uf: "PR", phone: "", lat: -25.43820, lng: -49.27310, rating: 5.0, reviews: 721, etaPrep: "23-33 min", etaDelivery: "17-29 min" },
-  { id: "HND-PR-FOZD-KLP", name: "Hinode Foz Do Iguaçu — Klp 1", address: "Bairro Klp 1", city: "Foz Do Iguaçu", uf: "PR", phone: "", lat: -25.54780, lng: -54.58820, rating: 4.8, reviews: 1350, etaPrep: "20-28 min", etaDelivery: "18-28 min" },
-  { id: "HND-PR-LOND-CENT", name: "Hinode Londrina — Centro 1", address: "Bairro Centro 1", city: "Londrina", uf: "PR", phone: "", lat: -23.30450, lng: -51.16960, rating: 4.6, reviews: 643, etaPrep: "16-25 min", etaDelivery: "19-31 min" },
-  { id: "HND-RJ-CABO-CENT", name: "Hinode Cabo Frio — Centro 1", address: "Bairro Centro 1", city: "Cabo Frio", uf: "RJ", phone: "", lat: -22.87940, lng: -42.01860, rating: 5.0, reviews: 253, etaPrep: "25-34 min", etaDelivery: "13-25 min" },
-  { id: "HND-RJ-DUQU-CENT", name: "Hinode Duque De Caxias Centro", address: "Bairro Centro", city: "Duque De Caxias", uf: "RJ", phone: "", lat: -22.78580, lng: -43.31190, rating: 4.9, reviews: 799, etaPrep: "19-30 min", etaDelivery: "15-27 min" },
-  { id: "HND-RJ-ITAG-CENT", name: "Hinode Itaguaí Centro", address: "Bairro Centro", city: "Itaguaí", uf: "RJ", phone: "", lat: -22.86310, lng: -43.77580, rating: 4.6, reviews: 461, etaPrep: "18-28 min", etaDelivery: "13-21 min" },
-  { id: "HND-RJ-ITAP-NITE", name: "Hinode Itaperuna — Niterói 1", address: "Bairro Niterói 1", city: "Itaperuna", uf: "RJ", phone: "", lat: -21.20500, lng: -41.88660, rating: 4.6, reviews: 656, etaPrep: "19-29 min", etaDelivery: "16-24 min" },
-  { id: "HND-RJ-MAGE-PIAB", name: "Hinode Magé — Piabetá (Inhomirim)", address: "Bairro Piabetá (Inhomirim)", city: "Magé", uf: "RJ", phone: "", lat: -22.52830, lng: -43.12080, rating: 4.8, reviews: 136, etaPrep: "20-30 min", etaDelivery: "16-28 min" },
-  { id: "HND-RJ-NITE-CENT", name: "Hinode Niteroi — Centro 2", address: "Bairro Centro 2", city: "Niteroi", uf: "RJ", phone: "", lat: -22.89320, lng: -43.12410, rating: 4.9, reviews: 604, etaPrep: "18-29 min", etaDelivery: "12-24 min" },
-  { id: "HND-RJ-NOVA-CENT", name: "Hinode Nova Iguaçu — Centro 1", address: "Bairro Centro 1", city: "Nova Iguaçu", uf: "RJ", phone: "", lat: -22.75560, lng: -43.46040, rating: 4.6, reviews: 656, etaPrep: "19-29 min", etaDelivery: "16-24 min" },
-  { id: "HND-RJ-PETR-ALTO", name: "Hinode Petropolis — Alto da Serra 2", address: "Bairro Alto da Serra 2", city: "Petropolis", uf: "RJ", phone: "", lat: -22.50850, lng: -43.18080, rating: 4.5, reviews: 825, etaPrep: "25-33 min", etaDelivery: "17-27 min" },
-  { id: "HND-RJ-RIOD-BANG", name: "Hinode Rio De Janeiro — Bangu", address: "Bairro Bangu", city: "Rio De Janeiro", uf: "RJ", phone: "", lat: -22.87830, lng: -43.46830, rating: 5.0, reviews: 344, etaPrep: "24-35 min", etaDelivery: "16-24 min" },
-  { id: "HND-RJ-RIOD-BONS", name: "Hinode Rio De Janeiro — Bonsucesso 1", address: "Bairro Bonsucesso 1", city: "Rio De Janeiro", uf: "RJ", phone: "", lat: -22.87280, lng: -43.25280, rating: 4.8, reviews: 682, etaPrep: "25-37 min", etaDelivery: "18-30 min" },
-  { id: "HND-RJ-RIOD-CENT", name: "Hinode Rio De Janeiro Centro", address: "Bairro Centro", city: "Rio De Janeiro", uf: "RJ", phone: "", lat: -22.90350, lng: -43.17810, rating: 4.7, reviews: 578, etaPrep: "23-32 min", etaDelivery: "18-26 min" },
-  { id: "HND-RJ-RIOD-RECR", name: "Hinode Rio De Janeiro — Recreio Dos Bandeirantes", address: "Bairro Recreio Dos Bandeirantes", city: "Rio De Janeiro", uf: "RJ", phone: "", lat: -23.01920, lng: -43.47960, rating: 4.9, reviews: 604, etaPrep: "18-29 min", etaDelivery: "12-24 min" },
-  { id: "HND-RJ-RIOD-SANT", name: "Hinode Rio De Janeiro — Santa Cruz", address: "Bairro Santa Cruz", city: "Rio De Janeiro", uf: "RJ", phone: "", lat: -22.91390, lng: -43.68310, rating: 4.6, reviews: 734, etaPrep: "15-26 min", etaDelivery: "14-22 min" },
-  { id: "HND-RJ-SAOG-ALCA", name: "Hinode São Gonçalo — Alcântara", address: "Bairro Alcântara", city: "São Gonçalo", uf: "RJ", phone: "", lat: -22.82680, lng: -43.05370, rating: 4.7, reviews: 201, etaPrep: "24-34 min", etaDelivery: "17-27 min" },
-  { id: "HND-RN-CAIC-CENT", name: "Hinode Caicó Centro", address: "Bairro Centro", city: "Caicó", uf: "RN", phone: "", lat: -6.45830, lng: -37.09750, rating: 4.9, reviews: 240, etaPrep: "22-30 min", etaDelivery: "16-26 min" },
-  { id: "HND-RN-MOSS-ALTO", name: "Hinode Mossoro — Alto Sao Manoel 1", address: "Bairro Alto Sao Manoel 1", city: "Mossoro", uf: "RN", phone: "", lat: -5.18790, lng: -37.34410, rating: 4.8, reviews: 968, etaPrep: "25-34 min", etaDelivery: "16-24 min" },
-  { id: "HND-RN-NATA-LAGO", name: "Hinode Natal — Lagoa Nova 1", address: "Bairro Lagoa Nova 1", city: "Natal", uf: "RN", phone: "", lat: -5.83780, lng: -35.20890, rating: 4.8, reviews: 409, etaPrep: "17-28 min", etaDelivery: "17-29 min" },
-  { id: "HND-RN-NATA-PONT", name: "Hinode Natal — Ponta Negra 2", address: "Bairro Ponta Negra 2", city: "Natal", uf: "RN", phone: "", lat: -5.87840, lng: -35.18080, rating: 4.9, reviews: 799, etaPrep: "19-30 min", etaDelivery: "15-27 min" },
-  { id: "HND-RN-NATA-ZONA", name: "Hinode Natal — Zona Norte", address: "Bairro Zona Norte", city: "Natal", uf: "RN", phone: "", lat: -5.74940, lng: -35.23690, rating: 4.8, reviews: 682, etaPrep: "25-37 min", etaDelivery: "18-30 min" },
-  { id: "HND-RN-PARN-CENT", name: "Hinode Parnamirim Centro", address: "Bairro Centro", city: "Parnamirim", uf: "RN", phone: "", lat: -5.91560, lng: -35.26250, rating: 4.7, reviews: 669, etaPrep: "22-33 min", etaDelivery: "13-23 min" },
-  { id: "HND-RO-ARIQ-SETO", name: "Hinode Ariquemes — Setor 04", address: "Bairro Setor 04", city: "Ariquemes", uf: "RO", phone: "", lat: -9.91330, lng: -63.04080, rating: 4.7, reviews: 851, etaPrep: "20-30 min", etaDelivery: "19-27 min" },
-  { id: "HND-RO-JIPA-CENT", name: "Hinode Ji-Paraná — Centro 1", address: "Bairro Centro 1", city: "Ji-Paraná", uf: "RO", phone: "", lat: -10.87720, lng: -61.93190, rating: 4.9, reviews: 513, etaPrep: "19-28 min", etaDelivery: "17-27 min" },
-  { id: "HND-RO-PORT-ELDO", name: "Hinode Porto Velho — Eldorado", address: "Bairro Eldorado", city: "Porto Velho", uf: "RO", phone: "", lat: -8.73610, lng: -63.87360, rating: 4.8, reviews: 864, etaPrep: "23-34 min", etaDelivery: "16-26 min" },
-  { id: "HND-RO-VILH", name: "Hinode VILHENA", address: "", city: "VILHENA", uf: "RO", phone: "", lat: -12.74060, lng: -60.14560, rating: 4.9, reviews: 749, etaPrep: "25-36 min", etaDelivery: "17-25 min" },
-  { id: "HND-RR-BOAV-BURI", name: "Hinode Boa Vista — Buritis", address: "Bairro Buritis", city: "Boa Vista", uf: "RR", phone: "", lat: 2.81970, lng: -60.67330, rating: 4.9, reviews: 708, etaPrep: "20-29 min", etaDelivery: "12-22 min" },
-  { id: "HND-RS-ALVO-MARI", name: "Hinode Alvorada — Maringá", address: "Bairro Maringá", city: "Alvorada", uf: "RS", phone: "", lat: -29.99140, lng: -51.08080, rating: 4.6, reviews: 734, etaPrep: "15-26 min", etaDelivery: "14-22 min" },
-  { id: "HND-RS-GRAV-SAOV", name: "Hinode Gravataí — São Vicente", address: "Bairro São Vicente", city: "Gravataí", uf: "RS", phone: "", lat: -29.94420, lng: -50.99190, rating: 4.5, reviews: 916, etaPrep: "24-34 min", etaDelivery: "12-24 min" },
-  { id: "HND-RS-IJUI-PROG", name: "Hinode Ijuí — Progresso", address: "Bairro Progresso", city: "Ijuí", uf: "RS", phone: "", lat: -28.38780, lng: -53.91470, rating: 4.5, reviews: 916, etaPrep: "24-34 min", etaDelivery: "12-24 min" },
-  { id: "HND-RS-NOVO-RIOB", name: "Hinode Novo Hamburgo — Rio Branco", address: "Bairro Rio Branco", city: "Novo Hamburgo", uf: "RS", phone: "", lat: -29.67830, lng: -51.13000, rating: 4.9, reviews: 981, etaPrep: "17-27 min", etaDelivery: "13-23 min" },
-  { id: "HND-RS-PASS-CENT", name: "Hinode Passo Fundo Centro", address: "Bairro Centro", city: "Passo Fundo", uf: "RS", phone: "", lat: -28.26280, lng: -52.40670, rating: 5.0, reviews: 812, etaPrep: "22-34 min", etaDelivery: "12-20 min" },
-  { id: "HND-RS-PELO-TRES", name: "Hinode Pelotas — Três Vendas", address: "Bairro Três Vendas", city: "Pelotas", uf: "RS", phone: "", lat: -31.76540, lng: -52.33750, rating: 4.9, reviews: 981, etaPrep: "17-27 min", etaDelivery: "13-23 min" },
-  { id: "HND-RS-PORT-CRIS", name: "Hinode Porto Alegre — Cristo Redentor", address: "Bairro Cristo Redentor", city: "Porto Alegre", uf: "RS", phone: "", lat: -30.00420, lng: -51.17390, rating: 5.0, reviews: 1085, etaPrep: "19-27 min", etaDelivery: "13-21 min" },
-  { id: "HND-RS-SANT-CENT", name: "Hinode Santa Cruz Do Sul Centro", address: "Bairro Centro", city: "Santa Cruz Do Sul", uf: "RS", phone: "", lat: -29.71750, lng: -52.42560, rating: 4.9, reviews: 799, etaPrep: "19-30 min", etaDelivery: "15-27 min" },
-  { id: "HND-RS-URUG-CENT", name: "Hinode Uruguaiana — Centro 1", address: "Bairro Centro 1", city: "Uruguaiana", uf: "RS", phone: "", lat: -29.75470, lng: -57.08830, rating: 4.8, reviews: 968, etaPrep: "25-34 min", etaDelivery: "16-24 min" },
-  { id: "HND-RS-VACA-CENT", name: "Hinode Vacaria Centro", address: "Bairro Centro", city: "Vacaria", uf: "RS", phone: "", lat: -28.51190, lng: -50.93420, rating: 4.5, reviews: 448, etaPrep: "15-24 min", etaDelivery: "16-28 min" },
-  { id: "HND-RS-VIAM-SANT", name: "Hinode Viamão — Santa Isabel", address: "Bairro Santa Isabel", city: "Viamão", uf: "RS", phone: "", lat: -30.08080, lng: -51.02330, rating: 4.6, reviews: 838, etaPrep: "17-26 min", etaDelivery: "14-26 min" },
-  { id: "HND-SC-BALN-NACO", name: "Hinode Balneário Camboriú — Nações", address: "Bairro Nações", city: "Balneário Camboriú", uf: "SC", phone: "", lat: -26.99190, lng: -48.63530, rating: 5.0, reviews: 162, etaPrep: "15-27 min", etaDelivery: "18-28 min" },
-  { id: "HND-SC-BLUM-AGUA", name: "Hinode Blumenau — Água Verde 1", address: "Bairro Água Verde 1", city: "Blumenau", uf: "SC", phone: "", lat: -26.91940, lng: -49.06610, rating: 4.6, reviews: 370, etaPrep: "19-27 min", etaDelivery: "18-30 min" },
-  { id: "HND-SC-CHAP-UNIV", name: "Hinode Chapeco — Universitario 1", address: "Bairro Universitario 1", city: "Chapeco", uf: "SC", phone: "", lat: -27.10040, lng: -52.61520, rating: 4.7, reviews: 578, etaPrep: "23-32 min", etaDelivery: "18-26 min" },
-  { id: "HND-SC-CRIC-CENT", name: "Hinode Criciúma Centro", address: "Bairro Centro", city: "Criciúma", uf: "SC", phone: "", lat: -28.67750, lng: -49.36970, rating: 4.9, reviews: 331, etaPrep: "21-31 min", etaDelivery: "19-31 min" },
-  { id: "HND-SC-FLOR-CENT", name: "Hinode Florianópolis Centro", address: "Bairro Centro", city: "Florianópolis", uf: "SC", phone: "", lat: -27.59690, lng: -48.54950, rating: 4.7, reviews: 565, etaPrep: "20-28 min", etaDelivery: "13-25 min" },
-  { id: "HND-SC-JARA-CENT", name: "Hinode Jaraguá Do Sul — Centro 2", address: "Bairro Centro 2", city: "Jaraguá Do Sul", uf: "SC", phone: "", lat: -26.48560, lng: -49.06670, rating: 4.7, reviews: 292, etaPrep: "23-35 min", etaDelivery: "12-24 min" },
-  { id: "HND-SC-JOIN-FLOR", name: "Hinode Joinville — Floresta 1", address: "Bairro Floresta 1", city: "Joinville", uf: "SC", phone: "", lat: -26.29920, lng: -48.84580, rating: 4.6, reviews: 643, etaPrep: "16-25 min", etaDelivery: "19-31 min" },
-  { id: "HND-SE-ARAC-SAOJ", name: "Hinode Aracaju — São José", address: "Bairro São José", city: "Aracaju", uf: "SE", phone: "", lat: -10.94720, lng: -37.07310, rating: 4.5, reviews: 266, etaPrep: "17-27 min", etaDelivery: "18-26 min" },
-  { id: "HND-SE-ITAB-ROTA", name: "Hinode Itabaiana — Rotary Club De Itabaiana 1", address: "Bairro Rotary Club De Itabaiana 1", city: "Itabaiana", uf: "SE", phone: "", lat: -10.68560, lng: -37.42560, rating: 4.8, reviews: 500, etaPrep: "16-24 min", etaDelivery: "12-20 min" },
-  { id: "HND-SE-PROP-CENT", name: "Hinode Propriá Centro", address: "Bairro Centro", city: "Propriá", uf: "SE", phone: "", lat: -10.21280, lng: -36.84250, rating: 4.8, reviews: 773, etaPrep: "24-33 min", etaDelivery: "13-21 min" },
-  { id: "HND-SE-TOBI-CENT", name: "Hinode Tobias Barreto — Centro 2", address: "Bairro Centro 2", city: "Tobias Barreto", uf: "SE", phone: "", lat: -11.18140, lng: -38.00580, rating: 4.9, reviews: 526, etaPrep: "22-32 min", etaDelivery: "14-26 min" },
-  { id: "HND-SP-AMPA-CENT", name: "Hinode Amparo — Centro 1", address: "Bairro Centro 1", city: "Amparo", uf: "SP", phone: "", lat: -22.70110, lng: -46.76110, rating: 4.7, reviews: 474, etaPrep: "21-32 min", etaDelivery: "18-28 min" },
-  { id: "HND-SP-BARU-BETH", name: "Hinode Barueri — Bethaville I", address: "Bairro Bethaville I", city: "Barueri", uf: "SP", phone: "", lat: -23.51080, lng: -46.87610, rating: 4.9, reviews: 526, etaPrep: "22-32 min", etaDelivery: "14-26 min" },
-  { id: "HND-SP-CAMP", name: "Hinode Campinas", address: "", city: "Campinas", uf: "SP", phone: "", lat: -22.90560, lng: -47.06080, rating: 4.8, reviews: 541, etaPrep: "21-31 min", etaDelivery: "17-29 min" },
-  { id: "HND-SP-CATA-CENT", name: "Hinode Catanduva Centro", address: "Bairro Centro", city: "Catanduva", uf: "SP", phone: "", lat: -21.13780, lng: -48.97220, rating: 4.7, reviews: 396, etaPrep: "25-35 min", etaDelivery: "12-22 min" },
-  { id: "HND-SP-DRAC-CENT", name: "Hinode Dracena Centro", address: "Bairro Centro", city: "Dracena", uf: "SP", phone: "", lat: -21.48390, lng: -51.53140, rating: 4.8, reviews: 409, etaPrep: "17-28 min", etaDelivery: "17-29 min" },
-  { id: "HND-SP-FRAN-RESI", name: "Hinode Franca — Residencial Amazonas 2", address: "Bairro Residencial Amazonas 2", city: "Franca", uf: "SP", phone: "", lat: -20.53860, lng: -47.40060, rating: 4.8, reviews: 695, etaPrep: "17-25 min", etaDelivery: "15-23 min" },
-  { id: "HND-SP-FRAN-COMP", name: "Hinode Franco Da Rocha — Companhia Fazenda Belém 1", address: "Bairro Companhia Fazenda Belém 1", city: "Franco Da Rocha", uf: "SP", phone: "", lat: -23.32890, lng: -46.72690, rating: 4.6, reviews: 643, etaPrep: "16-25 min", etaDelivery: "19-31 min" },
-  { id: "HND-SP-GUAR-VILA", name: "Hinode Guarulhos — Vila Galvão", address: "Bairro Vila Galvão", city: "Guarulhos", uf: "SP", phone: "", lat: -23.46280, lng: -46.53330, rating: 4.9, reviews: 708, etaPrep: "20-29 min", etaDelivery: "12-22 min" },
-  { id: "HND-SP-INDA-CENT", name: "Hinode Indaiatuba Centro", address: "Bairro Centro", city: "Indaiatuba", uf: "SP", phone: "", lat: -23.09030, lng: -47.21780, rating: 5.0, reviews: 435, etaPrep: "23-31 min", etaDelivery: "19-29 min" },
-  { id: "HND-SP-ITAP-CENT", name: "Hinode Itapetininga Centro", address: "Bairro Centro", city: "Itapetininga", uf: "SP", phone: "", lat: -23.58830, lng: -48.05310, rating: 4.7, reviews: 669, etaPrep: "22-33 min", etaDelivery: "13-23 min" },
-  { id: "HND-SP-ITAP-VILA", name: "Hinode Itapeva — Vila Nova", address: "Bairro Vila Nova", city: "Itapeva", uf: "SP", phone: "", lat: -23.98190, lng: -48.87580, rating: 4.8, reviews: 695, etaPrep: "17-25 min", etaDelivery: "15-23 min" },
-  { id: "HND-SP-JAU-CHAC", name: "Hinode Jaú — Chácara Bela Vista 1", address: "Bairro Chácara Bela Vista 1", city: "Jaú", uf: "SP", phone: "", lat: -22.29640, lng: -48.55780, rating: 4.9, reviews: 804, etaPrep: "15-26 min", etaDelivery: "16-26 min" },
-  { id: "HND-SP-JUND-VILA", name: "Hinode Jundiai — Vila Sao Joao Batista 1", address: "Bairro Vila Sao Joao Batista 1", city: "Jundiai", uf: "SP", phone: "", lat: -23.18640, lng: -46.88420, rating: 4.6, reviews: 734, etaPrep: "15-26 min", etaDelivery: "14-22 min" },
-  { id: "HND-SP-MAUA-VILA", name: "Hinode Mauá — Vila Bocaina", address: "Bairro Vila Bocaina", city: "Mauá", uf: "SP", phone: "", lat: -23.66780, lng: -46.46140, rating: 4.7, reviews: 565, etaPrep: "20-28 min", etaDelivery: "13-25 min" },
-  { id: "HND-SP-MOGI-CENT", name: "Hinode Mogi Guaçu Centro", address: "Bairro Centro", city: "Mogi Guaçu", uf: "SP", phone: "", lat: -22.37110, lng: -46.94250, rating: 4.6, reviews: 643, etaPrep: "16-25 min", etaDelivery: "19-31 min" },
-  { id: "HND-SP-OSAS-CENT", name: "Hinode Osasco Centro", address: "Bairro Centro", city: "Osasco", uf: "SP", phone: "", lat: -23.53250, lng: -46.79190, rating: 4.8, reviews: 773, etaPrep: "24-33 min", etaDelivery: "13-21 min" },
-  { id: "HND-SP-PIRA-JARD", name: "Hinode Piracicaba — Jardim Europa", address: "Bairro Jardim Europa", city: "Piracicaba", uf: "SP", phone: "", lat: -22.72530, lng: -47.64920, rating: 4.9, reviews: 526, etaPrep: "22-32 min", etaDelivery: "14-26 min" },
-  { id: "HND-SP-REGI-CENT", name: "Hinode Registro Centro", address: "Bairro Centro", city: "Registro", uf: "SP", phone: "", lat: -24.48780, lng: -47.84470, rating: 4.7, reviews: 578, etaPrep: "23-32 min", etaDelivery: "18-26 min" },
-  { id: "HND-SP-RIBE-VILA", name: "Hinode Ribeirão Preto — Vila Monte Alegre", address: "Bairro Vila Monte Alegre", city: "Ribeirão Preto", uf: "SP", phone: "", lat: -21.17040, lng: -47.81030, rating: 4.5, reviews: 539, etaPrep: "25-36 min", etaDelivery: "19-27 min" },
-  { id: "HND-SP-RIOC-VILA", name: "Hinode Rio Claro — Vila Santo Antônio", address: "Bairro Vila Santo Antônio", city: "Rio Claro", uf: "SP", phone: "", lat: -22.40830, lng: -47.56110, rating: 4.8, reviews: 682, etaPrep: "25-37 min", etaDelivery: "18-30 min" },
-  { id: "HND-SP-SANT-PARA", name: "Hinode Santo André — Paraíso 1", address: "Bairro Paraíso 1", city: "Santo André", uf: "SP", phone: "", lat: -23.66380, lng: -46.53110, rating: 4.8, reviews: 695, etaPrep: "17-25 min", etaDelivery: "15-23 min" },
-  { id: "HND-SP-SANT-VALO", name: "Hinode Santos — Valongo", address: "Bairro Valongo", city: "Santos", uf: "SP", phone: "", lat: -23.93610, lng: -46.32860, rating: 4.8, reviews: 877, etaPrep: "15-27 min", etaDelivery: "13-25 min" },
-  { id: "HND-SP-SAOC-CENT", name: "Hinode São Carlos Centro", address: "Bairro Centro", city: "São Carlos", uf: "SP", phone: "", lat: -22.00670, lng: -47.89080, rating: 4.7, reviews: 565, etaPrep: "20-28 min", etaDelivery: "13-25 min" },
-  { id: "HND-SP-SAOJ-VILA", name: "Hinode São José Do Rio Preto — Vila Diniz", address: "Bairro Vila Diniz", city: "São José Do Rio Preto", uf: "SP", phone: "", lat: -20.81970, lng: -49.37940, rating: 4.8, reviews: 682, etaPrep: "25-37 min", etaDelivery: "18-30 min" },
-  { id: "HND-SP-SAOJ-AVSA", name: "Hinode São José Dos Campos — Av Satélite", address: "Bairro Av Satélite", city: "São José Dos Campos", uf: "SP", phone: "", lat: -23.17910, lng: -45.88720, rating: 4.7, reviews: 669, etaPrep: "22-33 min", etaDelivery: "13-23 min" },
-  { id: "HND-SP-SAOP-BARR", name: "Hinode São Paulo — Barra Funda", address: "Bairro Barra Funda", city: "São Paulo", uf: "SP", phone: "", lat: -23.52780, lng: -46.66080, rating: 4.8, reviews: 695, etaPrep: "17-25 min", etaDelivery: "15-23 min" },
-  { id: "HND-SP-SAOP-BUTA", name: "Hinode São Paulo — Butantã", address: "Bairro Butantã", city: "São Paulo", uf: "SP", phone: "", lat: -23.56830, lng: -46.72360, rating: 4.7, reviews: 760, etaPrep: "21-29 min", etaDelivery: "16-28 min" },
-  { id: "HND-SP-SAOP-CAPA", name: "Hinode São Paulo — Capao Redondo", address: "Bairro Capao Redondo", city: "São Paulo", uf: "SP", phone: "", lat: -23.65200, lng: -46.76410, rating: 4.6, reviews: 461, etaPrep: "18-28 min", etaDelivery: "13-21 min" },
-  { id: "HND-SP-SAOP-INTE", name: "Hinode São Paulo — Interlagos 1", address: "Bairro Interlagos 1", city: "São Paulo", uf: "SP", phone: "", lat: -23.68690, lng: -46.69500, rating: 5.0, reviews: 812, etaPrep: "22-34 min", etaDelivery: "12-20 min" },
-  { id: "HND-SP-SAOP-LAPA", name: "Hinode São Paulo — Lapa", address: "Bairro Lapa", city: "São Paulo", uf: "SP", phone: "", lat: -23.52370, lng: -46.70260, rating: 4.7, reviews: 578, etaPrep: "23-32 min", etaDelivery: "18-26 min" },
-  { id: "HND-SP-SAOP-PARQ", name: "Hinode São Paulo — Parque Artur Alvim", address: "Bairro Parque Artur Alvim", city: "São Paulo", uf: "SP", phone: "", lat: -23.54140, lng: -46.46310, rating: 4.8, reviews: 864, etaPrep: "23-34 min", etaDelivery: "16-26 min" },
-  { id: "HND-SP-SAOP-TATU", name: "Hinode São Paulo — Tatuapé", address: "Bairro Tatuapé", city: "São Paulo", uf: "SP", phone: "", lat: -23.54000, lng: -46.57310, rating: 5.0, reviews: 994, etaPrep: "20-31 min", etaDelivery: "18-30 min" },
-  { id: "HND-SP-VOTO-JARD", name: "Hinode Votorantim — Jardim Toledo", address: "Bairro Jardim Toledo", city: "Votorantim", uf: "SP", phone: "", lat: -23.54470, lng: -47.43780, rating: 4.9, reviews: 890, etaPrep: "18-26 min", etaDelivery: "18-26 min" },
-  { id: "HND-TO-ARAG-CENT", name: "Hinode Araguaína Centro", address: "Bairro Centro", city: "Araguaína", uf: "TO", phone: "", lat: -7.19080, lng: -48.20780, rating: 4.9, reviews: 422, etaPrep: "20-32 min", etaDelivery: "14-22 min" }
+  // ===== AC =====
+  { id: "HND-AC-CRUZEIRO-DO-SUL", name: "Hinode Cruzeiro Do Sul", address: "RUA AFONSO PENA, 881 - Aabb - Cruzeiro Do Sul/AC", street: "RUA AFONSO PENA", number: "881", bairro: "AABB", city: "Cruzeiro Do Sul", uf: "AC", phone: "(68) 999014636", whatsapp: "5568999014636", email: "cruzeirodosul@colfqhnd.com.br", lat: -7.6285, lng: -72.6747, rating: 4.6, reviews: 84, etaPrep: "19-30 min", etaDelivery: "12-22 min", hours: {mon:[8,0,18,0],tue:[8,0,18,0],wed:[8,0,18,0],thu:[8,0,18,0],fri:[8,0,18,0],sat:[8,0,12,0],sun:null} },
+  { id: "HND-AC-RIO-BRANCO", name: "Hinode Rio Branco", address: "RUA PERNAMBUCO, 487 - Bosque - Rio Branco/AC", street: "RUA PERNAMBUCO", number: "487", bairro: "BOSQUE", city: "Rio Branco", uf: "AC", phone: "(68) 992326720", whatsapp: "5568992326720", email: "riobranco@colfqhnd.com.br", lat: -9.9747, lng: -67.8243, rating: 4.7, reviews: 383, etaPrep: "22-31 min", etaDelivery: "15-23 min", hours: {mon:[8,0,18,0],tue:[8,0,18,0],wed:[8,0,18,0],thu:[8,0,18,0],fri:[8,0,18,0],sat:[8,0,12,0],sun:null} },
+  // ===== AL =====
+  { id: "HND-AL-ARAPIRACA", name: "Hinode Arapiraca", address: "RUA NOSSA SENHORA DE FÁTIMA, 244 - Brasília - Arapiraca/AL", street: "RUA NOSSA SENHORA DE FÁTIMA", number: "244", bairro: "BRASÍLIA", city: "Arapiraca", uf: "AL", phone: "(82) 999011580", whatsapp: "5582999011580", email: "arapiraca@colfqhnd.com.br", lat: -9.7531, lng: -36.6612, rating: 4.8, reviews: 227, etaPrep: "19-31 min", etaDelivery: "19-27 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-AL-ATALAIA", name: "Hinode Atalaia", address: "AVENIDA JOSE PROCOPIO ALBUQUERQUE, 60 - Jose Paulino - Atalaia/AL", street: "AVENIDA JOSE PROCOPIO ALBUQUERQUE", number: "60", bairro: "JOSE PAULINO", city: "Atalaia", uf: "AL", phone: "(82) 993616789", whatsapp: "5582993616789", email: "atalaia1@colfqhnd.com.br", lat: -9.5103, lng: -36.0228, rating: 4.8, reviews: 318, etaPrep: "18-27 min", etaDelivery: "14-24 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-AL-MACEIO-TABULEIRO-DO-MARTINS", name: "Hinode Maceio Tabuleiro Do Martins", address: "AVENIDA DOUTOR DURVAL DE GÓIS MONTEIRO, 9757 - Tabuleiro Do Martins - Maceio/AL", street: "AVENIDA DOUTOR DURVAL DE GÓIS MONTEIRO", number: "9757", bairro: "TABULEIRO DO MARTINS", city: "Maceio", uf: "AL", phone: "(82) 30130301", whatsapp: "5582988479066", email: "maceio@colfqhnd.com.br", lat: -9.6498, lng: -35.7089, rating: 4.6, reviews: 97, etaPrep: "22-34 min", etaDelivery: "17-29 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-AL-PALMEIRA-DOS-INDIOS-2", name: "Hinode Palmeira Dos Indios 2", address: "RUA MARIANO DE FREITAS, 68 - São Cristóvão - Palmeira Dos Indios/AL", street: "RUA MARIANO DE FREITAS", number: "68", bairro: "SÃO CRISTÓVÃO", city: "Palmeira Dos Indios", uf: "AL", phone: "(82) 982368182", whatsapp: "5582999209434", email: "palmeiradosindios2@colfqhnd.com.br", lat: -9.4076, lng: -36.6291, rating: 4.6, reviews: 279, etaPrep: "20-31 min", etaDelivery: "15-25 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-AL-SANTANA-DO-IPANEMA-1", name: "Hinode Santana Do Ipanema 1", address: "AVENIDA PRESIDENTE DUTRA, 303 - Monumento - Santana Do Ipanema/AL", street: "AVENIDA PRESIDENTE DUTRA", number: "303", bairro: "MONUMENTO", city: "Santana Do Ipanema", uf: "AL", phone: "(82) 981259282", whatsapp: "5582981259282", email: "santanadoipanema1@colfqhnd.com.br", lat: -9.3787, lng: -37.2454, rating: 4.7, reviews: 760, etaPrep: "21-29 min", etaDelivery: "16-28 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  // ===== AM =====
+  { id: "HND-AM-ALVORADA", name: "Hinode Alvorada", address: "AVENIDA DESEMBARGADOR JOÃO MACHADO, 597 - Alvorada - Manaus/AM", street: "AVENIDA DESEMBARGADOR JOÃO MACHADO", number: "597", bairro: "ALVORADA", city: "Manaus", uf: "AM", phone: "(92) 33474678", whatsapp: "5592982028290", email: "manausalvorada@colfqhnd.com.br", lat: -3.0809, lng: -60.0356, rating: 4.6, reviews: 279, etaPrep: "20-31 min", etaDelivery: "15-25 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-AM-ITACOATIARA", name: "Hinode Itacoatiara", address: "RUA DOUTOR LUZARDO FERREIRA DE MELO, 2045 - Centro - Itacoatiara/AM", street: "RUA DOUTOR LUZARDO FERREIRA DE MELO", number: "2045", bairro: "CENTRO", city: "Itacoatiara", uf: "AM", phone: "(92) 992024349", whatsapp: "5592992024349", email: "itacoatiara@colfqhnd.com.br", lat: -3.1432, lng: -58.4442, rating: 4.8, reviews: 227, etaPrep: "19-31 min", etaDelivery: "19-27 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-AM-MANAUS-CENTRO", name: "Hinode Manaus Centro", address: "AVENIDA CONSTANTINO NERY, 503 - Centro - Manaus/AM", street: "AVENIDA CONSTANTINO NERY", number: "503", bairro: "CENTRO", city: "Manaus", uf: "AM", phone: "(92) 41027060", whatsapp: "5592995089572", email: "manauscentro@colfqhnd.com.br", lat: -3.132, lng: -60.0254, rating: 4.5, reviews: 175, etaPrep: "18-26 min", etaDelivery: "15-27 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-AM-MANAUS-ZONA-LESTE", name: "Hinode Manaus Zona Leste", address: "AUTAZ MIRIM, 288 - Tancredo Neves - Manaus/AM", street: "AUTAZ MIRIM", number: "288", bairro: "TANCREDO NEVES", city: "Manaus", uf: "AM", phone: "(92) 992296837", whatsapp: "5592992296837", email: "manauszonaleste@colfqhnd.com.br", lat: -3.0481, lng: -59.9531, rating: 4.8, reviews: 123, etaPrep: "17-26 min", etaDelivery: "19-29 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  // ===== AP =====
+  { id: "HND-AP-MACAPA-CENTRAL", name: "Hinode Macapa Central", address: "RUA LEOPOLDO MACHADO, 2334 - Central - Macapa/AP", street: "RUA LEOPOLDO MACHADO", number: "2334", bairro: "CENTRAL", city: "Macapa", uf: "AP", phone: "(96) 991321639", whatsapp: "5596991321639", email: "macapa@colfqhnd.com.br", lat: 0.0356, lng: -51.0705, rating: 5.0, reviews: 253, etaPrep: "25-34 min", etaDelivery: "13-25 min", hours: {mon:[8,0,18,0],tue:[8,0,18,0],wed:[8,0,18,0],thu:[8,0,18,0],fri:[8,0,18,0],sat:[8,0,12,0],sun:null} },
+  { id: "HND-AP-MACAPA-TREM", name: "Hinode Macapa Trem", address: "RUA LEOPOLDO MACHADO, 2466 - Central - Macapa/AP", street: "RUA LEOPOLDO MACHADO", number: "2466", bairro: "CENTRAL", city: "Macapa", uf: "AP", phone: "(96) 92077272", whatsapp: "559692077272", email: "macapatrem@colfqhnd.com.br", lat: 0.0356, lng: -51.0705, rating: 5.0, reviews: 253, etaPrep: "25-34 min", etaDelivery: "13-25 min", hours: {mon:[8,0,18,0],tue:[8,0,18,0],wed:[8,0,18,0],thu:[8,0,18,0],fri:[8,0,18,0],sat:[8,0,12,0],sun:null} },
+  // ===== BA =====
+  { id: "HND-BA-ALAGOINHAS", name: "Hinode Alagoinhas", address: "SETE DE SETEMBRO, 32 - Centro - Alagoinhas/BA", street: "SETE DE SETEMBRO", number: "32", bairro: "CENTRO", city: "Alagoinhas", uf: "BA", phone: "(75) 34218000", whatsapp: "5575998284534", email: "alagoinhas@colfqhnd.com.br", lat: -12.1361, lng: -38.4192, rating: 4.7, reviews: 1428, etaPrep: "16-25 min", etaDelivery: "16-26 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-BA-BARREIRAS-1", name: "Hinode Barreiras 1", address: "RUA 26 DE MAIO, 221 - Centro - Barreiras/BA", street: "RUA 26 DE MAIO", number: "221", bairro: "CENTRO", city: "Barreiras", uf: "BA", phone: "", whatsapp: "5577999235852", email: "barreiras1@colfqhnd.com.br", lat: -12.148, lng: -44.9925, rating: 5.0, reviews: 162, etaPrep: "15-27 min", etaDelivery: "18-28 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-BA-EUCLIDES-DA-CUNHA", name: "Hinode Euclides Da Cunha", address: "RUA ELSON TORRES DE AQUINO, 246 - Centro - Euclides Da Cunha/BA", street: "RUA ELSON TORRES DE AQUINO", number: "246", bairro: "CENTRO", city: "Euclides Da Cunha", uf: "BA", phone: "(75) 998831717", whatsapp: "5575998831717", email: "euclidesdacunha@colfqhnd.com.br", lat: -10.5074, lng: -39.0148, rating: 4.6, reviews: 188, etaPrep: "21-30 min", etaDelivery: "12-20 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-BA-EUNAPOLIS-1", name: "Hinode Eunapolis 1", address: "AVENIDA CASTRO ALVES, 372 - Centro - Eunapolis/BA", street: "AVENIDA CASTRO ALVES", number: "372", bairro: "CENTRO", city: "Eunapolis", uf: "BA", phone: "(73) 999081132", whatsapp: "5573999081132", email: "eunapolis1@colfqhnd.com.br", lat: -16.3719, lng: -39.5807, rating: 4.6, reviews: 188, etaPrep: "21-30 min", etaDelivery: "12-20 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-BA-FEIRA-DE-SANTANA-3", name: "Hinode Feira De Santana 3", address: "RUA CASTRO ALVES, 1175 - Centro - Feira De Santana/BA", street: "RUA CASTRO ALVES", number: "1175", bairro: "CENTRO", city: "Feira De Santana", uf: "BA", phone: "(7) 530305560", whatsapp: "5575991666967", email: "feiradesantana3@colfqhnd.com.br", lat: -12.2666, lng: -38.9667, rating: 4.9, reviews: 149, etaPrep: "23-34 min", etaDelivery: "13-21 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-BA-ILHEUS-1", name: "Hinode Ilheus 1", address: "AVENIDA ITABUNA, 1491 - Conquista - Ilheus/BA", street: "AVENIDA ITABUNA", number: "1491", bairro: "CONQUISTA", city: "Ilheus", uf: "BA", phone: "(73) 999474078", whatsapp: "5573999474078", email: "ilheus1@colfqhnd.com.br", lat: -14.7935, lng: -39.0463, rating: 4.6, reviews: 188, etaPrep: "21-30 min", etaDelivery: "12-20 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-BA-IRECE-1", name: "Hinode Irece 1", address: "AVENIDA ADOLFO MOITINHO, 545 - Centro - Irece/BA", street: "AVENIDA ADOLFO MOITINHO", number: "545", bairro: "CENTRO", city: "Irece", uf: "BA", phone: "(74) 999862472", whatsapp: "5574999862472", email: "irece1@colfqhnd.com.br", lat: -11.3032, lng: -41.8537, rating: 4.7, reviews: 110, etaPrep: "25-33 min", etaDelivery: "14-22 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-BA-ITABERABA", name: "Hinode Itaberaba", address: "AVENIDA RIO BRANCO, 461 - Centro - Itaberaba/BA", street: "AVENIDA RIO BRANCO", number: "461", bairro: "CENTRO", city: "Itaberaba", uf: "BA", phone: "", whatsapp: "5575991950032", email: "itaberaba@colfqhnd.com.br", lat: -12.5221, lng: -40.3056, rating: 5.0, reviews: 1571, etaPrep: "16-26 min", etaDelivery: "15-23 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-BA-ITABUNA-1", name: "Hinode Itabuna 1", address: "RUA SERGIPE, 127 - Jardim Vitoria - Itabuna/BA", street: "RUA SERGIPE", number: "127", bairro: "JARDIM VITORIA", city: "Itabuna", uf: "BA", phone: "(73) 30261902", whatsapp: "5573999291101", email: "itabuna@colfqhnd.com.br", lat: -14.7858, lng: -39.2803, rating: 4.9, reviews: 1454, etaPrep: "22-33 min", etaDelivery: "18-26 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-BA-JEQUIE-2", name: "Hinode Jequie 2", address: "AVENIDA RIO BRANCO, 648 - Centro - Jequie/BA", street: "AVENIDA RIO BRANCO", number: "648", bairro: "CENTRO", city: "Jequie", uf: "BA", phone: "(73) 999489961", whatsapp: "5573999489961", email: "jequie2@colfqhnd.com.br", lat: -13.8576, lng: -40.083, rating: 5.0, reviews: 344, etaPrep: "24-35 min", etaDelivery: "16-24 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-BA-JUAZEIRO-BA", name: "Hinode Juazeiro Ba", address: "TRAVESSA LUIZ INÁCIO LULA DA SILVA, s/n - Santa Maria Goretti - Juazeiro/BA", street: "TRAVESSA LUIZ INÁCIO LULA DA SILVA", number: "S/N", bairro: "SANTA MARIA GORETTI", city: "Juazeiro", uf: "BA", phone: "(74) 36131659", whatsapp: "5574991028145", email: "juazeiroba@colfqhnd.com.br", lat: -9.4117, lng: -40.4986, rating: 4.7, reviews: 565, etaPrep: "20-28 min", etaDelivery: "13-25 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-BA-LAURO-DE-FREITAS-1", name: "Hinode Lauro De Freitas 1", address: "AVENIDA SANTOS DUMONT, 2873 - Centro - Lauro De Freitas/BA", street: "AVENIDA SANTOS DUMONT", number: "2873", bairro: "CENTRO", city: "Lauro De Freitas", uf: "BA", phone: "(71) 41134544", whatsapp: "5571994173131", email: "laurodefreitas1@colfqhnd.com.br", lat: -12.8946, lng: -38.3251, rating: 4.9, reviews: 331, etaPrep: "21-31 min", etaDelivery: "19-31 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-BA-PAULO-AFONSO-1", name: "Hinode Paulo Afonso 1", address: "RUA SANTOS DUMONT, 169 - Vila Poty - Paulo Afonso/BA", street: "RUA SANTOS DUMONT", number: "169", bairro: "VILA POTY", city: "Paulo Afonso", uf: "BA", phone: "(75) 987048567", whatsapp: "5575987048567", email: "pauloafonso1@colfqhnd.com.br", lat: -9.4098, lng: -38.2204, rating: 4.9, reviews: 331, etaPrep: "21-31 min", etaDelivery: "19-31 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-BA-SALVADOR-1", name: "Hinode Salvador 1", address: "AVENIDA TANCREDO NEVES, 274 - Caminho Das Árvores - Salvador/BA", street: "AVENIDA TANCREDO NEVES", number: "274", bairro: "CAMINHO DAS ÁRVORES", city: "Salvador", uf: "BA", phone: "(71) 130429416", whatsapp: "5571982648068", email: "salvador1@colfqhnd.com.br", lat: -12.9809, lng: -38.463, rating: 4.9, reviews: 149, etaPrep: "23-34 min", etaDelivery: "13-21 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-BA-SALVADOR-CENTRO-2", name: "Hinode Salvador Centro 2", address: "RUA POLITEAMA DE CIMA, 22 - Politeama - Salvador/BA", street: "RUA POLITEAMA DE CIMA", number: "22", bairro: "POLITEAMA", city: "Salvador", uf: "BA", phone: "(71) 30332175", whatsapp: "5571986323676", email: "salvadorcentro2@colfqhnd.com.br", lat: -12.9786, lng: -38.5128, rating: 4.7, reviews: 487, etaPrep: "24-36 min", etaDelivery: "15-27 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-BA-SALVADOR-URUGUAI-1", name: "Hinode Salvador Uruguai 1", address: "RUA DO URUGUAY, 753 - Uruguai - Salvador/BA", street: "RUA DO URUGUAY", number: "753", bairro: "URUGUAI", city: "Salvador", uf: "BA", phone: "(71) 982414021", whatsapp: "5571982414021", email: "salvadoruruguai1@colfqhnd.com.br", lat: -12.9241, lng: -38.4895, rating: 4.8, reviews: 682, etaPrep: "25-37 min", etaDelivery: "18-30 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-BA-SANTO-ANTONIO-DE-JESUS-1", name: "Hinode Santo Antonio De Jesus 1", address: "RUA MONSENHOR ANTÔNIO DE OLIVEIRA, 55 - Centro - Santo Antonio De Jesus/BA", street: "RUA MONSENHOR ANTÔNIO DE OLIVEIRA", number: "55", bairro: "CENTRO", city: "Santo Antonio De Jesus", uf: "BA", phone: "(75) 36324215", whatsapp: "5575991749986", email: "santoantoniodejesus1@colfqhnd.com.br", lat: -12.97, lng: -39.2628, rating: 4.5, reviews: 357, etaPrep: "16-28 min", etaDelivery: "13-23 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-BA-SIMOES-FILHO", name: "Hinode Simoes Filho", address: "RUA PROFESSORA MARIA DE SOUZA CHAVES, 32 - Centro - Simoes Filho/BA", street: "RUA PROFESSORA MARIA DE SOUZA CHAVES", number: "32", bairro: "CENTRO", city: "Simoes Filho", uf: "BA", phone: "(71) 30271070", whatsapp: "5571987148239", email: "simoesfilho@colfqhnd.com.br", lat: -12.7821, lng: -38.4042, rating: 4.7, reviews: 383, etaPrep: "22-31 min", etaDelivery: "15-23 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-BA-TEIXEIRA-DE-FREITAS-1", name: "Hinode Teixeira De Freitas 1", address: "AVENIDA PRESIDENTE GETÚLIO VARGAS, 4253 - Centro - Teixeira De Freitas/BA", street: "AVENIDA PRESIDENTE GETÚLIO VARGAS", number: "4253", bairro: "CENTRO", city: "Teixeira De Freitas", uf: "BA", phone: "(73) 998541656", whatsapp: "5573998541656", email: "teixeiradefreitas1@colfqhnd.com.br", lat: -17.5358, lng: -39.7423, rating: 4.8, reviews: 409, etaPrep: "17-28 min", etaDelivery: "17-29 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-BA-VITORIA-DA-CONQUISTA", name: "Hinode Vitoria Da Conquista", address: "PRAÇA PRESIDENTE TANCREDO NEVES, 178 - Centro - Vitoria Da Conquista/BA", street: "PRAÇA PRESIDENTE TANCREDO NEVES", number: "178", bairro: "CENTRO", city: "Vitoria Da Conquista", uf: "BA", phone: "(77) 34214128", whatsapp: "5577991219474", email: "vitoriadaconquista@colfqhnd.com.br", lat: -14.8615, lng: -40.8442, rating: 4.9, reviews: 513, etaPrep: "19-28 min", etaDelivery: "17-27 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  // ===== CE =====
+  { id: "HND-CE-CRATEUS-1", name: "Hinode Crateus 1", address: "RUA CORONEL TOTÓ, 906 - Centro - Crateus/CE", street: "RUA CORONEL TOTÓ", number: "906", bairro: "CENTRO", city: "Crateus", uf: "CE", phone: "(88) 36910543", whatsapp: "5588997046652", email: "crateus@colfqhnd.com.br", lat: -5.1773, lng: -40.6776, rating: 4.5, reviews: 266, etaPrep: "17-27 min", etaDelivery: "18-26 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-CE-EUSEBIO", name: "Hinode Eusebio", address: "AVENIDA EUSÉBIO DE QUEIROZ, 140 - Coaçu - Eusebio/CE", street: "AVENIDA EUSÉBIO DE QUEIROZ", number: "140", bairro: "COAÇU", city: "Eusebio", uf: "CE", phone: "(85) 981075709", whatsapp: "5585981075709", email: "eusebio@colfqhnd.com.br", lat: -3.8907, lng: -38.4506, rating: 4.6, reviews: 370, etaPrep: "19-27 min", etaDelivery: "18-30 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-CE-FORTALEZA", name: "Hinode Fortaleza", address: "SENADOR POMPEU, 1099 - Centro - Fortaleza/CE", street: "SENADOR POMPEU", number: "1099", bairro: "CENTRO", city: "Fortaleza", uf: "CE", phone: "(85) 32469801", whatsapp: "5585998680055", email: "fortaleza@colfqhnd.com.br", lat: -3.7273, lng: -38.5267, rating: 4.7, reviews: 487, etaPrep: "24-36 min", etaDelivery: "15-27 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-CE-FORTALEZA-MESSEJANA", name: "Hinode Fortaleza Messejana", address: "AVENIDA FREI CIRILO, 3840 - Messejana - Fortaleza/CE", street: "AVENIDA FREI CIRILO", number: "3840", bairro: "MESSEJANA", city: "Fortaleza", uf: "CE", phone: "(85) 21816257", whatsapp: "5585996461561", email: "fortalezamessejana@colfqhnd.com.br", lat: -3.8253, lng: -38.4906, rating: 4.7, reviews: 669, etaPrep: "22-33 min", etaDelivery: "13-23 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-CE-IGUATU-CENTRO", name: "Hinode Iguatu Centro", address: "RUA JOSE DE ALENCAR, 734 - Centro - Iguatu/CE", street: "RUA JOSE DE ALENCAR", number: "734", bairro: "CENTRO", city: "Iguatu", uf: "CE", phone: "(88) 35811806", whatsapp: "5588988680457", email: "iguatucentro@colfqhnd.com.br", lat: -6.3596, lng: -39.2986, rating: 4.8, reviews: 214, etaPrep: "16-27 min", etaDelivery: "14-26 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-CE-JUAZEIRO-CE", name: "Hinode Juazeiro Ce", address: "RUA VEREADOR JOSÉ GONÇALVES DE ALMEIDA, 46 - Tiradentes - Juazeiro Do Norte/CE", street: "RUA VEREADOR JOSÉ GONÇALVES DE ALMEIDA", number: "46", bairro: "TIRADENTES", city: "Juazeiro Do Norte", uf: "CE", phone: "(88) 999894806", whatsapp: "5588999894806", email: "juazeiro@colfqhnd.com.br", lat: -7.2128, lng: -39.3151, rating: 4.6, reviews: 552, etaPrep: "17-29 min", etaDelivery: "16-26 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-CE-MARACANAU", name: "Hinode Maracanau", address: "AVENIDA CARLOS JEREISSATI, 500 - Jereissati Ii - Maracanau/CE", street: "AVENIDA CARLOS JEREISSATI", number: "500", bairro: "JEREISSATI II", city: "Maracanau", uf: "CE", phone: "(085) 30155001", whatsapp: "5585998377648", email: "maracanau@colfqhnd.com.br", lat: -3.8767, lng: -38.6256, rating: 4.6, reviews: 97, etaPrep: "22-34 min", etaDelivery: "17-29 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-CE-QUIXADA-CENTRO", name: "Hinode Quixada Centro", address: "RUA RODRIGUES JUNIOR, 1372 - Centro - Quixada/CE", street: "RUA RODRIGUES JUNIOR", number: "1372", bairro: "CENTRO", city: "Quixada", uf: "CE", phone: "(88) 34124626", whatsapp: "5588997303844", email: "quixadacentro@colfqhnd.com.br", lat: -4.9711, lng: -39.0151, rating: 4.6, reviews: 643, etaPrep: "16-25 min", etaDelivery: "19-31 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-CE-SOBRAL-CENTRO", name: "Hinode Sobral Centro", address: "RUA CORONEL MONTALVERNE, 530 - Centro - Sobral/CE", street: "RUA CORONEL MONTALVERNE", number: "530", bairro: "CENTRO", city: "Sobral", uf: "CE", phone: "(88) 20216343", whatsapp: "5588992356075", email: "sobral@colfqhnd.com.br", lat: -3.6886, lng: -40.3489, rating: 4.9, reviews: 422, etaPrep: "20-32 min", etaDelivery: "14-22 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-CE-TIANGUA", name: "Hinode Tiangua", address: "RUA VEREADOR TADEU FERNANDES GOMES, 95 - Centro - Tiangua/CE", street: "RUA VEREADOR TADEU FERNANDES GOMES", number: "95", bairro: "CENTRO", city: "Tiangua", uf: "CE", phone: "(88) 36711703", whatsapp: "558899706771", email: "tiangua@colfqhnd.com.br", lat: -3.732, lng: -40.9876, rating: 4.7, reviews: 292, etaPrep: "23-35 min", etaDelivery: "12-24 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  // ===== DF =====
+  { id: "HND-DF-AGUAS-CLARAS", name: "Hinode Aguas Claras", address: "QS 5 RUA 800 LOTE 66, 66 - Areal Aguas Claras - Brasilia/DF", street: "QS 5 RUA 800 LOTE 66", number: "66", bairro: "AREAL AGUAS CLARAS", city: "Brasilia", uf: "DF", phone: "(61) 83771255", whatsapp: "556183771255", email: "aguasclaras@colfqhnd.com.br", lat: -15.8333, lng: -48.025, rating: 4.8, reviews: 1545, etaPrep: "21-29 min", etaDelivery: "13-23 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-DF-ASA-NORTE-1", name: "Hinode Asa Norte 1", address: "SCN QUADRA 1 BLOCO D LOJAS 15, 16 E 17 B - Asa Norte - Brasilia/DF", street: "SCN QUADRA 1 BLOCO D LOJAS 15, 16 E 17 B", number: "", bairro: "ASA NORTE", city: "Brasilia", uf: "DF", phone: "(61) 96911036", whatsapp: "556196911036", email: "asanorte1@colfqhnd.com.br", lat: -15.7642, lng: -47.8825, rating: 4.5, reviews: 175, etaPrep: "18-26 min", etaDelivery: "15-27 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  // ===== ES =====
+  { id: "HND-ES-CACHOEIRO-DO-ITAPEMIRIM", name: "Hinode Cachoeiro Do Itapemirim", address: "AVENIDA JONES DOS SANTOS NEVES, 497 - Otton Marins - Cachoeiro De Itapemirim/ES", street: "AVENIDA JONES DOS SANTOS NEVES", number: "497", bairro: "OTTON MARINS", city: "Cachoeiro De Itapemirim", uf: "ES", phone: "(27) 999399308", whatsapp: "5528999278776", email: "cachoeiro@colfqhnd.com.br", lat: -20.8489, lng: -41.1124, rating: 4.8, reviews: 136, etaPrep: "20-30 min", etaDelivery: "16-28 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-ES-CARIACICA-1", name: "Hinode Cariacica 1", address: "AVENIDA AMERICA, 398 - Jardim America - Cariacica/ES", street: "AVENIDA AMERICA", number: "398", bairro: "JARDIM AMERICA", city: "Cariacica", uf: "ES", phone: "(27) 31146717", whatsapp: "5527998866717", email: "cariacica1@colfqhnd.com.br", lat: -20.2634, lng: -40.4198, rating: 4.8, reviews: 214, etaPrep: "16-27 min", etaDelivery: "14-26 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-ES-COLATINA-1", name: "Hinode Colatina 1", address: "RUA AROLDO ANTOLINI, 173 - Esplanada - Colatina/ES", street: "RUA AROLDO ANTOLINI", number: "173", bairro: "ESPLANADA", city: "Colatina", uf: "ES", phone: "(27) 31216798", whatsapp: "5527998612187", email: "colatina1@colfqhnd.com.br", lat: -19.5388, lng: -40.6306, rating: 4.6, reviews: 461, etaPrep: "18-28 min", etaDelivery: "13-21 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-ES-GUARAPARI-1", name: "Hinode Guarapari 1", address: "RUA MIAMI, 439 - Praia Do Morro - Guarapari/ES", street: "RUA MIAMI", number: "439", bairro: "PRAIA DO MORRO", city: "Guarapari", uf: "ES", phone: "(27) 32610793", whatsapp: "5527997777036", email: "guarapari1@colfqhnd.com.br", lat: -20.6743, lng: -40.5046, rating: 4.7, reviews: 565, etaPrep: "20-28 min", etaDelivery: "13-25 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-ES-LINHARES", name: "Hinode Linhares", address: "RUA JOÃO FRANCISCO CALMON, 1500 - Centro - Linhares/ES", street: "RUA JOÃO FRANCISCO CALMON", number: "1500", bairro: "CENTRO", city: "Linhares", uf: "ES", phone: "(27) 31100121", whatsapp: "5527995003330", email: "linhares@colfqhnd.com.br", lat: -19.3949, lng: -40.064, rating: 4.7, reviews: 487, etaPrep: "24-36 min", etaDelivery: "15-27 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-ES-SERRA-2", name: "Hinode Serra 2", address: "AVENIDA CENTRAL, 1563 - Parque Residencial Laranjeiras - Serra/ES", street: "AVENIDA CENTRAL", number: "1563", bairro: "PARQUE RESIDENCIAL LARANJEIRAS", city: "Serra", uf: "ES", phone: "(27) 995119004", whatsapp: "5527995119004", email: "serra2@colfqhnd.com.br", lat: -20.1992, lng: -40.2511, rating: 4.6, reviews: 838, etaPrep: "17-26 min", etaDelivery: "14-26 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-ES-SAO-MATEUS", name: "Hinode São Mateus", address: "JOSÉ TOZZI, 1433 - Centro - Sao Mateus/ES", street: "JOSÉ TOZZI", number: "1433", bairro: "CENTRO", city: "Sao Mateus", uf: "ES", phone: "(27) 998612187", whatsapp: "5527999559695", email: "saomateus@colfqhnd.com.br", lat: -18.7146, lng: -39.8589, rating: 4.6, reviews: 552, etaPrep: "17-29 min", etaDelivery: "16-26 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-ES-VILA-VELHA-1", name: "Hinode Vila Velha 1", address: "AVENIDA CHAMPAGNAT, 620 - Centro De Vila Velha - Vila Velha/ES", street: "AVENIDA CHAMPAGNAT", number: "620", bairro: "CENTRO DE VILA VELHA", city: "Vila Velha", uf: "ES", phone: "(27) 32192300", whatsapp: "552732192300", email: "vilavelha1@colfqhnd.com.br", lat: -20.3297, lng: -40.2925, rating: 4.8, reviews: 500, etaPrep: "16-24 min", etaDelivery: "12-20 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-ES-VITORIA-1", name: "Hinode Vitoria 1", address: "AVENIDA NOSSA SENHORA DA PENHA, 2035 - Santa Lúcia - Vitoria/ES", street: "AVENIDA NOSSA SENHORA DA PENHA", number: "2035", bairro: "SANTA LÚCIA", city: "Vitoria", uf: "ES", phone: "(27) 999504244", whatsapp: "5527999504244", email: "vitoria@colfqhnd.com.br", lat: -20.3, lng: -40.2939, rating: 4.7, reviews: 942, etaPrep: "19-31 min", etaDelivery: "14-24 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  // ===== GO =====
+  { id: "HND-GO-ANAPOLIS-2", name: "Hinode Anápolis 2", address: "AVENIDA GETULINO ARTIAGA, 138 - Centro - Anapolis/GO", street: "AVENIDA GETULINO ARTIAGA", number: "138", bairro: "CENTRO", city: "Anapolis", uf: "GO", phone: "(62) 37067600", whatsapp: "5562995060510", email: "anapolis2@colfqhnd.com.br", lat: -16.3284, lng: -48.9534, rating: 4.8, reviews: 318, etaPrep: "18-27 min", etaDelivery: "14-24 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-GO-APARECIDA-DE-GOIANIA", name: "Hinode Aparecida De Goiania", address: "AVENIDA JOSÉ LEANDRO DA CRUZ, s/n - Parque Amazônia - Aparecida De Goiania/GO", street: "AVENIDA JOSÉ LEANDRO DA CRUZ", number: "S/N", bairro: "PARQUE AMAZÔNIA", city: "Aparecida De Goiania", uf: "GO", phone: "(62) 39226228", whatsapp: "556239226228", email: "aparecidadegoiania@colfqhnd.com.br", lat: -16.7689, lng: -49.2333, rating: 4.8, reviews: 500, etaPrep: "16-24 min", etaDelivery: "12-20 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-GO-FORMOSA", name: "Hinode Formosa", address: "RUA SAO PEDRO, 458 - Formosinha - Formosa/GO", street: "RUA SAO PEDRO", number: "458", bairro: "FORMOSINHA", city: "Formosa", uf: "GO", phone: "(61) 996882408", whatsapp: "5561996882408", email: "formosa@colfqhnd.com.br", lat: -15.5371, lng: -47.3349, rating: 4.9, reviews: 708, etaPrep: "20-29 min", etaDelivery: "12-22 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-GO-GOIANIA-SETOR-CENTRAL-1", name: "Hinode Goiania Setor Central 1", address: "AVENIDA ARAGUAIA, 254 - Setor Central - Goiania/GO", street: "AVENIDA ARAGUAIA", number: "254", bairro: "SETOR CENTRAL", city: "Goiania", uf: "GO", phone: "(62) 36120552", whatsapp: "556236120552", email: "goianiasetorcentral1@colfqhnd.com.br", lat: -16.6869, lng: -49.2648, rating: 4.5, reviews: 539, etaPrep: "25-36 min", etaDelivery: "19-27 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-GO-ITUMBIARA-1", name: "Hinode Itumbiara 1", address: "AVENIDA OSVALDO CRUZ, 120 - Vila São Sebastião - Itumbiara/GO", street: "AVENIDA OSVALDO CRUZ", number: "120", bairro: "VILA SÃO SEBASTIÃO", city: "Itumbiara", uf: "GO", phone: "(64) 34041919", whatsapp: "5564996621919", email: "itumbiara1@colfqhnd.com.br", lat: -18.4187, lng: -49.2156, rating: 4.6, reviews: 747, etaPrep: "18-30 min", etaDelivery: "19-29 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-GO-RIO-VERDE", name: "Hinode Rio Verde", address: "RUA 21, 143 - Popular - Rio Verde/GO", street: "RUA 21", number: "143", bairro: "POPULAR", city: "Rio Verde", uf: "GO", phone: "(64) 36130632", whatsapp: "5564996072788", email: "rioverde@colfqhnd.com.br", lat: -17.7975, lng: -50.9176, rating: 4.9, reviews: 1072, etaPrep: "16-28 min", etaDelivery: "16-28 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-GO-TRINDADE", name: "Hinode Trindade", address: "AVENIDA FRANCISCO PAULO RAMOS, 235 - Vila Padre Eterno - Trindade/GO", street: "AVENIDA FRANCISCO PAULO RAMOS", number: "235", bairro: "VILA PADRE ETERNO", city: "Trindade", uf: "GO", phone: "(62) 31101065", whatsapp: "5562986528681", email: "trindade@colfqhnd.com.br", lat: -16.651, lng: -49.488, rating: 4.8, reviews: 695, etaPrep: "17-25 min", etaDelivery: "15-23 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-GO-VALPARAISO", name: "Hinode Valparaiso", address: "RUA 31, s/n - Parque Esplanada Iii - Valparaiso De Goias/GO", street: "RUA 31", number: "S/N", bairro: "PARQUE ESPLANADA III", city: "Valparaiso De Goias", uf: "GO", phone: "(61) 992290416", whatsapp: "5561992290416", email: "valparaiso@colfqhnd.com.br", lat: -16.0651, lng: -47.9758, rating: 4.8, reviews: 695, etaPrep: "17-25 min", etaDelivery: "15-23 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  // ===== MA =====
+  { id: "HND-MA-ACAILANDIA-4", name: "Hinode Açailandia 4", address: "RUA BOM JESUS, 307, 327 - Centro - Acailandia/MA", street: "RUA BOM JESUS, 307", number: "327", bairro: "CENTRO", city: "Acailandia", uf: "MA", phone: "(99) 991729572", whatsapp: "5599991729572", email: "acailandia4@colfqhnd.com.br", lat: -4.9469, lng: -47.5054, rating: 4.5, reviews: 1480, etaPrep: "17-25 min", etaDelivery: "12-24 min", hours: {mon:[8,0,18,0],tue:[8,0,18,0],wed:[8,0,18,0],thu:[8,0,18,0],fri:[8,0,18,0],sat:[8,0,12,0],sun:null} },
+  { id: "HND-MA-BACABAL", name: "Hinode Bacabal", address: "BARÃO DO RIO BRANCO, 80 - Centro - Bacabal/MA", street: "BARÃO DO RIO BRANCO", number: "80", bairro: "CENTRO", city: "Bacabal", uf: "MA", phone: "(99) 985050801", whatsapp: "5599985050801", email: "bacabal@colfqhnd.com.br", lat: -4.2261, lng: -44.7811, rating: 4.5, reviews: 1389, etaPrep: "18-29 min", etaDelivery: "17-27 min", hours: {mon:[8,0,18,0],tue:[8,0,18,0],wed:[8,0,18,0],thu:[8,0,18,0],fri:[8,0,18,0],sat:[8,0,12,0],sun:null} },
+  { id: "HND-MA-CAXIAS-MA", name: "Hinode Caxias Ma", address: "AVENIDA NEREU BITTENCOURT, 43 - Centro - Caxias/MA", street: "AVENIDA NEREU BITTENCOURT", number: "43", bairro: "CENTRO", city: "Caxias", uf: "MA", phone: "(99) 984501782", whatsapp: "5599984501782", email: "caxiasma@colfqhnd.com.br", lat: -4.8584, lng: -43.3556, rating: 4.6, reviews: 279, etaPrep: "20-31 min", etaDelivery: "15-25 min", hours: {mon:[8,0,18,0],tue:[8,0,18,0],wed:[8,0,18,0],thu:[8,0,18,0],fri:[8,0,18,0],sat:[8,0,12,0],sun:null} },
+  { id: "HND-MA-IMPERATRIZ-2", name: "Hinode Imperatriz 2", address: "RUA BENEDITO LEITE, 924 - Centro - Imperatriz/MA", street: "RUA BENEDITO LEITE", number: "924", bairro: "CENTRO", city: "Imperatriz", uf: "MA", phone: "(99) 91556597", whatsapp: "559991556597", email: "imperatriz2@colfqhnd.com.br", lat: -5.5183, lng: -47.4777, rating: 4.5, reviews: 357, etaPrep: "16-28 min", etaDelivery: "13-23 min", hours: {mon:[8,0,18,0],tue:[8,0,18,0],wed:[8,0,18,0],thu:[8,0,18,0],fri:[8,0,18,0],sat:[8,0,12,0],sun:null} },
+  { id: "HND-MA-ITAPECURU-MIRIM-2", name: "Hinode Itapecuru Mirim 2", address: "SENADOR BENEDITO LEITE, 602 - Centro - Itapecuru Mirim/MA", street: "SENADOR BENEDITO LEITE", number: "602", bairro: "CENTRO", city: "Itapecuru Mirim", uf: "MA", phone: "(98) 996099950", whatsapp: "5598996099950", email: "itapecuru@hinodefranquia.com.br", lat: -3.4011, lng: -44.3553, rating: 4.7, reviews: 576, etaPrep: "20-30 min", etaDelivery: "15-25 min", hours: {mon:[8,0,18,0],tue:[8,0,18,0],wed:[8,0,18,0],thu:[8,0,18,0],fri:[8,0,18,0],sat:[8,0,12,0],sun:null} },
+  { id: "HND-MA-SANTA-INES", name: "Hinode Santa Ines", address: "RUA DA PEDRA BRANCA, 701 - Centro - Santa Ines/MA", street: "RUA DA PEDRA BRANCA", number: "701", bairro: "CENTRO", city: "Santa Ines", uf: "MA", phone: "(98) 981368482", whatsapp: "5598981368482", email: "santaines@colfqhnd.com.br", lat: -3.668, lng: -45.3776, rating: 4.8, reviews: 500, etaPrep: "16-24 min", etaDelivery: "12-20 min", hours: {mon:[8,0,18,0],tue:[8,0,18,0],wed:[8,0,18,0],thu:[8,0,18,0],fri:[8,0,18,0],sat:[8,0,12,0],sun:null} },
+  { id: "HND-MA-SAO-JOSE-DO-RIBAMAR", name: "Hinode Sao Jose Do Ribamar", address: "ESTRADA DE RIBAMAR 3 4, 5 - Tijupa Queimado - Sao Jose De Ribamar/MA", street: "ESTRADA DE RIBAMAR 3 4", number: "5", bairro: "TIJUPA QUEIMADO", city: "Sao Jose De Ribamar", uf: "MA", phone: "(98) 31998979", whatsapp: "5598991796526", email: "saojosedoribamar@colfqhnd.com.br", lat: -2.5616, lng: -44.0577, rating: 4.9, reviews: 617, etaPrep: "21-33 min", etaDelivery: "17-25 min", hours: {mon:[8,0,18,0],tue:[8,0,18,0],wed:[8,0,18,0],thu:[8,0,18,0],fri:[8,0,18,0],sat:[8,0,12,0],sun:null} },
+  { id: "HND-MA-SAO-LUIS", name: "Hinode Sao Luis", address: "JERÔNIMO DE ALBUQUERQUE MARANHÃO, 25 - Calhau - Sao Luis/MA", street: "JERÔNIMO DE ALBUQUERQUE MARANHÃO", number: "25", bairro: "CALHAU", city: "Sao Luis", uf: "MA", phone: "(98) 32365684", whatsapp: "5598992254144", email: "saoluis@colfqhnd.com.br", lat: -2.49, lng: -44.2417, rating: 4.5, reviews: 175, etaPrep: "18-26 min", etaDelivery: "15-27 min", hours: {mon:[8,0,18,0],tue:[8,0,18,0],wed:[8,0,18,0],thu:[8,0,18,0],fri:[8,0,18,0],sat:[8,0,12,0],sun:null} },
+  { id: "HND-MA-TIMON", name: "Hinode Timon", address: "AVENIDA PIAUÍ, 700 - Parque Piauí I - Timon/MA", street: "AVENIDA PIAUÍ", number: "700", bairro: "PARQUE PIAUÍ I", city: "Timon", uf: "MA", phone: "(86) 988174573", whatsapp: "5586988174573", email: "timon@colfqhnd.com.br", lat: -5.0937, lng: -42.8347, rating: 4.7, reviews: 669, etaPrep: "22-33 min", etaDelivery: "13-23 min", hours: {mon:[8,0,18,0],tue:[8,0,18,0],wed:[8,0,18,0],thu:[8,0,18,0],fri:[8,0,18,0],sat:[8,0,12,0],sun:null} },
+  // ===== MG =====
+  { id: "HND-MG-ALFENAS", name: "Hinode Alfenas", address: "AVENIDA HENRIQUE MUNHOZ GARCIA, 360 - Morada Do Sol - Alfenas/MG", street: "AVENIDA HENRIQUE MUNHOZ GARCIA", number: "360", bairro: "MORADA DO SOL", city: "Alfenas", uf: "MG", phone: "(35) 32917793", whatsapp: "5535988635333", email: "alfenas@colfqhnd.com.br", lat: -21.4304, lng: -45.9476, rating: 5.0, reviews: 1571, etaPrep: "16-26 min", etaDelivery: "15-23 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-MG-BARBACENA", name: "Hinode Barbacena", address: "LARGO MARECHAL DEODORO, 6 - Centro - Barbacena/MG", street: "LARGO MARECHAL DEODORO", number: "6", bairro: "CENTRO", city: "Barbacena", uf: "MG", phone: "(32) 33313823", whatsapp: "553233313823", email: "barbacena@colfqhnd.com.br", lat: -21.2255, lng: -43.7741, rating: 4.5, reviews: 175, etaPrep: "18-26 min", etaDelivery: "15-27 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-MG-BARREIRO", name: "Hinode Barreiro", address: "AVENIDA AFONSO VAZ DE MELO, 465 - Barreiro - Belo Horizonte/MG", street: "AVENIDA AFONSO VAZ DE MELO", number: "465", bairro: "BARREIRO", city: "Belo Horizonte", uf: "MG", phone: "(31) 25311509", whatsapp: "5531996011509", email: "barreiro@colfqhnd.com.br", lat: -19.9789, lng: -44.0228, rating: 4.6, reviews: 279, etaPrep: "20-31 min", etaDelivery: "15-25 min", hours: {mon:[10,0,19,0],tue:[10,0,19,0],wed:[10,0,19,0],thu:[10,0,19,0],fri:[10,0,19,0],sat:[10,0,14,0],sun:null} },
+  { id: "HND-MG-BETIM", name: "Hinode Betim", address: "AVENIDA JUIZ MARCO TÚLIO ISAAC, 1119 - Ingá Alto - Betim/MG", street: "AVENIDA JUIZ MARCO TÚLIO ISAAC", number: "1119", bairro: "INGÁ ALTO", city: "Betim", uf: "MG", phone: "(31) 25721288", whatsapp: "5531991425148", email: "betim@colfqhnd.com.br", lat: -19.9709, lng: -44.1992, rating: 4.7, reviews: 201, etaPrep: "24-34 min", etaDelivery: "17-27 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-MG-BH", name: "Hinode Bh", address: "RUA CURITIBA, 545, 545 - Centro - Belo Horizonte/MG", street: "RUA CURITIBA, 545", number: "545", bairro: "CENTRO", city: "Belo Horizonte", uf: "MG", phone: "(31) 36572546", whatsapp: "5531982626121", email: "bh@colfqhnd.com.br", lat: -19.9167, lng: -43.9345, rating: 4.8, reviews: 318, etaPrep: "18-27 min", etaDelivery: "14-24 min", hours: {mon:[10,0,19,0],tue:[10,0,19,0],wed:[10,0,19,0],thu:[10,0,19,0],fri:[10,0,19,0],sat:[10,0,14,0],sun:null} },
+  { id: "HND-MG-BH-ALIPIO-DE-MELO", name: "Hinode Bh Alípio De Melo", address: "RUA SANTANA DO LIVRAMENTO, 21 - Glória - Belo Horizonte/MG", street: "RUA SANTANA DO LIVRAMENTO", number: "21", bairro: "GLÓRIA", city: "Belo Horizonte", uf: "MG", phone: "(31) 35142295", whatsapp: "553135142295", email: "bhalipiodemelo@colfqhnd.com.br", lat: -19.8867, lng: -43.9789, rating: 4.5, reviews: 448, etaPrep: "15-24 min", etaDelivery: "16-28 min", hours: {mon:[10,0,19,0],tue:[10,0,19,0],wed:[10,0,19,0],thu:[10,0,19,0],fri:[10,0,19,0],sat:[10,0,14,0],sun:null} },
+  { id: "HND-MG-CONTAGEM", name: "Hinode Contagem", address: "AVENIDA JOSÉ FARIA DA ROCHA, 2776 - Eldorado - Contagem/MG", street: "AVENIDA JOSÉ FARIA DA ROCHA", number: "2776", bairro: "ELDORADO", city: "Contagem", uf: "MG", phone: "(31) 25651509", whatsapp: "5531989859357", email: "contagem@colfqhnd.com.br", lat: -19.9047, lng: -44.0883, rating: 4.7, reviews: 474, etaPrep: "21-32 min", etaDelivery: "18-28 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-MG-CURVELO-CENTRO", name: "Hinode Curvelo Centro", address: "RUA BARÃO DO RIO BRANCO, 354 - Centro - Curvelo/MG", street: "RUA BARÃO DO RIO BRANCO", number: "354", bairro: "CENTRO", city: "Curvelo", uf: "MG", phone: "(38) 37211863", whatsapp: "5538999500155", email: "curvelo@colfqhnd.com.br", lat: -18.756, lng: -44.4309, rating: 4.9, reviews: 708, etaPrep: "20-29 min", etaDelivery: "12-22 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-MG-JOAO-MONLEVADE", name: "Hinode Joao Monlevade", address: "AVENIDA GETÚLIO VARGAS, 5368 - Carneirinhos - Joao Monlevade/MG", street: "AVENIDA GETÚLIO VARGAS", number: "5368", bairro: "CARNEIRINHOS", city: "Joao Monlevade", uf: "MG", phone: "(31) 38501381", whatsapp: "5531989819252", email: "joaomonlevade@colfqhnd.com.br", lat: -19.8128, lng: -43.1745, rating: 4.9, reviews: 331, etaPrep: "21-31 min", etaDelivery: "19-31 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-MG-JUIZ-DE-FORA-MORRO-DA-GLORIA", name: "Hinode Juiz De Fora Morro Da Gloria", address: "ENGENHEIRO JOSÉ CARLOS DE MORAIS SARMENT, 112 - Sta Catarina - Juiz De Fora/MG", street: "ENGENHEIRO JOSÉ CARLOS DE MORAIS SARMENT", number: "112", bairro: "STA CATARINA", city: "Juiz De Fora", uf: "MG", phone: "(32) 32214777", whatsapp: "5532988704777", email: "morrodagloria@colfqhnd.com.br", lat: -21.7506, lng: -43.3522, rating: 4.6, reviews: 747, etaPrep: "18-30 min", etaDelivery: "19-29 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-MG-MANHUACU", name: "Hinode Manhuacu", address: "RUA MELLIN ABI-ACKEL, 126 - Todos Os Santos - Manhuacu/MG", street: "RUA MELLIN ABI-ACKEL", number: "126", bairro: "TODOS OS SANTOS", city: "Manhuacu", uf: "MG", phone: "(33) 987373720", whatsapp: "5533987373720", email: "manhuacu@colfqhnd.com.br", lat: -20.258, lng: -42.0289, rating: 4.8, reviews: 500, etaPrep: "16-24 min", etaDelivery: "12-20 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-MG-MONTES-CLAROS-CENTRO-1", name: "Hinode Montes Claros Centro 1", address: "ENGENHEIRO JOÃO ANTÔNIO PIMENTA, 190 - Centro - Montes Claros/MG", street: "ENGENHEIRO JOÃO ANTÔNIO PIMENTA", number: "190", bairro: "CENTRO", city: "Montes Claros", uf: "MG", phone: "(38) 32137522", whatsapp: "5538998381547", email: "montesclaroscentro1@colfqhnd.com.br", lat: -16.7355, lng: -43.8612, rating: 4.8, reviews: 682, etaPrep: "25-37 min", etaDelivery: "18-30 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-MG-PAMPULHA", name: "Hinode Pampulha", address: "AVENIDA PORTUGAL, 3250 - Jardim Atlântico - Belo Horizonte/MG", street: "AVENIDA PORTUGAL", number: "3250", bairro: "JARDIM ATLÂNTICO", city: "Belo Horizonte", uf: "MG", phone: "(31) 38798869", whatsapp: "5531993208141", email: "pampulha@colfqhnd.com.br", lat: -19.8489, lng: -43.9697, rating: 4.6, reviews: 279, etaPrep: "20-31 min", etaDelivery: "15-25 min", hours: {mon:[10,0,19,0],tue:[10,0,19,0],wed:[10,0,19,0],thu:[10,0,19,0],fri:[10,0,19,0],sat:[10,0,14,0],sun:null} },
+  { id: "HND-MG-PARACATU", name: "Hinode Paracatu", address: "RUA GASTÃO PEREIRA GONÇALVES, 217 - Centro - Paracatu/MG", street: "RUA GASTÃO PEREIRA GONÇALVES", number: "217", bairro: "CENTRO", city: "Paracatu", uf: "MG", phone: "(38) 997501150", whatsapp: "5538997501150", email: "paracatu@colfqhnd.com.br", lat: -17.2218, lng: -46.8746, rating: 5.0, reviews: 344, etaPrep: "24-35 min", etaDelivery: "16-24 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-MG-PASSOS-1", name: "Hinode Passos 1", address: "AVENIDA COMENDADOR FRANCISCO AVELINO MAIA, 3210 - Muarama - Passos/MG", street: "AVENIDA COMENDADOR FRANCISCO AVELINO MAIA", number: "3210", bairro: "MUARAMA", city: "Passos", uf: "MG", phone: "", whatsapp: "5535999282665", email: "passos1@colfqhnd.com.br", lat: -20.7194, lng: -46.6097, rating: 4.6, reviews: 734, etaPrep: "15-26 min", etaDelivery: "14-22 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-MG-PATOS-DE-MINAS", name: "Hinode Patos De Minas", address: "RUA AGENOR MACIEL, 77 - Centro - Patos De Minas/MG", street: "RUA AGENOR MACIEL", number: "77", bairro: "CENTRO", city: "Patos De Minas", uf: "MG", phone: "(34) 38214346", whatsapp: "5534999449961", email: "patosdeminas@colfqhnd.com.br", lat: -18.578, lng: -46.5187, rating: 4.6, reviews: 552, etaPrep: "17-29 min", etaDelivery: "16-26 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-MG-POCOS-DE-CALDAS-1", name: "Hinode Pocos De Caldas 1", address: "RUA SÃO PAULO, 511 - Centro - Pocos De Caldas/MG", street: "RUA SÃO PAULO", number: "511", bairro: "CENTRO", city: "Pocos De Caldas", uf: "MG", phone: "(19) 997485438", whatsapp: "5519997485438", email: "pocosdecaldas1@colfqhnd.com.br", lat: -21.7886, lng: -46.5631, rating: 4.9, reviews: 513, etaPrep: "19-28 min", etaDelivery: "17-27 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-MG-RIBEIRAO-DAS-NEVES", name: "Hinode Ribeirão Das Neves", address: "ADELINO SOARES DINIZ, 50 - Varzea Alegre - Ribeirao Das Neves/MG", street: "ADELINO SOARES DINIZ", number: "50", bairro: "VARZEA ALEGRE", city: "Ribeirao Das Neves", uf: "MG", phone: "(31) 36242905", whatsapp: "5531971291033", email: "ribeiraodasneves@colfqhnd.com.br", lat: -19.7669, lng: -44.0867, rating: 4.6, reviews: 643, etaPrep: "16-25 min", etaDelivery: "19-31 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-MG-SALINAS-2", name: "Hinode Salinas 2", address: "RUA ARACUAI, 27 - Sao Geraldo - Salinas/MG", street: "RUA ARACUAI", number: "27", bairro: "SAO GERALDO", city: "Salinas", uf: "MG", phone: "", whatsapp: "5538988055810", email: "salinas2@colfqhnd.com.br", lat: -16.1697, lng: -42.2916, rating: 4.8, reviews: 409, etaPrep: "17-28 min", etaDelivery: "17-29 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-MG-SAO-JOAO-DEL-REI", name: "Hinode São João Del Rei", address: "RUA MINISTRO GABRIEL PASSOS, 299 - Centro - Sao Joao Del Rei/MG", street: "RUA MINISTRO GABRIEL PASSOS", number: "299", bairro: "CENTRO", city: "Sao Joao Del Rei", uf: "MG", phone: "(32) 33732369", whatsapp: "5532988580323", email: "sjdelrei@colfqhnd.com.br", lat: -21.1356, lng: -44.2614, rating: 4.6, reviews: 461, etaPrep: "18-28 min", etaDelivery: "13-21 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-MG-UBA", name: "Hinode Uba", address: "AVENIDA COMENDADOR JACINTO SOARES DE SOUZA LI, 1405 - Centro - Uba/MG", street: "AVENIDA COMENDADOR JACINTO SOARES DE SOUZA LI", number: "1405", bairro: "CENTRO", city: "Uba", uf: "MG", phone: "(32) 30217518", whatsapp: "553230217518", email: "uba@colfqhnd.com.br", lat: -21.1186, lng: -42.9425, rating: 4.6, reviews: 856, etaPrep: "16-26 min", etaDelivery: "12-24 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-MG-UBERABA-1", name: "Hinode Uberaba 1", address: "RUA TRISTÃO DE CASTRO, 651 - São Benedito - Uberaba/MG", street: "RUA TRISTÃO DE CASTRO", number: "651", bairro: "SÃO BENEDITO", city: "Uberaba", uf: "MG", phone: "(34) 34807001", whatsapp: "5534998191926", email: "uberaba1@colfqhnd.com.br", lat: -19.7472, lng: -47.9381, rating: 4.8, reviews: 409, etaPrep: "17-28 min", etaDelivery: "17-29 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-MG-UBERLANDIA-3", name: "Hinode Uberlandia 3", address: "AVENIDA AFONSO PENA, 2159 - Nossa Senhora Aparecida - Uberlandia/MG", street: "AVENIDA AFONSO PENA", number: "2159", bairro: "NOSSA SENHORA APARECIDA", city: "Uberlandia", uf: "MG", phone: "(34) 99822614", whatsapp: "553499822614", email: "uberlandia3@colfqhnd.com.br", lat: -18.9264, lng: -48.2842, rating: 4.9, reviews: 799, etaPrep: "19-30 min", etaDelivery: "15-27 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-MG-VARGINHA", name: "Hinode Varginha", address: "RUA DELFIM MOREIRA, 535 - Centro - Varginha/MG", street: "RUA DELFIM MOREIRA", number: "535", bairro: "CENTRO", city: "Varginha", uf: "MG", phone: "(35) 999086535", whatsapp: "5535999086535", email: "varginha@colfqhnd.com.br", lat: -21.5556, lng: -45.4364, rating: 4.8, reviews: 500, etaPrep: "16-24 min", etaDelivery: "12-20 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  // ===== MS =====
+  { id: "HND-MS-CAMPO-GRANDE-MS", name: "Hinode Campo Grande Ms", address: "RUA GONCALVES DIAS, 6 - Jardim Monte Libano - Campo Grande/MS", street: "RUA GONCALVES DIAS", number: "6", bairro: "JARDIM MONTE LIBANO", city: "Campo Grande", uf: "MS", phone: "(67) 996335551", whatsapp: "5567996335551", email: "campograndems@colfqhnd.com.br", lat: -20.4528, lng: -54.6233, rating: 5.0, reviews: 344, etaPrep: "24-35 min", etaDelivery: "16-24 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-MS-CORUMBA-1", name: "Hinode Corumba 1", address: "RUA JOAQUIM MURTINHO, 1503 - Aeroporto - Corumba/MS", street: "RUA JOAQUIM MURTINHO", number: "1503", bairro: "AEROPORTO", city: "Corumba", uf: "MS", phone: "(67) 998788890", whatsapp: "5567998788890", email: "corumba1@colfqhnd.com.br", lat: -19.0078, lng: -57.6541, rating: 4.6, reviews: 734, etaPrep: "15-26 min", etaDelivery: "14-22 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-MS-DOURADOS-3", name: "Hinode Dourados 3", address: "RUA HILDA BERGO DUARTE, 452 - Jardim Caramuru - Dourados/MS", street: "RUA HILDA BERGO DUARTE", number: "452", bairro: "JARDIM CARAMURU", city: "Dourados", uf: "MS", phone: "(67) 999116074", whatsapp: "5567999116074", email: "dourados3@colfqhnd.com.br", lat: -22.2231, lng: -54.812, rating: 4.7, reviews: 669, etaPrep: "22-33 min", etaDelivery: "13-23 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-MS-TRES-LAGOAS-2", name: "Hinode Tres Lagoas 2", address: "BRUNO GARCIA, 570 - Centro - Tres Lagoas/MS", street: "BRUNO GARCIA", number: "570", bairro: "CENTRO", city: "Tres Lagoas", uf: "MS", phone: "(67) 999196074", whatsapp: "5567999196074", email: "treslagoas2@colfqhnd.com.br", lat: -20.7858, lng: -51.7008, rating: 4.6, reviews: 838, etaPrep: "17-26 min", etaDelivery: "14-26 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  // ===== MT =====
+  { id: "HND-MT-CACERES-1", name: "Hinode Caceres 1", address: "AVENIDA SÃO JOÃO, 430 - Cavalhada Ii - Caceres/MT", street: "AVENIDA SÃO JOÃO", number: "430", bairro: "CAVALHADA II", city: "Caceres", uf: "MT", phone: "(65) 996067700", whatsapp: "5565996067700", email: "caceres1@colfqhnd.com.br", lat: -16.0764, lng: -57.6818, rating: 4.6, reviews: 1506, etaPrep: "23-33 min", etaDelivery: "14-24 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-MT-CUIABA-2", name: "Hinode Cuiaba 2", address: "AVENIDA MIGUEL SUTIL, 6274 - Alvorada - Cuiaba/MT", street: "AVENIDA MIGUEL SUTIL", number: "6274", bairro: "ALVORADA", city: "Cuiaba", uf: "MT", phone: "(65) 996114545", whatsapp: "5565996114545", email: "cuiaba2@colfqhnd.com.br", lat: -15.5667, lng: -56.0828, rating: 4.8, reviews: 591, etaPrep: "15-25 min", etaDelivery: "15-25 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-MT-LUCAS-DO-RIO-VERDE", name: "Hinode Lucas Do Rio Verde", address: "AVENIDA PARANÁ, 998S - Menino Deus - Lucas Do Rio Verde/MT", street: "AVENIDA PARANÁ", number: "998S", bairro: "MENINO DEUS", city: "Lucas Do Rio Verde", uf: "MT", phone: "(65) 35495291", whatsapp: "5565998082252", email: "lucasdorioverde@colfqhnd.com.br", lat: -13.0508, lng: -55.9119, rating: 4.9, reviews: 513, etaPrep: "19-28 min", etaDelivery: "17-27 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-MT-SINOP-1", name: "Hinode Sinop 1", address: "RUA DAS NOGUEIRAS, 493 - Setor Comercial - Sinop/MT", street: "RUA DAS NOGUEIRAS", number: "493", bairro: "SETOR COMERCIAL", city: "Sinop", uf: "MT", phone: "(66) 35158557", whatsapp: "5566984584164", email: "sinop1@colfqhnd.com.br", lat: -11.8604, lng: -55.5089, rating: 4.5, reviews: 1007, etaPrep: "23-35 min", etaDelivery: "15-23 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-MT-TANGARA-DA-SERRA-1", name: "Hinode Tangara Da Serra 1", address: "AVENIDA VEREADOR NILO TORRES, 1210 - Jardim Dona Julia - Tangara Da Serra/MT", street: "AVENIDA VEREADOR NILO TORRES", number: "1210", bairro: "JARDIM DONA JULIA", city: "Tangara Da Serra", uf: "MT", phone: "(65) 993025344", whatsapp: "5565993025344", email: "tangaradaserra1@colfqhnd.com.br", lat: -14.6228, lng: -57.49, rating: 4.7, reviews: 474, etaPrep: "21-32 min", etaDelivery: "18-28 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  // ===== PA =====
+  { id: "HND-PA-ABAETETUBA", name: "Hinode Abaetetuba", address: "RUA LAURO SODRE, 1614 - Centro - Abaetetuba/PA", street: "RUA LAURO SODRE", number: "1614", bairro: "CENTRO", city: "Abaetetuba", uf: "PA", phone: "(91) 985068463", whatsapp: "5591985068463", email: "abaetetuba@colfqhnd.com.br", lat: -1.7184, lng: -48.8784, rating: 4.9, reviews: 1454, etaPrep: "22-33 min", etaDelivery: "18-26 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-PA-ALTAMIRA", name: "Hinode Altamira", address: "TRAVESSA PEDRO GOMES, 1204 - Sudam I - Altamira/PA", street: "TRAVESSA PEDRO GOMES", number: "1204", bairro: "SUDAM I", city: "Altamira", uf: "PA", phone: "(93) 35153124", whatsapp: "5593991728906", email: "altamira@colfqhnd.com.br", lat: -3.2032, lng: -52.2069, rating: 4.8, reviews: 318, etaPrep: "18-27 min", etaDelivery: "14-24 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-PA-CAPANEMA-1", name: "Hinode Capanema 1", address: "AVENIDA JOAO PAULO II, 117 - Garrafao - Capanema/PA", street: "AVENIDA JOAO PAULO II", number: "117", bairro: "GARRAFAO", city: "Capanema", uf: "PA", phone: "(91) 985278345", whatsapp: "5591985278345", email: "capanema@colfqhnd.com.br", lat: -1.1947, lng: -47.1812, rating: 4.8, reviews: 136, etaPrep: "20-30 min", etaDelivery: "16-28 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-PA-CONCORDIA-DO-PARA", name: "Hinode Concordia Do Para", address: "RUA BOM JARDIM, 74 - Centro - Concordia Do Para/PA", street: "RUA BOM JARDIM", number: "74", bairro: "CENTRO", city: "Concordia Do Para", uf: "PA", phone: "(91) 37281893", whatsapp: "5591992021856", email: "concordiadopara@colfqhnd.com.br", lat: -1.9907, lng: -47.9603, rating: 4.7, reviews: 292, etaPrep: "23-35 min", etaDelivery: "12-24 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-PA-ICOARACI-2", name: "Hinode Icoaraci 2", address: "AUGUSTO MONTENEGRO, 6955 - Coqueiro Icoaraci - Belem/PA", street: "AUGUSTO MONTENEGRO", number: "6955", bairro: "COQUEIRO ICOARACI", city: "Belem", uf: "PA", phone: "(91) 84404929", whatsapp: "5591998313216", email: "icoaraci@colfqhnd.com.br", lat: -1.3056, lng: -48.4781, rating: 4.9, reviews: 331, etaPrep: "21-31 min", etaDelivery: "19-31 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-PA-ITAITUBA-1", name: "Hinode Itaituba 1", address: "TRAVESSA TREZE DE MAIO, 999 - Bela Vista - Itaituba/PA", street: "TRAVESSA TREZE DE MAIO", number: "999", bairro: "BELA VISTA", city: "Itaituba", uf: "PA", phone: "(93) 991424481", whatsapp: "5593991424481", email: "itaituba@colfqhnd.com.br", lat: -4.2766, lng: -55.9836, rating: 4.9, reviews: 1558, etaPrep: "24-33 min", etaDelivery: "18-30 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-PA-MARABA", name: "Hinode Maraba", address: "ANTÔNIO MAIA, 1724 - Va Marabá - Maraba/PA", street: "ANTÔNIO MAIA", number: "1724", bairro: "VA MARABÁ", city: "Maraba", uf: "PA", phone: "(94) 30181717", whatsapp: "5594991211191", email: "maraba@colfqhnd.com.br", lat: -5.368, lng: -49.1175, rating: 4.7, reviews: 201, etaPrep: "24-34 min", etaDelivery: "17-27 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-PA-MARITUBA", name: "Hinode Marituba", address: "AVENIDA FERNANDO GUILHON, 5255 - Centro - Marituba/PA", street: "AVENIDA FERNANDO GUILHON", number: "5255", bairro: "CENTRO", city: "Marituba", uf: "PA", phone: "(91) 988812507", whatsapp: "5591988812507", email: "marituba@colfqhnd.com.br", lat: -1.3631, lng: -48.3424, rating: 4.6, reviews: 370, etaPrep: "19-27 min", etaDelivery: "18-30 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-PA-PARAUAPEBAS-2", name: "Hinode Parauapebas 2", address: "AVENIDA RIO GRANDE, 150 - Beira Rio - Parauapebas/PA", street: "AVENIDA RIO GRANDE", number: "150", bairro: "BEIRA RIO", city: "Parauapebas", uf: "PA", phone: "(94) 33463591", whatsapp: "5594992341582", email: "parauapebas2@colfqhnd.com.br", lat: -6.0675, lng: -49.9019, rating: 4.7, reviews: 201, etaPrep: "24-34 min", etaDelivery: "17-27 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-PA-REDENCAO-2", name: "Hinode Redenção 2", address: "AVENIDA INDEPENDÊNCIA, 9 - Nucleo Urbano - Redencao/PA", street: "AVENIDA INDEPENDÊNCIA", number: "9", bairro: "NUCLEO URBANO", city: "Redencao", uf: "PA", phone: "(94) 91056579", whatsapp: "559491056579", email: "redencao2@colfqhnd.com.br", lat: -8.0291, lng: -49.9847, rating: 4.5, reviews: 357, etaPrep: "16-28 min", etaDelivery: "13-23 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-PA-SANTAREM", name: "Hinode Santarém", address: "AVENIDA BORGES LEAL, 2299 - Aparecida - Santarem/PA", street: "AVENIDA BORGES LEAL", number: "2299", bairro: "APARECIDA", city: "Santarem", uf: "PA", phone: "(93) 991547166", whatsapp: "5593991024455", email: "santarem@colfqhnd.com.br", lat: -2.4404, lng: -54.6989, rating: 4.6, reviews: 461, etaPrep: "18-28 min", etaDelivery: "13-21 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-PA-TUCURUI-2", name: "Hinode Tucurui 2", address: "RUA DOM CORNELIO VERMANS, 549 - Santa Isabel - Tucurui/PA", street: "RUA DOM CORNELIO VERMANS", number: "549", bairro: "SANTA ISABEL", city: "Tucurui", uf: "PA", phone: "(94) 991872975", whatsapp: "5594991872975", email: "tucurui2@colfqhnd.com.br", lat: -3.7656, lng: -49.6724, rating: 4.6, reviews: 838, etaPrep: "17-26 min", etaDelivery: "14-26 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-PA-VIGIA", name: "Hinode Vigia", address: "BARÃO DE GUARAJÁ, 202 - Centro - Vigia/PA", street: "BARÃO DE GUARAJÁ", number: "202", bairro: "CENTRO", city: "Vigia", uf: "PA", phone: "(91) 981238822", whatsapp: "5591981238822", email: "vigia@colfqhnd.com.br", lat: -0.8587, lng: -48.1417, rating: 4.5, reviews: 448, etaPrep: "15-24 min", etaDelivery: "16-28 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  // ===== PB =====
+  { id: "HND-PB-CAJAZEIRAS-PB", name: "Hinode Cajazeiras Pb", address: "RUA SEBASTIAO BANDEIRA DE MELO, 145 - Centro - Cajazeiras/PB", street: "RUA SEBASTIAO BANDEIRA DE MELO", number: "145", bairro: "CENTRO", city: "Cajazeiras", uf: "PB", phone: "(83) 999777026", whatsapp: "5583999777026", email: "cajazeiraspb@colfqhnd.com.br", lat: -6.8898, lng: -38.5573, rating: 4.8, reviews: 1545, etaPrep: "21-29 min", etaDelivery: "13-23 min", hours: {mon:[8,0,18,0],tue:[8,0,18,0],wed:[8,0,18,0],thu:[8,0,18,0],fri:[8,0,18,0],sat:[8,0,12,0],sun:null} },
+  { id: "HND-PB-CAMPINA-GRANDE-3", name: "Hinode Campina Grande 3", address: "PRAÇA DO TRABALHO, 276 - Sao Jose - Campina Grande/PB", street: "PRAÇA DO TRABALHO", number: "276", bairro: "SAO JOSE", city: "Campina Grande", uf: "PB", phone: "(83) 88809139", whatsapp: "5583988809139", email: "campinagrande3@colfqhnd.com.br", lat: -7.2306, lng: -35.881, rating: 4.8, reviews: 318, etaPrep: "18-27 min", etaDelivery: "14-24 min", hours: {mon:[8,0,18,0],tue:[8,0,18,0],wed:[8,0,18,0],thu:[8,0,18,0],fri:[8,0,18,0],sat:[8,0,12,0],sun:null} },
+  { id: "HND-PB-JOAO-PESSOA-2", name: "Hinode Joao Pessoa 2", address: "AVENIDA PRESIDENTE EPITÁCIO PESSOA, 1251 - Estados - Joao Pessoa/PB", street: "AVENIDA PRESIDENTE EPITÁCIO PESSOA", number: "1251", bairro: "ESTADOS", city: "Joao Pessoa", uf: "PB", phone: "(83) 991525976", whatsapp: "5583991525976", email: "joaopessoa2@colfqhnd.com.br", lat: -7.1195, lng: -34.845, rating: 4.9, reviews: 422, etaPrep: "20-32 min", etaDelivery: "14-22 min", hours: {mon:[8,0,18,0],tue:[8,0,18,0],wed:[8,0,18,0],thu:[8,0,18,0],fri:[8,0,18,0],sat:[8,0,12,0],sun:null} },
+  { id: "HND-PB-PATOS", name: "Hinode Patos", address: "RUA DO PRADO, 169 - Santo Antônio - Patos/PB", street: "RUA DO PRADO", number: "169", bairro: "SANTO ANTÔNIO", city: "Patos", uf: "PB", phone: "(83) 998097616", whatsapp: "5583998097616", email: "patos@colfqhnd.com.br", lat: -7.0241, lng: -37.28, rating: 4.8, reviews: 682, etaPrep: "25-37 min", etaDelivery: "18-30 min", hours: {mon:[8,0,18,0],tue:[8,0,18,0],wed:[8,0,18,0],thu:[8,0,18,0],fri:[8,0,18,0],sat:[8,0,12,0],sun:null} },
+  // ===== PE =====
+  { id: "HND-PE-CARPINA-2", name: "Hinode Carpina 2", address: "AVENIDA MURILO SILVA, 200 - Centro - Carpina/PE", street: "AVENIDA MURILO SILVA", number: "200", bairro: "CENTRO", city: "Carpina", uf: "PE", phone: "(81) 991186674", whatsapp: "5581991186674", email: "carpina2@colfqhnd.com.br", lat: -7.8497, lng: -35.2531, rating: 4.7, reviews: 383, etaPrep: "22-31 min", etaDelivery: "15-23 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-PE-CARUARU-2", name: "Hinode Caruaru 2", address: "AVENIDA JOSÉ RODRIGUES DE JESUS, 681 - Indianópolis - Caruaru/PE", street: "AVENIDA JOSÉ RODRIGUES DE JESUS", number: "681", bairro: "INDIANÓPOLIS", city: "Caruaru", uf: "PE", phone: "(81) 21611407", whatsapp: "558121611407", email: "caruaru2@colfqhnd.com.br", lat: -8.2912, lng: -35.9692, rating: 4.6, reviews: 370, etaPrep: "19-27 min", etaDelivery: "18-30 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-PE-GARANHUNS-1", name: "Hinode Garanhuns 1", address: "AVENIDA DJALMA DUTRA, 671 - Heliopolis - Garanhuns/PE", street: "AVENIDA DJALMA DUTRA", number: "671", bairro: "HELIOPOLIS", city: "Garanhuns", uf: "PE", phone: "(87) 81395754", whatsapp: "558781395754", email: "garanhuns1@colfqhnd.com.br", lat: -8.8911, lng: -36.4928, rating: 4.8, reviews: 136, etaPrep: "20-30 min", etaDelivery: "16-28 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-PE-JABOATAO-1", name: "Hinode Jaboatão 1", address: "RUA FREI PIO MOREIRA, 43 - Piedade - Jaboatao Dos Guararapes/PE", street: "RUA FREI PIO MOREIRA", number: "43", bairro: "PIEDADE", city: "Jaboatao Dos Guararapes", uf: "PE", phone: "(81) 979069941", whatsapp: "5581979069941", email: "jaboatao1@colfqhnd.com.br", lat: -8.175, lng: -34.9094, rating: 4.9, reviews: 149, etaPrep: "23-34 min", etaDelivery: "13-21 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-PE-PALMARES", name: "Hinode Palmares", address: "RUA CORONEL IZACIO, 206 - Centro - Palmares/PE", street: "RUA CORONEL IZACIO", number: "206", bairro: "CENTRO", city: "Palmares", uf: "PE", phone: "(81) 36614522", whatsapp: "5581993474348", email: "palmares@colfqhnd.com.br", lat: -8.6839, lng: -35.5891, rating: 5.0, reviews: 435, etaPrep: "23-31 min", etaDelivery: "19-29 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-PE-PAULISTA-1", name: "Hinode Paulista 1", address: "AVENIDA RODOLFO AURELIANO, 163 - Vila Torres Galvao - Paulista/PE", street: "AVENIDA RODOLFO AURELIANO", number: "163", bairro: "VILA TORRES GALVAO", city: "Paulista", uf: "PE", phone: "", whatsapp: "5581995169491", email: "paulista1@colfqhnd.com.br", lat: -7.9408, lng: -34.8728, rating: 4.7, reviews: 565, etaPrep: "20-28 min", etaDelivery: "13-25 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-PE-PETROLINA", name: "Hinode Petrolina", address: "RUA PREFEITO JOSÉ ALMEIDA DA SILVA, 261 - São José - Petrolina/PE", street: "RUA PREFEITO JOSÉ ALMEIDA DA SILVA", number: "261", bairro: "SÃO JOSÉ", city: "Petrolina", uf: "PE", phone: "(87) 38623870", whatsapp: "558738623870", email: "petrolina@colfqhnd.com.br", lat: -9.3891, lng: -40.503, rating: 4.6, reviews: 656, etaPrep: "19-29 min", etaDelivery: "16-24 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-PE-RECIFE-2", name: "Hinode Recife 2", address: "PRAÇA DO DERBY, 149 - Derby - Recife/PE", street: "PRAÇA DO DERBY", number: "149", bairro: "DERBY", city: "Recife", uf: "PE", phone: "(81) 998613845", whatsapp: "5581998613845", email: "recife2@colfqhnd.com.br", lat: -8.0625, lng: -34.8911, rating: 4.5, reviews: 175, etaPrep: "18-26 min", etaDelivery: "15-27 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-PE-SANTA-CRUZ-DO-CAPIBARIBE-2", name: "Hinode Santa Cruz Do Capibaribe 2", address: "RUA RITA NUNES DE ARAUJO, 380 - Sao Cristovao - Santa Cruz Do Capibaribe/PE", street: "RUA RITA NUNES DE ARAUJO", number: "380", bairro: "SAO CRISTOVAO", city: "Santa Cruz Do Capibaribe", uf: "PE", phone: "(81) 979140767", whatsapp: "5581979140767", email: "santacruzdocapibaribe1@colfqhnd.com.br", lat: -7.9569, lng: -36.2052, rating: 4.5, reviews: 539, etaPrep: "25-36 min", etaDelivery: "19-27 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-PE-VITORIA-DE-STO-ANTAO", name: "Hinode Vitoria De Sto Antao", address: "AVENIDA HENRIQUE DE HOLANDA, 950 - Matriz - Vitoria De Santo Antao/PE", street: "AVENIDA HENRIQUE DE HOLANDA", number: "950", bairro: "MATRIZ", city: "Vitoria De Santo Antao", uf: "PE", phone: "(81) 31451990", whatsapp: "5581997577981", email: "vitoriadestoantao@colfqhnd.com.br", lat: -8.1259, lng: -35.2906, rating: 4.8, reviews: 877, etaPrep: "15-27 min", etaDelivery: "13-25 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  // ===== PI =====
+  { id: "HND-PI-PARNAIBA-1", name: "Hinode Parnaiba 1", address: "RUA BORGES MACHADO, 965 - Frei Higino - Parnaiba/PI", street: "RUA BORGES MACHADO", number: "965", bairro: "FREI HIGINO", city: "Parnaiba", uf: "PI", phone: "(86) 988789880", whatsapp: "5586988789880", email: "parnaiba1@colfqhnd.com.br", lat: -2.9047, lng: -41.7766, rating: 4.6, reviews: 643, etaPrep: "16-25 min", etaDelivery: "19-31 min", hours: {mon:[8,0,18,0],tue:[8,0,18,0],wed:[8,0,18,0],thu:[8,0,18,0],fri:[8,0,18,0],sat:[8,0,12,0],sun:null} },
+  { id: "HND-PI-PARNAIBA-2", name: "Hinode Parnaiba 2", address: "ANHANGUERA, 4521 - Centro - Parnaiba/PI", street: "ANHANGUERA", number: "4521", bairro: "CENTRO", city: "Parnaiba", uf: "PI", phone: "", whatsapp: "5586988789880", email: "parnaiba2@hinodefranquia.com.br", lat: -2.9047, lng: -41.7766, rating: 4.6, reviews: 643, etaPrep: "16-25 min", etaDelivery: "19-31 min", hours: {mon:[8,0,18,0],tue:[8,0,18,0],wed:[8,0,18,0],thu:[8,0,18,0],fri:[8,0,18,0],sat:[8,0,12,0],sun:null} },
+  { id: "HND-PI-PICOS", name: "Hinode Picos", address: "RUA COELHO RODRIGUES, 333 - Centro - Picos/PI", street: "RUA COELHO RODRIGUES", number: "333", bairro: "CENTRO", city: "Picos", uf: "PI", phone: "(89) 999771486", whatsapp: "5589999771486", email: "picos@colfqhnd.com.br", lat: -7.0769, lng: -41.4671, rating: 4.8, reviews: 500, etaPrep: "16-24 min", etaDelivery: "12-20 min", hours: {mon:[8,0,18,0],tue:[8,0,18,0],wed:[8,0,18,0],thu:[8,0,18,0],fri:[8,0,18,0],sat:[8,0,12,0],sun:null} },
+  { id: "HND-PI-TERESINA-CENTRO", name: "Hinode Teresina Centro", address: "RUA MATO GROSSO, 720 - Cabral - Teresina/PI", street: "RUA MATO GROSSO", number: "720", bairro: "CABRAL", city: "Teresina", uf: "PI", phone: "(86) 81549444", whatsapp: "", email: "teresina@colfqhnd.com.br", lat: -5.0892, lng: -42.8019, rating: 4.9, reviews: 331, etaPrep: "21-31 min", etaDelivery: "19-31 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  // ===== PR =====
+  { id: "HND-PR-ARAUCARIA", name: "Hinode Araucaria", address: "RUA MANOEL RIBAS, 2265 - Costeira - Araucaria/PR", street: "RUA MANOEL RIBAS", number: "2265", bairro: "COSTEIRA", city: "Araucaria", uf: "PR", phone: "(41) 31261111", whatsapp: "5541992870031", email: "araucaria@colfqhnd.com.br", lat: -25.5933, lng: -49.4083, rating: 4.8, reviews: 786, etaPrep: "16-26 min", etaDelivery: "18-28 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-PR-CAMPO-MOURAO-1", name: "Hinode Campo Mourao 1", address: "AVENIDA MANOEL MENDES DE CAMARGO, 2440 - Centro - Campo Mourao/PR", street: "AVENIDA MANOEL MENDES DE CAMARGO", number: "2440", bairro: "CENTRO", city: "Campo Mourao", uf: "PR", phone: "(44) 998100010", whatsapp: "5544998100010", email: "campomourao@colfqhnd.com.br", lat: -24.0463, lng: -52.3829, rating: 4.7, reviews: 487, etaPrep: "24-36 min", etaDelivery: "15-27 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-PR-CURITIBA-3", name: "Hinode Curitiba 3", address: "RUA XV DE NOVEMBRO, 1155 - Centro - Curitiba/PR", street: "RUA XV DE NOVEMBRO", number: "1155", bairro: "CENTRO", city: "Curitiba", uf: "PR", phone: "(41) 32686562", whatsapp: "554196910151", email: "curitiba3@colfqhnd.com.br", lat: -25.4284, lng: -49.2733, rating: 5.0, reviews: 721, etaPrep: "23-33 min", etaDelivery: "17-29 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-PR-FOZ-DO-IGUACU-1", name: "Hinode Foz Do Iguacu 1", address: "RUA AMOREIRA, 571 - Klp - Foz Do Iguacu/PR", street: "RUA AMOREIRA", number: "571", bairro: "KLP", city: "Foz Do Iguacu", uf: "PR", phone: "(45) 998230352", whatsapp: "5545998230352", email: "fozdoiguacu1@colfqhnd.com.br", lat: -25.5478, lng: -54.5882, rating: 4.8, reviews: 1350, etaPrep: "20-28 min", etaDelivery: "18-28 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-PR-LONDRINA-CENTRO-1", name: "Hinode Londrina Centro 1", address: "RUA QUINTINO BOCAIUVA, 1107 - Centro - Londrina/PR", street: "RUA QUINTINO BOCAIUVA", number: "1107", bairro: "CENTRO", city: "Londrina", uf: "PR", phone: "(43) 91689314", whatsapp: "5543991689314", email: "londrinacentro1@colfqhnd.com.br", lat: -23.3045, lng: -51.1696, rating: 4.6, reviews: 643, etaPrep: "16-25 min", etaDelivery: "19-31 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  // ===== RJ =====
+  { id: "HND-RJ-ALCANTARA", name: "Hinode Alcantara", address: "RUA MANUEL JOÃO GONÇALVES, 456 - Alcântara - Sao Goncalo/RJ", street: "RUA MANUEL JOÃO GONÇALVES", number: "456", bairro: "ALCÂNTARA", city: "Sao Goncalo", uf: "RJ", phone: "(21) 965663620", whatsapp: "5521965663620", email: "alcantara@colfqhnd.com.br", lat: -22.8108, lng: -43.0192, rating: 4.7, reviews: 201, etaPrep: "24-34 min", etaDelivery: "17-27 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-RJ-BANGU", name: "Hinode Bangu", address: "SANTA CECÍLIA, 984 - Bangu - Rio De Janeiro/RJ", street: "SANTA CECÍLIA", number: "984", bairro: "BANGU", city: "Rio De Janeiro", uf: "RJ", phone: "(21) 981207761", whatsapp: "5521981207761", email: "bangu@colfqhnd.com.br", lat: -22.8783, lng: -43.4683, rating: 5.0, reviews: 344, etaPrep: "24-35 min", etaDelivery: "16-24 min", hours: {mon:[10,0,19,0],tue:[10,0,19,0],wed:[10,0,19,0],thu:[10,0,19,0],fri:[10,0,19,0],sat:[10,0,14,0],sun:null} },
+  { id: "HND-RJ-BONSUCESSO-1", name: "Hinode Bonsucesso 1", address: "GUILHERME MAXWELL, 547 - Bonsucesso - Rio De Janeiro/RJ", street: "GUILHERME MAXWELL", number: "547", bairro: "BONSUCESSO", city: "Rio De Janeiro", uf: "RJ", phone: "", whatsapp: "5521968336095", email: "bonsucesso1@colfqhnd.com.br", lat: -22.8714, lng: -43.2553, rating: 4.8, reviews: 682, etaPrep: "25-37 min", etaDelivery: "18-30 min", hours: {mon:[10,0,19,0],tue:[10,0,19,0],wed:[10,0,19,0],thu:[10,0,19,0],fri:[10,0,19,0],sat:[10,0,14,0],sun:null} },
+  { id: "HND-RJ-CENTRO-RJ", name: "Hinode Centro - Rj", address: "RUA URUGUAIANA, 39 - Centro - Rio De Janeiro/RJ", street: "RUA URUGUAIANA", number: "39", bairro: "CENTRO", city: "Rio De Janeiro", uf: "RJ", phone: "(21) 25097448", whatsapp: "5521997700306", email: "centrorj@colfqhnd.com.br", lat: -22.9098, lng: -43.1789, rating: 4.7, reviews: 578, etaPrep: "23-32 min", etaDelivery: "18-26 min", hours: {mon:[10,0,19,0],tue:[10,0,19,0],wed:[10,0,19,0],thu:[10,0,19,0],fri:[10,0,19,0],sat:[10,0,14,0],sun:null} },
+  { id: "HND-RJ-DUQUE-DE-CAXIAS", name: "Hinode Duque De Caxias", address: "AVENIDA GOVERNADOR LEONEL DE MOURA BRIZOLA, 1217 - Centro - Duque De Caxias/RJ", street: "AVENIDA GOVERNADOR LEONEL DE MOURA BRIZOLA", number: "1217", bairro: "CENTRO", city: "Duque De Caxias", uf: "RJ", phone: "(2) 126521884", whatsapp: "552126521884", email: "duquecaxias@colfqhnd.com.br", lat: -22.7858, lng: -43.312, rating: 4.9, reviews: 799, etaPrep: "19-30 min", etaDelivery: "15-27 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-RJ-ITAGUAI-2", name: "Hinode Itaguai 2", address: "RUA MONTEIRO MENDES, 148 - Centro - Itaguai/RJ", street: "RUA MONTEIRO MENDES", number: "148", bairro: "CENTRO", city: "Itaguai", uf: "RJ", phone: "", whatsapp: "5521976175210", email: "itaguai@colfqhnd.com.br", lat: -22.8674, lng: -43.7762, rating: 4.6, reviews: 461, etaPrep: "18-28 min", etaDelivery: "13-21 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-RJ-ITAPERUNA-1", name: "Hinode Itaperuna 1", address: "RUA PRIMEIRO DE MAIO, 330 - Niteroi - Itaperuna/RJ", street: "RUA PRIMEIRO DE MAIO", number: "330", bairro: "NITEROI", city: "Itaperuna", uf: "RJ", phone: "(22) 996215858", whatsapp: "5522996215858", email: "itaperuna@colfqhnd.com.br", lat: -21.2049, lng: -41.8895, rating: 4.6, reviews: 656, etaPrep: "19-29 min", etaDelivery: "16-24 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-RJ-MAGE-PIABETA", name: "Hinode Mage - Piabeta", address: "RUA AINO SATO, 39 - Piabetá (Inhomirim) - Mage/RJ", street: "RUA AINO SATO", number: "39", bairro: "PIABETÁ (INHOMIRIM)", city: "Mage", uf: "RJ", phone: "(21) 36307022", whatsapp: "552136307022", email: "mage@colfqhnd.com.br", lat: -22.5778, lng: -43.1903, rating: 4.8, reviews: 136, etaPrep: "20-30 min", etaDelivery: "16-28 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-RJ-NITEROI-2", name: "Hinode Niteroi 2", address: "RUA SAO PEDRO, 154 - Centro - Niteroi/RJ", street: "RUA SAO PEDRO", number: "154", bairro: "CENTRO", city: "Niteroi", uf: "RJ", phone: "(21) 36286981", whatsapp: "5521988287743", email: "niteroi2@colfqhnd.com.br", lat: -22.8919, lng: -43.1239, rating: 4.9, reviews: 604, etaPrep: "18-29 min", etaDelivery: "12-24 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-RJ-NOVA-IGUACU-1", name: "Hinode Nova Iguacu 1", address: "RUA CORONEL FRANCISCO SOARES, 46 - Centro - Nova Iguacu/RJ", street: "RUA CORONEL FRANCISCO SOARES", number: "46", bairro: "CENTRO", city: "Nova Iguacu", uf: "RJ", phone: "(21) 26559289", whatsapp: "552126559289", email: "novaiguacu1@colfqhnd.com.br", lat: -22.7592, lng: -43.4511, rating: 4.6, reviews: 656, etaPrep: "19-29 min", etaDelivery: "16-24 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-RJ-PETROPOLIS-2", name: "Hinode Petropolis 2", address: "RUA TEREZA, 1515 - Alto Da Serra - Petropolis/RJ", street: "RUA TEREZA", number: "1515", bairro: "ALTO DA SERRA", city: "Petropolis", uf: "RJ", phone: "(24) 33023994", whatsapp: "552433023994", email: "petropolis2@colfqhnd.com.br", lat: -22.5283, lng: -43.1736, rating: 4.5, reviews: 825, etaPrep: "25-33 min", etaDelivery: "17-27 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-RJ-RECREIO-DOS-BANDEIRANTES", name: "Hinode Recreio Dos Bandeirantes", address: "AVENIDA DAS AMÉRICAS, 13685 - Recreio Dos Bandeirantes - Rio De Janeiro/RJ", street: "AVENIDA DAS AMÉRICAS", number: "13685", bairro: "RECREIO DOS BANDEIRANTES", city: "Rio De Janeiro", uf: "RJ", phone: "(21) 21432747", whatsapp: "5521985778189", email: "recreiodosbandeirantes@colfqhnd.com.br", lat: -23.0167, lng: -43.4561, rating: 4.9, reviews: 604, etaPrep: "18-29 min", etaDelivery: "12-24 min", hours: {mon:[10,0,19,0],tue:[10,0,19,0],wed:[10,0,19,0],thu:[10,0,19,0],fri:[10,0,19,0],sat:[10,0,14,0],sun:null} },
+  { id: "HND-RJ-SANTA-CRUZ-RJ", name: "Hinode Santa Cruz Rj", address: "RUA FELIPE CARDOSO, 431 - Santa Cruz - Rio De Janeiro/RJ", street: "RUA FELIPE CARDOSO", number: "431", bairro: "SANTA CRUZ", city: "Rio De Janeiro", uf: "RJ", phone: "(21) 32174841", whatsapp: "5521981759140", email: "santacruzrj@colfqhnd.com.br", lat: -22.9181, lng: -43.6852, rating: 4.6, reviews: 734, etaPrep: "15-26 min", etaDelivery: "14-22 min", hours: {mon:[10,0,19,0],tue:[10,0,19,0],wed:[10,0,19,0],thu:[10,0,19,0],fri:[10,0,19,0],sat:[10,0,14,0],sun:null} },
+  // ===== RN =====
+  { id: "HND-RN-CAICO-1", name: "Hinode Caico 1", address: "RUA JOAQUIM GORGONIO LOJA, 01 - Centro - Caico/RN", street: "RUA JOAQUIM GORGONIO LOJA", number: "01", bairro: "CENTRO", city: "Caico", uf: "RN", phone: "(84) 21440573", whatsapp: "5584991264559", email: "caico@colfqhnd.com.br", lat: -6.4581, lng: -37.0976, rating: 4.9, reviews: 240, etaPrep: "22-30 min", etaDelivery: "16-26 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-RN-MOSSORO-1", name: "Hinode Mossoro 1", address: "AVENIDA PRESIDENTE DUTRA, 1197 - Alto Sao Manoel - Mossoro/RN", street: "AVENIDA PRESIDENTE DUTRA", number: "1197", bairro: "ALTO SAO MANOEL", city: "Mossoro", uf: "RN", phone: "(84) 33216075", whatsapp: "5584988987689", email: "mossoro@colfqhnd.com.br", lat: -5.1879, lng: -37.3439, rating: 4.8, reviews: 968, etaPrep: "25-34 min", etaDelivery: "16-24 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-RN-NATAL-LAGOA-NOVA-1", name: "Hinode Natal Lagoa Nova 1", address: "AVENIDA AMINTAS BARROS, 3878 - Lagoa Nova - Natal/RN", street: "AVENIDA AMINTAS BARROS", number: "3878", bairro: "LAGOA NOVA", city: "Natal", uf: "RN", phone: "(84) 33029702", whatsapp: "5584991145651", email: "natal@colfqhnd.com.br", lat: -5.8167, lng: -35.2056, rating: 4.8, reviews: 409, etaPrep: "17-28 min", etaDelivery: "17-29 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-RN-NATAL-PONTA-NEGRA-2", name: "Hinode Natal Ponta Negra 2", address: "AVENIDA ENGENHEIRO ROBERTO FREIRE, 4702 - Ponta Negra - Natal/RN", street: "AVENIDA ENGENHEIRO ROBERTO FREIRE", number: "4702", bairro: "PONTA NEGRA", city: "Natal", uf: "RN", phone: "(84) 20309878", whatsapp: "558420309878", email: "natalpontanegra2@colfqhnd.com.br", lat: -5.8772, lng: -35.1761, rating: 4.9, reviews: 799, etaPrep: "19-30 min", etaDelivery: "15-27 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-RN-NATAL-ZONA-NORTE", name: "Hinode Natal Zona Norte", address: "DOUTOR JOÃO MEDEIROS FILHO, 2300 - Potengi - Natal/RN", street: "DOUTOR JOÃO MEDEIROS FILHO", number: "2300", bairro: "POTENGI", city: "Natal", uf: "RN", phone: "(084) 33223911", whatsapp: "5584999422163", email: "natalzonanorte@colfqhnd.com.br", lat: -5.7333, lng: -35.2417, rating: 4.8, reviews: 682, etaPrep: "25-37 min", etaDelivery: "18-30 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-RN-PARNAMIRIM-1", name: "Hinode Parnamirim 1", address: "RUA PIRES DE CAMPOS, 144 - Centro - Parnamirim/RN", street: "RUA PIRES DE CAMPOS", number: "144", bairro: "CENTRO", city: "Parnamirim", uf: "RN", phone: "(84) 31131048", whatsapp: "5584987566088", email: "parnamirim1@colfqhnd.com.br", lat: -5.9159, lng: -35.2627, rating: 4.7, reviews: 669, etaPrep: "22-33 min", etaDelivery: "13-23 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  // ===== RO =====
+  { id: "HND-RO-ARIQUEMES", name: "Hinode Ariquemes", address: "RUA FORTALEZA, 2635 - Setor 03 - Ariquemes/RO", street: "RUA FORTALEZA", number: "2635", bairro: "SETOR 03", city: "Ariquemes", uf: "RO", phone: "", whatsapp: "5569992423467", email: "ariquemes@colfqhnd.com.br", lat: -9.9133, lng: -63.0408, rating: 4.7, reviews: 851, etaPrep: "20-30 min", etaDelivery: "19-27 min", hours: {mon:[8,0,18,0],tue:[8,0,18,0],wed:[8,0,18,0],thu:[8,0,18,0],fri:[8,0,18,0],sat:[8,0,12,0],sun:null} },
+  { id: "HND-RO-JI-PARANA-1", name: "Hinode Ji Parana 1", address: "RUA DOM AUGUSTO, 1650 - Centro - Ji-Parana/RO", street: "RUA DOM AUGUSTO", number: "1650", bairro: "CENTRO", city: "Ji-Parana", uf: "RO", phone: "(69) 999103109", whatsapp: "5569999103109", email: "jiparana@colfqhnd.com.br", lat: -10.8848, lng: -61.9518, rating: 4.9, reviews: 513, etaPrep: "19-28 min", etaDelivery: "17-27 min", hours: {mon:[8,0,18,0],tue:[8,0,18,0],wed:[8,0,18,0],thu:[8,0,18,0],fri:[8,0,18,0],sat:[8,0,12,0],sun:null} },
+  { id: "HND-RO-PORTO-VELHO-2", name: "Hinode Porto Velho 2", address: "RUA VITORIA REGIA, 5437 - Eldorado - Porto Velho/RO", street: "RUA VITORIA REGIA", number: "5437", bairro: "ELDORADO", city: "Porto Velho", uf: "RO", phone: "(69) 993083663", whatsapp: "5569993083663", email: "portovelho2@colfqhnd.com.br", lat: -8.7619, lng: -63.9039, rating: 4.8, reviews: 864, etaPrep: "23-34 min", etaDelivery: "16-26 min", hours: {mon:[8,0,18,0],tue:[8,0,18,0],wed:[8,0,18,0],thu:[8,0,18,0],fri:[8,0,18,0],sat:[8,0,12,0],sun:null} },
+  { id: "HND-RO-VILHENA-1", name: "Hinode Vilhena 1", address: "RUA NELSON TREMEA, 213 - Centro (S-01) - Vilhena/RO", street: "RUA NELSON TREMEA", number: "213", bairro: "CENTRO (S-01)", city: "Vilhena", uf: "RO", phone: "(69) 993488903", whatsapp: "5569993488903", email: "vilhena1@colfqhnd.com.br", lat: -12.7406, lng: -60.1458, rating: 4.7, reviews: 576, etaPrep: "20-30 min", etaDelivery: "15-25 min", hours: {mon:[8,0,18,0],tue:[8,0,18,0],wed:[8,0,18,0],thu:[8,0,18,0],fri:[8,0,18,0],sat:[8,0,12,0],sun:null} },
+  // ===== RR =====
+  { id: "HND-RR-BOA-VISTA", name: "Hinode Boa Vista", address: "MESTRE ALBANO, 1483 - Buritis - Boa Vista/RR", street: "MESTRE ALBANO", number: "1483", bairro: "BURITIS", city: "Boa Vista", uf: "RR", phone: "(95) 36255762", whatsapp: "5595984187403", email: "boavista@colfqhnd.com.br", lat: 2.8208, lng: -60.6753, rating: 4.9, reviews: 708, etaPrep: "20-29 min", etaDelivery: "12-22 min", hours: {mon:[8,0,18,0],tue:[8,0,18,0],wed:[8,0,18,0],thu:[8,0,18,0],fri:[8,0,18,0],sat:[8,0,12,0],sun:null} },
+  // ===== RS =====
+  { id: "HND-RS-ALVORADA-RS-1", name: "Hinode Alvorada Rs 1", address: "RUA CEARÁ, 387 - Maringá - Alvorada/RS", street: "RUA CEARÁ", number: "387", bairro: "MARINGÁ", city: "Alvorada", uf: "RS", phone: "(51) 984166952", whatsapp: "5551984166952", email: "alvorada1@colfqhnd.com.br", lat: -29.9889, lng: -51.0828, rating: 4.6, reviews: 734, etaPrep: "15-26 min", etaDelivery: "14-22 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-RS-GRAVATAI", name: "Hinode Gravatai", address: "RUA FLÁVIO ROBERTO SABBADINI, 614 - São Vicente - Gravatai/RS", street: "RUA FLÁVIO ROBERTO SABBADINI", number: "614", bairro: "SÃO VICENTE", city: "Gravatai", uf: "RS", phone: "(51) 31280770", whatsapp: "5551981690799", email: "gravatai@colfqhnd.com.br", lat: -29.9412, lng: -50.9892, rating: 4.5, reviews: 916, etaPrep: "24-34 min", etaDelivery: "12-24 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-RS-IJUI", name: "Hinode Ijui", address: "RUA DAS CHACARAS, 111 - Progresso - Ijui/RS", street: "RUA DAS CHACARAS", number: "111", bairro: "PROGRESSO", city: "Ijui", uf: "RS", phone: "(55) 33324640", whatsapp: "55984544337", email: "ijui@colfqhnd.com.br", lat: -28.3878, lng: -53.9156, rating: 4.5, reviews: 916, etaPrep: "24-34 min", etaDelivery: "12-24 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-RS-NOVO-HAMBURGO", name: "Hinode Novo Hamburgo", address: "RUA BENJAMIN CONSTANT, 429 - Rio Branco - Novo Hamburgo/RS", street: "RUA BENJAMIN CONSTANT", number: "429", bairro: "RIO BRANCO", city: "Novo Hamburgo", uf: "RS", phone: "(51) 30352153", whatsapp: "5551993937337", email: "novohamburgo@colfqhnd.com.br", lat: -29.6783, lng: -51.1306, rating: 4.9, reviews: 981, etaPrep: "17-27 min", etaDelivery: "13-23 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-RS-NOVO-HAMBURGO-1", name: "Hinode Novo Hamburgo 1", address: "BENJAMIN CONSTANT, 429 - Rio Branco - Novo Hamburgo/RS", street: "BENJAMIN CONSTANT", number: "429", bairro: "RIO BRANCO", city: "Novo Hamburgo", uf: "RS", phone: "(51) 993937337", whatsapp: "5551993937337", email: "novohamburgo1@colfqhnd.com.br", lat: -29.6783, lng: -51.1306, rating: 4.9, reviews: 981, etaPrep: "17-27 min", etaDelivery: "13-23 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-RS-PASSO-FUNDO", name: "Hinode Passo Fundo", address: "RUA PAISSANDU, 916 - Centro - Passo Fundo/RS", street: "RUA PAISSANDU", number: "916", bairro: "CENTRO", city: "Passo Fundo", uf: "RS", phone: "(54) 36323148", whatsapp: "5554981450453", email: "passofundo@colfqhnd.com.br", lat: -28.2628, lng: -52.4067, rating: 5.0, reviews: 812, etaPrep: "22-34 min", etaDelivery: "12-20 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-RS-PELOTAS", name: "Hinode Pelotas", address: "AVENIDA DOM JOAQUIM, 1515 - Três Vendas - Pelotas/RS", street: "AVENIDA DOM JOAQUIM", number: "1515", bairro: "TRÊS VENDAS", city: "Pelotas", uf: "RS", phone: "(53) 991179793", whatsapp: "5553991179793", email: "pelotas@colfqhnd.com.br", lat: -31.7654, lng: -52.3375, rating: 4.9, reviews: 981, etaPrep: "17-27 min", etaDelivery: "13-23 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-RS-PORTO-ALEGRE-1", name: "Hinode Porto Alegre 1", address: "AVENIDA ASSIS BRASIL, 3535 - Cristo Redentor - Porto Alegre/RS", street: "AVENIDA ASSIS BRASIL", number: "3535", bairro: "CRISTO REDENTOR", city: "Porto Alegre", uf: "RS", phone: "(51) 35739117", whatsapp: "5551992994695", email: "portoalegre1@colfqhnd.com.br", lat: -30.005, lng: -51.1797, rating: 5.0, reviews: 1085, etaPrep: "19-27 min", etaDelivery: "13-21 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-RS-SANTA-CRUZ-DO-SUL-1", name: "Hinode Santa Cruz Do Sul 1", address: "RUA TENENTE CORONEL BRITO, 1075 - Centro - Santa Cruz Do Sul/RS", street: "RUA TENENTE CORONEL BRITO", number: "1075", bairro: "CENTRO", city: "Santa Cruz Do Sul", uf: "RS", phone: "(51) 35644101", whatsapp: "555135644101", email: "stacruzdosul@colfqhnd.com.br", lat: -29.7174, lng: -52.4264, rating: 4.9, reviews: 799, etaPrep: "19-30 min", etaDelivery: "15-27 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-RS-URUGUAIANA-1", name: "Hinode Uruguaiana 1", address: "RUA DUQUE DE CAXIAS, 1748 - Centro - Uruguaiana/RS", street: "RUA DUQUE DE CAXIAS", number: "1748", bairro: "CENTRO", city: "Uruguaiana", uf: "RS", phone: "(55) 997000580", whatsapp: "55997000580", email: "uruguaiana1@colfqhnd.com.br", lat: -29.7546, lng: -57.0883, rating: 4.8, reviews: 968, etaPrep: "25-34 min", etaDelivery: "16-24 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-RS-VACARIA", name: "Hinode Vacaria", address: "MOREIRA DA PAZ, 187 - Centro - Vacaria/RS", street: "MOREIRA DA PAZ", number: "187", bairro: "CENTRO", city: "Vacaria", uf: "RS", phone: "", whatsapp: "555496456628", email: "vacaria@colfqhnd.com.br", lat: -28.5125, lng: -50.9342, rating: 4.5, reviews: 448, etaPrep: "15-24 min", etaDelivery: "16-28 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-RS-VIAMAO", name: "Hinode Viamao", address: "RUA QUINTINO BONETTO, 45 - Santa Isabel - Viamao/RS", street: "RUA QUINTINO BONETTO", number: "45", bairro: "SANTA ISABEL", city: "Viamao", uf: "RS", phone: "(51) 97215151", whatsapp: "5551997215151", email: "viamao@colfqhnd.com.br", lat: -30.0817, lng: -51.0233, rating: 4.6, reviews: 838, etaPrep: "17-26 min", etaDelivery: "14-26 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  // ===== SC =====
+  { id: "HND-SC-BLUMENAU-1", name: "Hinode Blumenau 1", address: "RUA FREI ESTANISLAU SCHAETTE, 980 - Água Verde - Blumenau/SC", street: "RUA FREI ESTANISLAU SCHAETTE", number: "980", bairro: "ÁGUA VERDE", city: "Blumenau", uf: "SC", phone: "(47) 32099442", whatsapp: "5547988639317", email: "blumenau1@colfqhnd.com.br", lat: -26.9194, lng: -49.0661, rating: 4.6, reviews: 370, etaPrep: "19-27 min", etaDelivery: "18-30 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-SC-CAMBORIU", name: "Hinode Camboriú", address: "ISRAEL, 450 - Nações - Balneario Camboriu/SC", street: "ISRAEL", number: "450", bairro: "NAÇÕES", city: "Balneario Camboriu", uf: "SC", phone: "(47) 32464167", whatsapp: "5547997444324", email: "camboriu@colfqhnd.com.br", lat: -26.9906, lng: -48.6356, rating: 5.0, reviews: 162, etaPrep: "15-27 min", etaDelivery: "18-28 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-SC-CHAPECO-1", name: "Hinode Chapeco 1", address: "AVENIDA FERNANDO MACHADO - E, 1952 - Universitario - Chapeco/SC", street: "AVENIDA FERNANDO MACHADO - E", number: "1952", bairro: "UNIVERSITARIO", city: "Chapeco", uf: "SC", phone: "(49) 33283822", whatsapp: "5549999581114", email: "chapeco@colfqhnd.com.br", lat: -27.0961, lng: -52.6188, rating: 4.7, reviews: 578, etaPrep: "23-32 min", etaDelivery: "18-26 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-SC-CRICIUMA-1", name: "Hinode Criciuma 1", address: "RUA ALMIRANTE BARROSO, 1025 - Centro - Criciuma/SC", street: "RUA ALMIRANTE BARROSO", number: "1025", bairro: "CENTRO", city: "Criciuma", uf: "SC", phone: "(48) 998221409", whatsapp: "5548998221409", email: "criciuma1@colfqhnd.com.br", lat: -28.6776, lng: -49.3697, rating: 4.9, reviews: 331, etaPrep: "21-31 min", etaDelivery: "19-31 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-SC-FLORIANOPOLIS", name: "Hinode Florianopolis", address: "RUA CONSELHEIRO MAFRA, 758 - Centro - Florianopolis/SC", street: "RUA CONSELHEIRO MAFRA", number: "758", bairro: "CENTRO", city: "Florianopolis", uf: "SC", phone: "(48) 960000274", whatsapp: "5548960000274", email: "florianopolis@colfqhnd.com.br", lat: -27.5949, lng: -48.5482, rating: 4.7, reviews: 565, etaPrep: "20-28 min", etaDelivery: "13-25 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-SC-JARAGUA-DO-SUL-2", name: "Hinode Jaragua Do Sul 2", address: "AVENIDA MARECHAL DEODORO DA FONSECA, 1285 - Centro - Jaragua Do Sul/SC", street: "AVENIDA MARECHAL DEODORO DA FONSECA", number: "1285", bairro: "CENTRO", city: "Jaragua Do Sul", uf: "SC", phone: "(47) 30553050", whatsapp: "5547991663866", email: "jaraguadosul2@colfqhnd.com.br", lat: -26.4853, lng: -49.0775, rating: 4.7, reviews: 292, etaPrep: "23-35 min", etaDelivery: "12-24 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-SC-JOINVILLE-ANITA-1", name: "Hinode Joinville Anita 1", address: "RUA SANTA CATARINA, 48 - Floresta - Joinville/SC", street: "RUA SANTA CATARINA", number: "48", bairro: "FLORESTA", city: "Joinville", uf: "SC", phone: "(47) 34321122", whatsapp: "554734321122", email: "joinvilleanita@colfqhnd.com.br", lat: -26.2906, lng: -48.8244, rating: 4.6, reviews: 643, etaPrep: "16-25 min", etaDelivery: "19-31 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  // ===== SE =====
+  { id: "HND-SE-ARACAJU-2", name: "Hinode Aracaju 2", address: "ARAUA, 806 - São José - Aracaju/SE", street: "ARAUA", number: "806", bairro: "SÃO JOSÉ", city: "Aracaju", uf: "SE", phone: "", whatsapp: "5579996364640", email: "aracaju2@colfqhnd.com.br", lat: -10.9472, lng: -37.0731, rating: 4.5, reviews: 266, etaPrep: "17-27 min", etaDelivery: "18-26 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-SE-ITABAIANA-1", name: "Hinode Itabaiana 1", address: "PRACA ESCRITOR SEBRAO SOBRINHO, 541 - Rotary Club De Itabaiana - Itabaiana/SE", street: "PRACA ESCRITOR SEBRAO SOBRINHO", number: "541", bairro: "ROTARY CLUB DE ITABAIANA", city: "Itabaiana", uf: "SE", phone: "(79) 998056897", whatsapp: "5579998056897", email: "itabaiana1@colfqhnd.com.br", lat: -10.6862, lng: -37.425, rating: 4.8, reviews: 500, etaPrep: "16-24 min", etaDelivery: "12-20 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-SE-PROPRIA-1", name: "Hinode Propria 1", address: "RUA NILO PECANHA, 1538 - Centro - Propria/SE", street: "RUA NILO PECANHA", number: "1538", bairro: "CENTRO", city: "Propria", uf: "SE", phone: "(79) 998061919", whatsapp: "5579998061919", email: "propria1@colfqhnd.com.br", lat: -10.2167, lng: -36.8403, rating: 4.8, reviews: 773, etaPrep: "24-33 min", etaDelivery: "13-21 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-SE-TOBIAS-BARRETO-2", name: "Hinode Tobias Barreto 2", address: "LARGO JOAO ANDRADE GARCEZ, 1055 - Centro - Tobias Barreto/SE", street: "LARGO JOAO ANDRADE GARCEZ", number: "1055", bairro: "CENTRO", city: "Tobias Barreto", uf: "SE", phone: "(79) 996600520", whatsapp: "5579996600520", email: "tobiasbarreto2@colfqhnd.com.br", lat: -11.1839, lng: -37.9978, rating: 4.9, reviews: 526, etaPrep: "22-32 min", etaDelivery: "14-26 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  // ===== SP =====
+  { id: "HND-SP-BARRA-FUNDA", name: "Hinode Barra Funda", address: "RUA LOPES DE OLIVEIRA, 489 - Barra Funda - Sao Paulo/SP", street: "RUA LOPES DE OLIVEIRA", number: "489", bairro: "BARRA FUNDA", city: "Sao Paulo", uf: "SP", phone: "(11) 25396459", whatsapp: "5511963360424", email: "barrafunda@colfqhnd.com.br", lat: -23.5251, lng: -46.665, rating: 4.8, reviews: 695, etaPrep: "17-25 min", etaDelivery: "15-23 min", hours: {mon:[10,0,19,0],tue:[10,0,19,0],wed:[10,0,19,0],thu:[10,0,19,0],fri:[10,0,19,0],sat:[10,0,14,0],sun:null} },
+  { id: "HND-SP-BARUERI", name: "Hinode Barueri", address: "RUA CALDAS NOVAS, 105 - Bethaville I - Barueri/SP", street: "RUA CALDAS NOVAS", number: "105", bairro: "BETHAVILLE I", city: "Barueri", uf: "SP", phone: "(11) 41635385", whatsapp: "5511948793852", email: "barueri@colfqhnd.com.br", lat: -23.5167, lng: -46.858, rating: 4.9, reviews: 526, etaPrep: "22-32 min", etaDelivery: "14-26 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-SP-BUTANTA", name: "Hinode Butanta", address: "RUA ALVARENGA, 1442 - Butantã - Sao Paulo/SP", street: "RUA ALVARENGA", number: "1442", bairro: "BUTANTÃ", city: "Sao Paulo", uf: "SP", phone: "(11) 37314307", whatsapp: "5511932556013", email: "butanta@colfqhnd.com.br", lat: -23.5709, lng: -46.7188, rating: 4.7, reviews: 760, etaPrep: "21-29 min", etaDelivery: "16-28 min", hours: {mon:[10,0,19,0],tue:[10,0,19,0],wed:[10,0,19,0],thu:[10,0,19,0],fri:[10,0,19,0],sat:[10,0,14,0],sun:null} },
+  { id: "HND-SP-CAMPINAS-GUANABARA-1", name: "Hinode Campinas Guanabara 1", address: "JOSÉ MARIO DE ARRUDA TOLEDO, 440 - Jardim Aurelia - Campinas/SP", street: "JOSÉ MARIO DE ARRUDA TOLEDO", number: "440", bairro: "JARDIM AURELIA", city: "Campinas", uf: "SP", phone: "(19) 996469239", whatsapp: "5519996469239", email: "campinasguanabara1@colfqhnd.com.br", lat: -22.8911, lng: -47.0531, rating: 4.7, reviews: 576, etaPrep: "20-30 min", etaDelivery: "15-25 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-SP-CAPAO-REDONDO", name: "Hinode Capao Redondo", address: "AVENIDA ELLIS MAAS, 265 - Capão Redondo - Sao Paulo/SP", street: "AVENIDA ELLIS MAAS", number: "265", bairro: "CAPÃO REDONDO", city: "Sao Paulo", uf: "SP", phone: "(11) 58194938", whatsapp: "5511992621654", email: "capaoredondo@colfqhnd.com.br", lat: -23.6716, lng: -46.7745, rating: 4.6, reviews: 461, etaPrep: "18-28 min", etaDelivery: "13-21 min", hours: {mon:[10,0,19,0],tue:[10,0,19,0],wed:[10,0,19,0],thu:[10,0,19,0],fri:[10,0,19,0],sat:[10,0,14,0],sun:null} },
+  { id: "HND-SP-CATANDUVA", name: "Hinode Catanduva", address: "PARQUE DAS AMERICAS, 162 - Centro - Catanduva/SP", street: "PARQUE DAS AMERICAS", number: "162", bairro: "CENTRO", city: "Catanduva", uf: "SP", phone: "(17) 35219098", whatsapp: "5517997741516", email: "catanduva@colfqhnd.com.br", lat: -21.1376, lng: -48.9728, rating: 4.7, reviews: 396, etaPrep: "25-35 min", etaDelivery: "12-22 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-SP-DRACENA", name: "Hinode Dracena", address: "PRAÇA ARTHUR PAGNOZZI, 105 - Centro - Dracena/SP", street: "PRAÇA ARTHUR PAGNOZZI", number: "105", bairro: "CENTRO", city: "Dracena", uf: "SP", phone: "(18) 38216029", whatsapp: "5518996063377", email: "dracena@colfqhnd.com.br", lat: -21.4843, lng: -51.5341, rating: 4.8, reviews: 409, etaPrep: "17-28 min", etaDelivery: "17-29 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-SP-FRANCA-2", name: "Hinode Franca 2", address: "AVENIDA RIO AMAZONAS, 1392 - Residencial Amazonas - Franca/SP", street: "AVENIDA RIO AMAZONAS", number: "1392", bairro: "RESIDENCIAL AMAZONAS", city: "Franca", uf: "SP", phone: "(16) 999907777", whatsapp: "5516999907777", email: "franca2@colfqhnd.com.br", lat: -20.5386, lng: -47.4006, rating: 4.8, reviews: 695, etaPrep: "17-25 min", etaDelivery: "15-23 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-SP-FRANCO-DA-ROCHA-1", name: "Hinode Franco Da Rocha 1", address: "RUA BASÍLIO FAZZI, 240 - Companhia Fazenda Belém - Franco Da Rocha/SP", street: "RUA BASÍLIO FAZZI", number: "240", bairro: "COMPANHIA FAZENDA BELÉM", city: "Franco Da Rocha", uf: "SP", phone: "(11) 44432801", whatsapp: "5511945298055", email: "francodarocha1@colfqhnd.com.br", lat: -23.3328, lng: -46.7245, rating: 4.6, reviews: 643, etaPrep: "16-25 min", etaDelivery: "19-31 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-SP-GUARULHOS", name: "Hinode Guarulhos", address: "RUA LUIZ GAMA, 157 - Centro - Guarulhos/SP", street: "RUA LUIZ GAMA", number: "157", bairro: "CENTRO", city: "Guarulhos", uf: "SP", phone: "(11) 34280958", whatsapp: "5511941092915", email: "guarulhos@colfqhnd.com.br", lat: -23.4628, lng: -46.5333, rating: 4.9, reviews: 708, etaPrep: "20-29 min", etaDelivery: "12-22 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-SP-INDAIATUBA", name: "Hinode Indaiatuba", address: "RUA PEDRO DE TOLEDO, 1192 - Centro - Indaiatuba/SP", street: "RUA PEDRO DE TOLEDO", number: "1192", bairro: "CENTRO", city: "Indaiatuba", uf: "SP", phone: "", whatsapp: "5519992279810", email: "indaiatuba@colfqhnd.com.br", lat: -23.0904, lng: -47.2197, rating: 5.0, reviews: 435, etaPrep: "23-31 min", etaDelivery: "19-29 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-SP-INTERLAGOS-1", name: "Hinode Interlagos 1", address: "AVENIDA INTERLAGOS, 2001 - Jardim Umuarama - Sao Paulo/SP", street: "AVENIDA INTERLAGOS", number: "2001", bairro: "JARDIM UMUARAMA", city: "Sao Paulo", uf: "SP", phone: "(11) 26918286", whatsapp: "5511995402685", email: "interlagos@colfqhnd.com.br", lat: -23.7027, lng: -46.6855, rating: 4.8, reviews: 695, etaPrep: "17-25 min", etaDelivery: "15-23 min", hours: {mon:[10,0,19,0],tue:[10,0,19,0],wed:[10,0,19,0],thu:[10,0,19,0],fri:[10,0,19,0],sat:[10,0,14,0],sun:null} },
+  { id: "HND-SP-ITAPEVA", name: "Hinode Itapeva", address: "RUA SANTA CRUZ, 596 - Vila Nova - Itapeva/SP", street: "RUA SANTA CRUZ", number: "596", bairro: "VILA NOVA", city: "Itapeva", uf: "SP", phone: "(15) 998110841", whatsapp: "5515998110841", email: "itapeva@colfqhnd.com.br", lat: -23.9826, lng: -48.8758, rating: 4.8, reviews: 695, etaPrep: "17-25 min", etaDelivery: "15-23 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-SP-ITAPEVI", name: "Hinode Itapevi", address: "AVENIDA PRESIDENTE VARGAS, 650 - Nova Itapevi - Itapevi/SP", street: "AVENIDA PRESIDENTE VARGAS", number: "650", bairro: "NOVA ITAPEVI", city: "Itapevi", uf: "SP", phone: "(11) 43218409", whatsapp: "5511972314145", email: "itapevi@colfqhnd.com.br", lat: -23.5448, lng: -46.9305, rating: 4.7, reviews: 576, etaPrep: "20-30 min", etaDelivery: "15-25 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-SP-ITAQUERA", name: "Hinode Itaquera", address: "RUA DOUTOR CAMPOS MOURA, 99 - Parque Artur Alvim - Sao Paulo/SP", street: "RUA DOUTOR CAMPOS MOURA", number: "99", bairro: "PARQUE ARTUR ALVIM", city: "Sao Paulo", uf: "SP", phone: "(11) 27685954", whatsapp: "5511998757761", email: "itaquera@colfqhnd.com.br", lat: -23.5394, lng: -46.4847, rating: 4.8, reviews: 864, etaPrep: "23-34 min", etaDelivery: "16-26 min", hours: {mon:[10,0,19,0],tue:[10,0,19,0],wed:[10,0,19,0],thu:[10,0,19,0],fri:[10,0,19,0],sat:[10,0,14,0],sun:null} },
+  { id: "HND-SP-JAU-1", name: "Hinode Jau 1", address: "AVENIDA ISALTINO DO AMARAL CARVALHO, 2130 - Chácara Bela Vista - Jau/SP", street: "AVENIDA ISALTINO DO AMARAL CARVALHO", number: "2130", bairro: "CHÁCARA BELA VISTA", city: "Jau", uf: "SP", phone: "(14) 36241092", whatsapp: "5514998961092", email: "jau1@colfqhnd.com.br", lat: -22.2964, lng: -48.5578, rating: 4.9, reviews: 804, etaPrep: "15-26 min", etaDelivery: "16-26 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-SP-JUNDIAI-1", name: "Hinode Jundiai 1", address: "RUA LUIZ SILVESTRONE, 122 - Vila Sao Joao Batista - Jundiai/SP", street: "RUA LUIZ SILVESTRONE", number: "122", bairro: "VILA SAO JOAO BATISTA", city: "Jundiai", uf: "SP", phone: "(11) 45335551", whatsapp: "5511944805556", email: "jundiai1@colfqhnd.com.br", lat: -23.1804, lng: -46.9023, rating: 4.6, reviews: 734, etaPrep: "15-26 min", etaDelivery: "14-22 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-SP-LAPA", name: "Hinode Lapa", address: "RUA TRAJANO, 172 - Lapa - Sao Paulo/SP", street: "RUA TRAJANO", number: "172", bairro: "LAPA", city: "Sao Paulo", uf: "SP", phone: "(11) 38751356", whatsapp: "5511974861276", email: "lapa@colfqhnd.com.br", lat: -23.5276, lng: -46.7058, rating: 4.7, reviews: 578, etaPrep: "23-32 min", etaDelivery: "18-26 min", hours: {mon:[10,0,19,0],tue:[10,0,19,0],wed:[10,0,19,0],thu:[10,0,19,0],fri:[10,0,19,0],sat:[10,0,14,0],sun:null} },
+  { id: "HND-SP-MAUA", name: "Hinode Maua", address: "RUA PREFEITO ENIO BRANCALION, 129 - Centro - Maua/SP", street: "RUA PREFEITO ENIO BRANCALION", number: "129", bairro: "CENTRO", city: "Maua", uf: "SP", phone: "", whatsapp: "5511993389357", email: "maua@colfqhnd.com.br", lat: -23.6678, lng: -46.4614, rating: 4.7, reviews: 565, etaPrep: "20-28 min", etaDelivery: "13-25 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-SP-MOGI-GUACU", name: "Hinode Mogi Guacu", address: "AVENIDA NOVE DE ABRIL, 878 - Centro - Mogi Guacu/SP", street: "AVENIDA NOVE DE ABRIL", number: "878", bairro: "CENTRO", city: "Mogi Guacu", uf: "SP", phone: "(19) 35692662", whatsapp: "5519971659894", email: "mogiguacu@colfqhnd.com.br", lat: -22.3675, lng: -46.942, rating: 4.6, reviews: 643, etaPrep: "16-25 min", etaDelivery: "19-31 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-SP-OSASCO-1", name: "Hinode Osasco 1", address: "AVENIDA DOMINGOS ODÁLIA FILHO, 301 - Centro - Osasco/SP", street: "AVENIDA DOMINGOS ODÁLIA FILHO", number: "301", bairro: "CENTRO", city: "Osasco", uf: "SP", phone: "(11) 36835945", whatsapp: "5511978540147", email: "osasco1@colfqhnd.com.br", lat: -23.5326, lng: -46.7919, rating: 4.8, reviews: 773, etaPrep: "24-33 min", etaDelivery: "13-21 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-SP-PIRACICABA-1", name: "Hinode Piracicaba 1", address: "RUA DONA EUGÊNIA, 756 - Jardim Europa - Piracicaba/SP", street: "RUA DONA EUGÊNIA", number: "756", bairro: "JARDIM EUROPA", city: "Piracicaba", uf: "SP", phone: "(19) 982159105", whatsapp: "5519982159105", email: "piracicaba1@colfqhnd.com.br", lat: -22.71, lng: -47.6478, rating: 4.9, reviews: 526, etaPrep: "22-32 min", etaDelivery: "14-26 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-SP-REGISTRO", name: "Hinode Registro", address: "CLARA GIANOTTI DE SOUZA, 642 - Centro - Registro/SP", street: "CLARA GIANOTTI DE SOUZA", number: "642", bairro: "CENTRO", city: "Registro", uf: "SP", phone: "(13) 996200642", whatsapp: "5513996200642", email: "registro@colfqhnd.com.br", lat: -24.4869, lng: -47.8442, rating: 4.7, reviews: 578, etaPrep: "23-32 min", etaDelivery: "18-26 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-SP-RIO-CLARO", name: "Hinode Rio Claro", address: "AVENIDA 27, 1440 - Vila Santo Antônio - Rio Claro/SP", street: "AVENIDA 27", number: "1440", bairro: "VILA SANTO ANTÔNIO", city: "Rio Claro", uf: "SP", phone: "(19) 35322233", whatsapp: "5519991137878", email: "rioclaro@colfqhnd.com.br", lat: -22.4108, lng: -47.5613, rating: 4.8, reviews: 682, etaPrep: "25-37 min", etaDelivery: "18-30 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-SP-SANTO-ANDRE-1", name: "Hinode Santo Andre 1", address: "PEREIRA BARRETO, 1395 - Paraíso - Santo Andre/SP", street: "PEREIRA BARRETO", number: "1395", bairro: "PARAÍSO", city: "Santo Andre", uf: "SP", phone: "(11) 26777735", whatsapp: "5511918430102", email: "santoandre1@colfqhnd.com.br", lat: -23.6555, lng: -46.5364, rating: 4.8, reviews: 695, etaPrep: "17-25 min", etaDelivery: "15-23 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-SP-SANTOS-VALONGO", name: "Hinode Santos Valongo", address: "VISCONDE DE EMBARE, 230 - Valongo - Santos/SP", street: "VISCONDE DE EMBARE", number: "230", bairro: "VALONGO", city: "Santos", uf: "SP", phone: "(13) 33921828", whatsapp: "5513997679500", email: "santosvalongo@colfqhnd.com.br", lat: -23.9329, lng: -46.3346, rating: 4.8, reviews: 877, etaPrep: "15-27 min", etaDelivery: "13-25 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-SP-SAO-CARLOS", name: "Hinode Sao Carlos", address: "RUA SÃO SEBASTIÃO, 1795 - Centro - Sao Carlos/SP", street: "RUA SÃO SEBASTIÃO", number: "1795", bairro: "CENTRO", city: "Sao Carlos", uf: "SP", phone: "(16) 34125192", whatsapp: "5516997533480", email: "saocarlos@colfqhnd.com.br", lat: -22.0184, lng: -47.8907, rating: 4.7, reviews: 565, etaPrep: "20-28 min", etaDelivery: "13-25 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-SP-SAO-JOSE-DO-RIO-PRETO-1", name: "Hinode Sao Jose Do Rio Preto 1", address: "RUA CAPITÃO DELMIRO ÁVILA, 273 - Vila Diniz - Sao Jose Do Rio Preto/SP", street: "RUA CAPITÃO DELMIRO ÁVILA", number: "273", bairro: "VILA DINIZ", city: "Sao Jose Do Rio Preto", uf: "SP", phone: "(17) 32332976", whatsapp: "5517997943837", email: "saojosedoriopreto1@colfqhnd.com.br", lat: -20.7977, lng: -49.3635, rating: 4.8, reviews: 682, etaPrep: "25-37 min", etaDelivery: "18-30 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-SP-SAO-JOSE-DOS-CAMPOS", name: "Hinode Sao Jose Dos Campos", address: "AVENIDA ANDRÔMEDA, 693 - Jardim Satélite - Sao Jose Dos Campos/SP", street: "AVENIDA ANDRÔMEDA", number: "693", bairro: "JARDIM SATÉLITE", city: "Sao Jose Dos Campos", uf: "SP", phone: "(12) 39334050", whatsapp: "5512981175962", email: "saojosedoscampos@colfqhnd.com.br", lat: -23.2289, lng: -45.8855, rating: 4.7, reviews: 669, etaPrep: "22-33 min", etaDelivery: "13-23 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  { id: "HND-SP-SHOPPING-GUARULHOS", name: "Hinode Shopping Guarulhos", address: "RUA ENGENHEIRO CAMILO OLIVETTI, 295 - Itapegica Vila Herminia - Guarulhos/SP", street: "RUA ENGENHEIRO CAMILO OLIVETTI", number: "295", bairro: "ITAPEGICA VILA HERMINIA", city: "Guarulhos", uf: "SP", phone: "(11) 41964355", whatsapp: "551141964355", email: "shoppingguarulhos.quiosque@colfqhnd.com.br", lat: -23.4747, lng: -46.5378, rating: 4.9, reviews: 708, etaPrep: "20-29 min", etaDelivery: "12-22 min", hours: {mon:[10,0,19,0],tue:[10,0,19,0],wed:[10,0,19,0],thu:[10,0,19,0],fri:[10,0,19,0],sat:[10,0,14,0],sun:[13,0,21,0]} },
+  { id: "HND-SP-SHOPPING-TAMBORE", name: "Hinode Shopping Tambore", address: "RUA PIRACEMA, 669 - Tamboré - Barueri/SP", street: "RUA PIRACEMA", number: "669", bairro: "TAMBORÉ", city: "Barueri", uf: "SP", phone: "", whatsapp: "", email: "shoppingtambore@colfqhnd.com.br", lat: -23.5037, lng: -46.842, rating: 4.9, reviews: 526, etaPrep: "22-32 min", etaDelivery: "14-26 min", hours: {mon:[10,0,19,0],tue:[10,0,19,0],wed:[10,0,19,0],thu:[10,0,19,0],fri:[10,0,19,0],sat:[10,0,14,0],sun:[13,0,21,0]} },
+  { id: "HND-SP-TATUAPE", name: "Hinode Tatuape", address: "RUA TIJUCO PRETO, 1136 - Tatuapé - Sao Paulo/SP", street: "RUA TIJUCO PRETO", number: "1136", bairro: "TATUAPÉ", city: "Sao Paulo", uf: "SP", phone: "(11) 27372925", whatsapp: "5511992695247", email: "tatuape@colfqhnd.com.br", lat: -23.5404, lng: -46.576, rating: 5.0, reviews: 994, etaPrep: "20-31 min", etaDelivery: "18-30 min", hours: {mon:[10,0,19,0],tue:[10,0,19,0],wed:[10,0,19,0],thu:[10,0,19,0],fri:[10,0,19,0],sat:[10,0,14,0],sun:null} },
+  { id: "HND-SP-VOTORANTIM", name: "Hinode Votorantim", address: "RUA IZALTINO MARIANO, 66 - Jardim Toledo - Votorantim/SP", street: "RUA IZALTINO MARIANO", number: "66", bairro: "JARDIM TOLEDO", city: "Votorantim", uf: "SP", phone: "(15) 30234626", whatsapp: "5515997475521", email: "votorantim@colfqhnd.com.br", lat: -23.547, lng: -47.4419, rating: 4.9, reviews: 890, etaPrep: "18-26 min", etaDelivery: "18-26 min", hours: {mon:[9,0,18,0],tue:[9,0,18,0],wed:[9,0,18,0],thu:[9,0,18,0],fri:[9,0,18,0],sat:[9,0,13,0],sun:null} },
+  // ===== TO =====
+  { id: "HND-TO-ARAGUAINA-2", name: "Hinode Araguaina 2", address: "AVENIDA PREFEITO JOÃO DE SOUZA LIMA, 258 - Centro - Araguaina/TO", street: "AVENIDA PREFEITO JOÃO DE SOUZA LIMA", number: "258", bairro: "CENTRO", city: "Araguaina", uf: "TO", phone: "(63) 99350498", whatsapp: "", email: "araguaina2@colfqhnd.com.br", lat: -7.1911, lng: -48.2076, rating: 4.9, reviews: 422, etaPrep: "20-32 min", etaDelivery: "14-22 min", hours: {mon:[8,0,18,0],tue:[8,0,18,0],wed:[8,0,18,0],thu:[8,0,18,0],fri:[8,0,18,0],sat:[8,0,12,0],sun:null} },
+  { id: "HND-TO-GURUPI", name: "Hinode Gurupi", address: "AVENIDA PARÁ, 1902 - Setor Central - Gurupi/TO", street: "AVENIDA PARÁ", number: "1902", bairro: "SETOR CENTRAL", city: "Gurupi", uf: "TO", phone: "(63) 33122005", whatsapp: "5563999173014", email: "gurupi@colfqhnd.com.br", lat: -11.7286, lng: -49.0681, rating: 4.7, reviews: 576, etaPrep: "20-30 min", etaDelivery: "15-25 min", hours: {mon:[8,0,18,0],tue:[8,0,18,0],wed:[8,0,18,0],thu:[8,0,18,0],fri:[8,0,18,0],sat:[8,0,12,0],sun:null} }
 ];
 
 // Estoque por franquia: gerado dinamicamente baseado no ID (reproducível)
@@ -5799,6 +6170,274 @@ const STOCK_BY_FRANCHISE = (() => {
   });
   return stockMap;
 })();
+
+/* ===================================================================
+   🟢 STATUS ONLINE — Sistema iFood-style pras franquias
+   Determina se cada franquia está ABERTA / FECHANDO EM BREVE / FECHADA
+   baseado no horário atual e no campo `hours` da franquia.
+   =================================================================== */
+
+const _DAY_KEYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+const _DAY_LABELS_PT = {
+  mon: 'Segunda', tue: 'Terça', wed: 'Quarta',
+  thu: 'Quinta', fri: 'Sexta', sat: 'Sábado', sun: 'Domingo'
+};
+const _DAY_SHORT_PT = {
+  mon: 'Seg', tue: 'Ter', wed: 'Qua',
+  thu: 'Qui', fri: 'Sex', sat: 'Sáb', sun: 'Dom'
+};
+
+/**
+ * Retorna { state: 'open'|'closing'|'closed', label, detail }
+ */
+function getFranchiseStatus(franchise, date) {
+  date = date || new Date();
+  const dayIdx = date.getDay();
+  const dayKey = _DAY_KEYS[dayIdx];
+  const currMin = date.getHours() * 60 + date.getMinutes();
+  const hours = (franchise.hours || {})[dayKey];
+
+  if (!hours) {
+    const next = _nextOpenDay(franchise, dayIdx);
+    return {
+      state: 'closed',
+      label: 'Fechada',
+      detail: next ? `Abre ${next.label} às ${next.time}` : 'Sem previsão'
+    };
+  }
+
+  const [oh, om, ch, cm] = hours;
+  const openMin = oh * 60 + om;
+  const closeMin = ch * 60 + cm;
+
+  if (currMin < openMin) {
+    const mins = openMin - currMin;
+    return {
+      state: 'closed',
+      label: 'Fechada',
+      detail: `Abre hoje às ${_fmtHM(oh, om)} (em ${_fmtDur(mins)})`
+    };
+  }
+
+  if (currMin >= closeMin) {
+    const next = _nextOpenDay(franchise, dayIdx);
+    return {
+      state: 'closed',
+      label: 'Fechada',
+      detail: next ? `Abre ${next.label} às ${next.time}` : 'Sem previsão'
+    };
+  }
+
+  const minsToClose = closeMin - currMin;
+  if (minsToClose <= 30) {
+    return {
+      state: 'closing',
+      label: `Fecha em ${_fmtDur(minsToClose)}`,
+      detail: `Última hora — fecha às ${_fmtHM(ch, cm)}`
+    };
+  }
+
+  return {
+    state: 'open',
+    label: 'Aberta agora',
+    detail: `Fecha às ${_fmtHM(ch, cm)}`
+  };
+}
+
+function _nextOpenDay(franchise, fromDayIdx) {
+  for (let i = 1; i <= 7; i++) {
+    const idx = (fromDayIdx + i) % 7;
+    const key = _DAY_KEYS[idx];
+    const h = (franchise.hours || {})[key];
+    if (h) {
+      const [oh, om] = h;
+      const label = i === 1 ? 'amanhã' : _DAY_LABELS_PT[key].toLowerCase();
+      return { label, time: _fmtHM(oh, om) };
+    }
+  }
+  return null;
+}
+
+function _fmtHM(h, m) {
+  return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+}
+
+function _fmtDur(mins) {
+  if (mins < 60) return `${mins}min`;
+  const h = Math.floor(mins / 60);
+  const m = mins % 60;
+  return m ? `${h}h${String(m).padStart(2,'0')}` : `${h}h`;
+}
+
+/**
+ * Renderiza o badge HTML de status (com bolinha pulsante + label)
+ */
+function renderStatusBadge(franchise, opts) {
+  opts = opts || {};
+  const s = getFranchiseStatus(franchise);
+  const showLabel = opts.label !== false;
+  return `<span class="hd-status hd-status-${s.state}" title="${s.detail}">
+    <span class="hd-status-dot"></span>${showLabel ? `<span class="hd-status-text">${s.label}</span>` : ''}
+  </span>`;
+}
+
+/* ===================================================================
+   ☎️ AÇÕES — Ligar / WhatsApp / Maps
+   =================================================================== */
+
+function callFranchise(franchiseId) {
+  const f = FRANCHISES.find(x => x.id === franchiseId);
+  if (!f || !f.phone) {
+    toast('Telefone indisponível', 'Esta franquia não tem telefone cadastrado.', '☎️');
+    return;
+  }
+  const clean = f.phone.replace(/\D/g, '');
+  window.location.href = `tel:+55${clean}`;
+  toast('Ligando…', `${f.name}`, '📞');
+}
+
+function whatsappFranchise(franchiseId) {
+  const f = FRANCHISES.find(x => x.id === franchiseId);
+  if (!f || !f.whatsapp) {
+    toast('WhatsApp indisponível', 'Esta franquia não tem WhatsApp cadastrado.', '💬');
+    return;
+  }
+  const msg = `Olá! Estou no aplicativo *Hinode Express* e queria saber sobre os produtos da ${f.name}. Pode me ajudar? 🌹`;
+  const url = `https://wa.me/${f.whatsapp}?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+  toast('Abrindo WhatsApp', `${f.name}`, '💬');
+}
+
+function openFranchiseInMaps(franchiseId) {
+  const f = FRANCHISES.find(x => x.id === franchiseId);
+  if (!f) return;
+  const query = encodeURIComponent(
+    `${f.street}, ${f.number}, ${f.bairro}, ${f.city}, ${f.uf}, Brasil`
+  );
+  window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank');
+  toast('Abrindo Maps', `Rota até ${f.name}`, '🗺️');
+}
+
+/* ===================================================================
+   📋 MODAL "Detalhes da Franquia"
+   Acessível tocando no .franchise-bar da home
+   =================================================================== */
+
+function openFranchiseDetails(franchiseId) {
+  const f = FRANCHISES.find(x => x.id === franchiseId);
+  if (!f) return;
+  const status = getFranchiseStatus(f);
+  const today = _DAY_KEYS[new Date().getDay()];
+
+  const html = `
+    <div class="hd-modal-backdrop" onclick="closeFranchiseDetails(event)">
+      <div class="hd-modal" onclick="event.stopPropagation()">
+        <button class="hd-modal-close" onclick="closeFranchiseDetails()">✕</button>
+
+        <div class="hd-modal-hero">
+          <div class="hd-modal-icon">H</div>
+          <h2 class="hd-modal-title">${f.name}</h2>
+          <div class="hd-modal-meta">${f.bairro.toLowerCase().replace(/\b\w/g, c => c.toUpperCase())} · ${f.city}/${f.uf}</div>
+          ${renderStatusBadge(f)}
+        </div>
+
+        <div class="hd-status-detail hd-status-detail-${status.state}">
+          <strong>${status.label}</strong>
+          <span>${status.detail}</span>
+        </div>
+
+        <div class="hd-actions">
+          <button class="hd-action-btn" onclick="callFranchise('${f.id}')" ${!f.phone ? 'disabled' : ''}>
+            <span class="hd-action-icon">📞</span>
+            <span>Ligar</span>
+          </button>
+          <button class="hd-action-btn hd-action-wa" onclick="whatsappFranchise('${f.id}')" ${!f.whatsapp ? 'disabled' : ''}>
+            <span class="hd-action-icon">💬</span>
+            <span>WhatsApp</span>
+          </button>
+          <button class="hd-action-btn" onclick="openFranchiseInMaps('${f.id}')">
+            <span class="hd-action-icon">🗺️</span>
+            <span>Como chegar</span>
+          </button>
+        </div>
+
+        <div class="hd-info-card">
+          <div class="hd-info-icon">📍</div>
+          <div class="hd-info-content">
+            <div class="hd-info-label">Endereço</div>
+            <div class="hd-info-value">${f.street}, ${f.number}</div>
+            <div class="hd-info-sub">${f.bairro.toLowerCase().replace(/\b\w/g, c => c.toUpperCase())} · ${f.city}/${f.uf}</div>
+          </div>
+        </div>
+
+        ${f.phone ? `
+          <div class="hd-info-card">
+            <div class="hd-info-icon">📞</div>
+            <div class="hd-info-content">
+              <div class="hd-info-label">Telefone</div>
+              <div class="hd-info-value">${f.phone}</div>
+            </div>
+          </div>
+        ` : ''}
+
+        <div class="hd-info-card">
+          <div class="hd-info-icon">⭐</div>
+          <div class="hd-info-content">
+            <div class="hd-info-label">Avaliação</div>
+            <div class="hd-info-value">${f.rating} <span style="opacity:0.6;font-size:13px;">(${f.reviews} avaliações)</span></div>
+          </div>
+        </div>
+
+        <div class="hd-hours-card">
+          <div class="hd-hours-header">
+            <span class="hd-info-icon">🕐</span>
+            <span class="hd-info-label">Horário de funcionamento</span>
+          </div>
+          ${['mon','tue','wed','thu','fri','sat','sun'].map(day => {
+            const h = (f.hours || {})[day];
+            const isToday = day === today;
+            const time = h ? `${_fmtHM(h[0],h[1])} – ${_fmtHM(h[2],h[3])}` : 'Fechado';
+            return `<div class="hd-hours-row ${isToday ? 'hd-hours-today' : ''}">
+              <span class="hd-hours-day">${_DAY_LABELS_PT[day]}${isToday ? ' · hoje' : ''}</span>
+              <span class="hd-hours-time ${!h ? 'hd-hours-closed' : ''}">${time}</span>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+
+  const container = document.createElement('div');
+  container.id = 'hd-modal-container';
+  container.innerHTML = html;
+  document.body.appendChild(container);
+  // Bloqueia scroll do body
+  document.body.style.overflow = 'hidden';
+  
+  // Anima entrada
+  requestAnimationFrame(() => {
+    container.querySelector('.hd-modal-backdrop').classList.add('hd-modal-visible');
+  });
+}
+
+function closeFranchiseDetails(e) {
+  if (e && e.target.classList && !e.target.classList.contains('hd-modal-backdrop')) return;
+  const container = document.getElementById('hd-modal-container');
+  if (!container) return;
+  container.querySelector('.hd-modal-backdrop').classList.remove('hd-modal-visible');
+  document.body.style.overflow = '';
+  setTimeout(() => container.remove(), 300);
+}
+
+// Re-renderiza .franchise-bar a cada minuto pra status ficar fresco
+setInterval(() => {
+  document.querySelectorAll('[data-franchise-status]').forEach(el => {
+    const fid = el.dataset.franchiseStatus;
+    const f = FRANCHISES.find(x => x.id === fid);
+    if (f) el.outerHTML = renderStatusBadge(f).replace('<span class="hd-status', `<span data-franchise-status="${fid}" class="hd-status`);
+  });
+}, 60000);
+
 
 const PRODUCTS = [
   { id: 'p1', name: 'Hinode Vert', desc: 'Eau de Parfum Masculino • 100ml', cat: 'Perfumes', emoji: '🌿', bg: 'bg-4', price: 189.90, oldPrice: 249.90, tag: 'Best Seller', rating: 4.9, reviews: 1245, description: 'Fragrância amadeirada com notas frescas de bergamota, vetiver e âmbar. Sofisticação para o homem moderno e visionário.' },
@@ -7010,13 +7649,14 @@ function renderClientHome() {
           <button class="icon-circle" style="width:32px;height:32px;font-size:13px;" onclick="goClient('onboarding')">↻</button>
         </div>
 
-        <!-- Franquia ativa -->
-        <div class="franchise-bar" onclick="toast('Sua franquia', '${f.name} • ${f.address}', '🏪')">
+        <!-- Franquia ativa (clique abre modal com detalhes, ligar, WhatsApp, Maps, horários) -->
+        <div class="franchise-bar" onclick="openFranchiseDetails('${f.id}')">
           <div class="franchise-bar-icon">H</div>
           <div class="franchise-bar-info">
             <b>${f.name}</b>
             <small>${f.distanceKm || '—'} km • ★ ${f.rating} • Entrega em ~${f.etaPrep.split('-')[1]}</small>
           </div>
+          <span data-franchise-status="${f.id}">${renderStatusBadge(f, {label: false})}</span>
           <div class="franchise-bar-arrow">›</div>
         </div>
       </div>
