@@ -111,6 +111,9 @@ function mapProduct(p, catCfg, id) {
   const off = sel && sel.commertialOffer;
   if (!off || !off.IsAvailable || !(off.Price > 0)) return null;
 
+  const img   = it && it.images && it.images[0];
+  const image = img && img.imageUrl ? String(img.imageUrl) : null;
+
   const price    = Number(off.Price);
   const listP    = Number(off.ListPrice);
   const oldPrice = listP > price ? listP : null;
@@ -128,6 +131,7 @@ function mapProduct(p, catCfg, id) {
     cat: catCfg.cat,
     emoji: detectEmoji(p.productName, catCfg.emoji),
     bg: catCfg.bg,
+    image,
     price,
     oldPrice,
     tag,
@@ -162,6 +166,7 @@ function generateBlock(products) {
         `cat: ${JSON.stringify(p.cat)}`,
         `emoji: ${JSON.stringify(p.emoji)}`,
         `bg: ${JSON.stringify(p.bg)}`,
+        `image: ${p.image != null ? JSON.stringify(p.image) : 'null'}`,
         `price: ${p.price}`,
         `oldPrice: ${p.oldPrice != null ? p.oldPrice : 'null'}`,
         `tag: ${p.tag != null ? JSON.stringify(p.tag) : 'null'}`,
