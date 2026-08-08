@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#1F0009" />
+<meta name="color-scheme" content="dark" />
+<meta name="description" content="Avaliador de Discurso Viral — grave sua fala, receba análise de entonação, pausas dramáticas, ritmo e gancho, com veredito de viralidade e sugestões criativas." />
+<title>Estúdio Viral — Avaliador de Discurso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --rouge: #B90032;
+  --rouge-soft: #D4234D;
+  --bordeaux: #370014;
+  --bordeaux-deep: #1F0009;
+  --or: #AA8232;
+  --or-light: #D4AF60;
+  --or-shimmer: #F4DCA0;
+  --rose: #FFE0D8;
+  --creme: #E1DCD5;
+  --blanc: #FBF8F4;
+  --gray-mute: #B8B0A6;
+  --success: #3DA97C;
+  --warn: #E09A3C;
+  --danger: #E05555;
+  --card: rgba(255,255,255,0.045);
+  --card-border: rgba(212,175,96,0.18);
+  --shadow-card: 0 8px 32px rgba(0,0,0,0.35);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body { min-height: 100%; }
+
+body {
+  font-family: 'Manrope', sans-serif;
+  background:
+    radial-gradient(1200px 600px at 80% -10%, rgba(185,0,50,0.22), transparent 60%),
+    radial-gradient(900px 500px at -10% 110%, rgba(170,130,50,0.14), transparent 60%),
+    var(--bordeaux-deep);
+  color: var(--blanc);
+  -webkit-font-smoothing: antialiased;
+  padding-bottom: 80px;
+}
+
+.wrap { max-width: 760px; margin: 0 auto; padding: 0 18px; }
+
+/* ── Header ─────────────────────────── */
+header {
+  padding: 34px 0 10px;
+  text-align: center;
+}
+.eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--or-light);
+}
+h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  font-size: clamp(34px, 7vw, 52px);
+  line-height: 1.05;
+  margin: 8px 0 6px;
+}
+h1 em { font-style: italic; color: var(--or-shimmer); }
+.sub {
+  color: var(--gray-mute);
+  font-size: 14.5px;
+  max-width: 520px;
+  margin: 0 auto;
+  line-height: 1.55;
+}
+
+/* ── Tabs ───────────────────────────── */
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin: 26px 0 20px;
+  background: rgba(0,0,0,0.28);
+  border: 1px solid var(--card-border);
+  border-radius: 999px;
+  padding: 5px;
+}
+.tab {
+  flex: 1;
+  border: 0;
+  background: transparent;
+  color: var(--gray-mute);
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
+  font-size: 13.5px;
+  padding: 11px 8px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all .25s ease;
+}
+.tab.active {
+  background: linear-gradient(135deg, var(--rouge), var(--rouge-soft));
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(185,0,50,0.4);
+}
+
+.panel { display: none; }
+.panel.active { display: block; animation: fadeUp .35s ease; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+/* ── Cards ──────────────────────────── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(8px);
+}
+.card h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.card .hint { color: var(--gray-mute); font-size: 13px; line-height: 1.5; margin-bottom: 14px; }
+
+textarea, input[type=text] {
+  width: 100%;
+  background: rgba(0,0,0,0.35);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 14px;
+  color: var(--blanc);
+  font-family: 'Manrope', sans-serif;
+  font-size: 16px;
+  padding: 14px;
+  resize: vertical;
+  outline: none;
+  transition: border-color .2s;
+}
+textarea:focus, input[type=text]:focus { border-color: var(--or-light); }
+textarea { min-height: 90px; }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 0;
+  border-radius: 999px;
+  padding: 14px 26px;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 800;
+  font-size: 15px;
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .2s ease;
+}
+.btn:active { transform: scale(0.97); }
+.btn-gold {
+  background: linear-gradient(135deg, var(--or), var(--or-light));
+  color: var(--bordeaux-deep);
+  box-shadow: 0 8px 24px rgba(170,130,50,0.35);
+}
+.btn-rouge {
+  background: linear-gradient(135deg, var(--rouge), var(--rouge-soft));
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(185,0,50,0.4);
+}
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--card-border);
+  color: var(--creme);
+}
+.btn[disabled] { opacity: .5; cursor: not-allowed; }
+.btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+
+/* ── Score visuals ──────────────────── */
+.score-hero {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.score-ring {
+  --p: 0;
+  --ring-color: var(--or-light);
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  background:
+    radial-gradient(closest-side, var(--bordeaux-deep) 78%, transparent 79% 100%),
+    conic-gradient(var(--ring-color) calc(var(--p) * 1%), rgba(255,255,255,0.08) 0);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.score-ring .num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 30px;
+  font-weight: 700;
+}
+.score-ring .lbl { font-size: 10px; color: var(--gray-mute); letter-spacing: 1px; text-transform: uppercase; }
+.score-ring .inner { text-align: center; }
+.verdict-txt { flex: 1; min-width: 200px; }
+.verdict-txt .v-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+.verdict-txt .v-sub { color: var(--gray-mute); font-size: 13.5px; margin-top: 6px; line-height: 1.5; }
+
+.dims { margin-top: 18px; display: grid; gap: 12px; }
+.dim .d-head { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 5px; }
+.dim .d-name { font-weight: 700; color: var(--creme); }
+.dim .d-val { font-family: 'JetBrains Mono', monospace; color: var(--or-light); }
+.bar {
+  height: 8px;
+  border-radius: 99px;
+  background: rgba(255,255,255,0.08);
+  overflow: hidden;
+}
+.bar > i {
+  display: block;
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--rouge), var(--or-light));
+  width: 0;
+  transition: width .8s cubic-bezier(.2,.8,.2,1);
+}
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.chip {
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid;
+}
+.chip.ok { color: var(--success); border-color: rgba(61,169,124,0.4); background: rgba(61,169,124,0.08); }
+.chip.bad { color: var(--danger); border-color: rgba(224,85,85,0.4); background: rgba(224,85,85,0.08); }
+.chip.mid { color: var(--warn); border-color: rgba(224,154,60,0.4); background: rgba(224,154,60,0.08); }
+
+/* ── Sugestões ──────────────────────── */
+.tips { display: grid; gap: 10px; margin-top: 8px; }
+.tip {
+  display: flex;
+  gap: 12px;
+  background: rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-left: 3px solid var(--or-light);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 14px;
+  line-height: 1.55;
+}
+.tip .t-ico { font-size: 18px; flex-shrink: 0; }
+.tip b { color: var(--or-shimmer); }
+.tip.warn { border-left-color: var(--danger); }
+
+/* ── Variações de headline ──────────── */
+.variant {
+  background: rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 14px;
+  padding: 14px;
+  margin-top: 10px;
+}
+.variant .v-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--or-light);
+}
+.variant .v-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  line-height: 1.35;
+  margin-top: 4px;
+}
+.variant .v-text .pausa {
+  color: var(--rouge-soft);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 0 2px;
+}
+.variant .v-text strong { color: var(--or-shimmer); }
+.variant .v-actions { margin-top: 8px; }
+.mini-btn {
+  border: 1px solid var(--card-border);
+  background: transparent;
+  color: var(--creme);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.mini-btn:hover { border-color: var(--or-light); color: var(--or-shimmer); }
+
+/* ── Estúdio de gravação ────────────── */
+.teleprompter {
+  background: rgba(0,0,0,0.4);
+  border: 1px dashed var(--card-border);
+  border-radius: 14px;
+  padding: 16px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  line-height: 1.45;
+  min-height: 60px;
+  color: var(--rose);
+}
+.teleprompter:empty::before {
+  content: 'Sua headline aparece aqui quando você clica em "Praticar" no Laboratório — ou fale livre.';
+  font-family: 'Manrope', sans-serif;
+  font-size: 13px;
+  color: var(--gray-mute);
+}
+.teleprompter .pausa { color: var(--rouge-soft); font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+.teleprompter strong { color: var(--or-shimmer); }
+
+canvas#viz {
+  width: 100%;
+  height: 110px;
+  border-radius: 14px;
+  background: rgba(0,0,0,0.4);
+  margin-top: 14px;
+  display: block;
+}
+.rec-stats {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+.stat {
+  flex: 1;
+  min-width: 90px;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px;
+  padding: 10px;
+  text-align: center;
+}
+.stat .s-val { font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: 700; color: var(--or-shimmer); }
+.stat .s-lbl { font-size: 10.5px; letter-spacing: 1px; text-transform: uppercase; color: var(--gray-mute); margin-top: 2px; }
+
+.rec-controls { display: flex; gap: 12px; margin-top: 16px; align-items: center; justify-content: center; }
+#btnRec.recording {
+  animation: pulse 1.4s infinite;
+  background: linear-gradient(135deg, #8f0026, var(--rouge));
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(185,0,50,0.55); }
+  50% { box-shadow: 0 0 0 14px rgba(185,0,50,0); }
+}
+
+.transcript-view {
+  background: rgba(0,0,0,0.3);
+  border-radius: 14px;
+  padding: 14px;
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--creme);
+  max-height: 260px;
+  overflow-y: auto;
+}
+.transcript-view .pz {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 6px;
+  padding: 2px 6px;
+  margin: 0 3px;
+}
+.pz.pz-drama { color: var(--success); background: rgba(61,169,124,0.14); }
+.pz.pz-long { color: var(--danger); background: rgba(224,85,85,0.14); }
+.transcript-view .filler { color: var(--danger); text-decoration: underline dotted; }
+
+.notice {
+  font-size: 12.5px;
+  color: var(--gray-mute);
+  background: rgba(224,154,60,0.08);
+  border: 1px solid rgba(224,154,60,0.25);
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-top: 10px;
+  line-height: 1.5;
+}
+
+.history-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.h-chip {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid var(--card-border);
+  color: var(--creme);
+}
+.h-chip b { color: var(--or-shimmer); }
+
+audio { width: 100%; margin-top: 12px; }
+
+footer {
+  text-align: center;
+  color: var(--gray-mute);
+  font-size: 11.5px;
+  margin-top: 30px;
+  line-height: 1.6;
+}
+footer a { color: var(--or-light); }
+
+.hidden { display: none !important; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Estúdio Viral</div>
+    <h1>Fale como quem <em>prende atenção</em></h1>
+    <p class="sub">Grave seu discurso e receba um veredito de viralidade — entonação, pausas dramáticas, ritmo, gancho e conexão — com sugestões criativas para melhorar cada take.</p>
+  </header>
+
+  <div class="tabs" role="tablist">
+    <button class="tab active" data-panel="lab" role="tab">✍️ Lab de Headlines</button>
+    <button class="tab" data-panel="studio" role="tab">🎙️ Gravar &amp; Avaliar</button>
+  </div>
+
+  <!-- ═══════════ LAB DE HEADLINES ═══════════ -->
+  <section class="panel active" id="panel-lab">
+    <div class="card">
+      <h2>Sua headline</h2>
+      <p class="hint">Escreva a primeira frase do seu vídeo — o gancho dos 3 primeiros segundos. Eu avalio a força dela e gero variações com pausas dramáticas (<span style="color:var(--rouge-soft);font-family:'JetBrains Mono',monospace;font-size:11px">⏸</span>) e ênfases marcadas.</p>
+      <textarea id="headlineInput" placeholder="Ex.: Ninguém te conta isso sobre vender perfume online..."></textarea>
+      <div class="btn-row">
+        <button class="btn btn-gold" id="btnAnalyzeHeadline">Avaliar headline</button>
+      </div>
+    </div>
+
+    <div class="card hidden" id="headlineResult">
+      <div class="score-hero">
+        <div class="score-ring" id="hlRing">
+          <div class="inner">
+            <div class="num" id="hlScore">0</div>
+            <div class="lbl">gancho</div>
+          </div>
+        </div>
+        <div class="verdict-txt">
+          <div class="v-title" id="hlVerdict"></div>
+          <div class="v-sub" id="hlVerdictSub"></div>
+        </div>
+      </div>
+      <div class="chips" id="hlChips"></div>
+      <div class="tips" id="hlTips" style="margin-top:16px"></div>
+    </div>
+
+    <div class="card hidden" id="variantsCard">
+      <h2>Variações prontas pra falar</h2>
+      <p class="hint"><strong style="color:var(--or-shimmer)">MAIÚSCULAS</strong> = suba o tom e a energia. <span style="color:var(--rouge-soft);font-family:'JetBrains Mono',monospace;font-size:11px">⏸</span> = pausa dramática de ~1 segundo. Clique em "Praticar" para levar a versão pro estúdio de gravação.</p>
+      <div id="variantsList"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════ ESTÚDIO DE GRAVAÇÃO ═══════════ -->
+  <section class="panel" id="panel-studio">
+    <div class="card">
+      <h2>Teleprompter</h2>
+      <div class="teleprompter" id="teleprompter"></div>
+      <canvas id="viz"></canvas>
+      <div class="rec-stats">
+        <div class="stat"><div class="s-val" id="stTime">0:00</div><div class="s-lbl">tempo</div></div>
+        <div class="stat"><div class="s-val" id="stWpm">–</div><div class="s-lbl">palavras/min</div></div>
+        <div class="stat"><div class="s-val" id="stPitch">–</div><div class="s-lbl">tom (Hz)</div></div>
+        <div class="stat"><div class="s-val" id="stPauses">0</div><div class="s-lbl">pausas</div></div>
+      </div>
+      <div class="rec-controls">
+        <button class="btn btn-rouge" id="btnRec">● Gravar</button>
+        <button class="btn btn-ghost hidden" id="btnRedo">↺ Novo take</button>
+      </div>
+      <div class="notice hidden" id="speechNotice"></div>
+    </div>
+
+    <!-- Resultado -->
+    <div id="resultArea" class="hidden">
+      <div class="card">
+        <div class="score-hero">
+          <div class="score-ring" id="ringOverall">
+            <div class="inner">
+              <div class="num" id="scoreOverall">0</div>
+              <div class="lbl">viral</div>
+            </div>
+          </div>
+          <div class="verdict-txt">
+            <div class="v-title" id="verdictTitle"></div>
+            <div class="v-sub" id="verdictSub"></div>
+          </div>
+        </div>
+        <div class="dims" id="dimsList"></div>
+      </div>
+
+      <div class="card">
+        <h2>Sugestões criativas</h2>
+        <p class="hint">O que fazer de diferente no próximo take — em ordem de impacto.</p>
+        <div class="tips" id="tipsList"></div>
+      </div>
+
+      <div class="card" id="transcriptCard">
+        <h2>Seu discurso, anotado</h2>
+        <p class="hint">Pausas detectadas no lugar onde aconteceram: <span class="pz pz-drama">⏸ dramática</span> funciona a seu favor, <span class="pz pz-long">⏸⏸ longa</span> derruba retenção. Vícios de linguagem sublinhados.</p>
+        <div class="transcript-view" id="transcriptView"></div>
+        <audio id="playback" controls class="hidden"></audio>
+      </div>
+
+      <div class="card" id="historyCard">
+        <h2>Sua evolução</h2>
+        <p class="hint">Últimos takes salvos neste aparelho.</p>
+        <div class="history-chips" id="historyChips"></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Análise 100% no seu navegador — nenhum áudio é enviado a servidor.<br/>
+    Rubrica inspirada nas dimensões do preditor de viralidade (gancho, atenção, retenção, resposta da audiência, performance criativa).
+  </footer>
+</div>
+
+<script>
+'use strict';
+/* ════════════════════════════════════════════════════════════
+   ESTÚDIO VIRAL — avaliador de discurso e headlines
+   Tudo client-side: Web Audio (pitch/RMS/pausas) + SpeechRecognition (pt-BR)
+   ════════════════════════════════════════════════════════════ */
+
+const $ = (s) => document.querySelector(s);
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const norm = (s) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+
+/* ── Tabs ── */
+document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => {
+  document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(x => x.classList.remove('active'));
+  t.classList.add('active');
+  $('#panel-' + t.dataset.panel).classList.add('active');
+}));
+
+/* ════════════ LÉXICO PT-BR ════════════ */
+const POWER_WORDS = ['segredo','segredos','ninguem','nunca','proibido','proibida','erro','erros','verdade','gratis','agora','pare','para de','cuidado','chocante','absurdo','garantido','provado','simples','rapido','facil','exclusivo','revelado','descobri','mentira','urgente','perigo','bombou','viralizou','milhao','milhoes','mil reais','esconde','escondem','ultimo','unica','unico','antes que','ilegal','banido','real','sem filtro','polemico'];
+const CURIOSITY = ['isso','isso aqui','o que','por que','porque','como','motivo','razao','detalhe','truque','metodo','jeito','forma','hack'];
+const DIRECT = ['voce','voces','te','teu','tua','seu','sua','vc'];
+const CTA_WORDS = ['comenta','comente','segue','siga','compartilha','compartilhe','salva','salve','manda','envia','marca','curte','curta','link na bio','me segue'];
+const EMOTION = ['medo','raiva','amor','odeio','amo','incrivel','surreal','chorei','chocado','apaixonado','vergonha','orgulho','inveja','sonho','pesadelo','desespero','felicidade'];
+const FILLERS = ['ne','tipo','tipo assim','entao','ai','cara','meio que','ta','okay','ok','entendeu','sabe','basicamente','literalmente','enfim','assim','olha so','bom'];
+const STOPWORDS = new Set('a o e de da do das dos em um uma umas uns para pra com por que se na no nas nos ao aos as os isso isto essa esse esta este eu tu ele ela nos vos eles elas me te lhe mais menos muito ja foi ser ter vai vou sao era como mas ou tambem quando onde qual sua seu tua teu minha meu'.split(' '));
+
+/* ════════════ LAB DE HEADLINES ════════════ */
+function analyzeHeadline(text) {
+  const t = norm(text.trim());
+  const words = t.split(/\s+/).filter(Boolean);
+  const checks = [];
+  let score = 30; // base
+
+  const has = (list) => list.some(w => t.includes(w));
+  const count = (list) => list.reduce((n, w) => n + (t.includes(w) ? 1 : 0), 0);
+
+  // Comprimento ideal: 5–14 palavras
+  if (words.length >= 5 && words.length <= 14) { score += 10; checks.push(['ok', `Tamanho bom (${words.length} palavras)`]); }
+  else if (words.length < 5) { score -= 5; checks.push(['bad', 'Curta demais — falta contexto pro gancho']); }
+  else { score -= 8; checks.push(['bad', `Longa demais (${words.length} palavras) — corte pra até 14`]); }
+
+  // Palavras de poder
+  const pw = count(POWER_WORDS);
+  if (pw >= 2) { score += 18; checks.push(['ok', 'Palavras de poder fortes']); }
+  else if (pw === 1) { score += 10; checks.push(['ok', 'Tem palavra de poder']); }
+  else { checks.push(['bad', 'Sem palavra de poder (segredo, erro, ninguém, pare...)']); }
+
+  // Curiosity gap
+  if (has(CURIOSITY)) { score += 12; checks.push(['ok', 'Abre lacuna de curiosidade']); }
+  else { checks.push(['mid', 'Sem lacuna de curiosidade — deixe algo em aberto']); }
+
+  // Fala direto com a pessoa
+  if (has(DIRECT)) { score += 10; checks.push(['ok', 'Fala direto com "você"']); }
+  else { checks.push(['mid', 'Não fala com "você" — headline impessoal']); }
+
+  // Número
+  if (/\d/.test(t) || /\b(tres|cinco|sete|dez|primeiro)\b/.test(t)) { score += 8; checks.push(['ok', 'Usa número — especificidade vende']); }
+
+  // Pergunta
+  if (text.includes('?')) { score += 6; checks.push(['ok', 'Formato pergunta — convida resposta mental']); }
+
+  // Emoção
+  if (has(EMOTION)) { score += 6; checks.push(['ok', 'Carga emocional presente']); }
+
+  // Clichês que enfraquecem
+  if (/\b(oi gente|ola pessoal|bom dia|hoje eu vou falar|nesse video)\b/.test(t)) {
+    score -= 20;
+    checks.push(['bad', 'Abertura clichê ("hoje eu vou falar...") mata o gancho — vá direto ao conflito']);
+  }
+
+  return { score: clamp(Math.round(score), 5, 98), checks, words };
+}
+
+function headlineTips(res, text) {
+  const tips = [];
+  const t = norm(text);
+  if (!POWER_WORDS.some(w => t.includes(w)))
+    tips.push(['🧨', 'Injete uma <b>palavra de poder</b>: "ninguém", "erro", "segredo", "pare". Ex.: em vez de "dicas de venda", diga "o erro que <b>ninguém</b> te conta sobre venda".']);
+  if (!CURIOSITY.some(w => t.includes(w)))
+    tips.push(['🕳️', 'Crie um <b>vazio de curiosidade</b>: prometa a informação sem entregá-la na headline. "O motivo é o que vem depois" — cérebro odeia lacuna aberta.']);
+  if (!DIRECT.some(w => t.includes(w)))
+    tips.push(['🎯', 'Troque o sujeito para <b>"você"</b>. "Vendedores erram X" → "<b>Você</b> está errando X agora mesmo".']);
+  tips.push(['⏸️', 'Na fala: solte a primeira metade rápida e firme, faça <b>pausa de 1 segundo</b> antes da palavra-chave, e entregue a palavra final <b>meia oitava acima</b>, mais lenta.']);
+  return tips;
+}
+
+function extractTopic(text) {
+  const skip = new Set([...POWER_WORDS, ...DIRECT, ...CURIOSITY, 'conta', 'contam', 'sobre', 'falar', 'hoje', 'video', 'comete', 'cometem', 'fazer', 'existe', 'precisa', 'descobrir']);
+  const words = norm(text).replace(/[^\w\sà-ú]/g, '').split(/\s+/)
+    .filter(w => w.length > 2 && !STOPWORDS.has(w) && !skip.has(w));
+  return words.slice(0, 4).join(' ') || 'esse assunto';
+}
+
+function headlineVariants(text) {
+  const topic = extractTopic(text);
+  const clean = text.trim().replace(/[.!?]+$/, '');
+  return [
+    ['Contraste', `Todo mundo fala de ${topic} <span class="pausa">⏸</span> mas <strong>NINGUÉM</strong> te conta <strong>ISSO</strong>`],
+    ['Comando + pausa', `<strong>PARA TUDO</strong> <span class="pausa">⏸</span> antes de continuar com ${topic}, você <strong>PRECISA</strong> ouvir isso`],
+    ['Confissão', `Eu errei durante <strong>ANOS</strong> com ${topic} <span class="pausa">⏸</span> até descobrir <strong>UM</strong> detalhe`],
+    ['Pergunta proibida', `Por que <strong>NINGUÉM</strong> te contou isso sobre ${topic}? <span class="pausa">⏸</span> Eu vou`],
+    ['Sua versão, marcada', markDelivery(clean)]
+  ];
+}
+
+// Marca a headline original com ênfase e pausa antes do fecho
+function markDelivery(text) {
+  const words = text.split(/\s+/);
+  const out = words.map(w => {
+    const nw = norm(w).replace(/[^\w]/g, '');
+    if (POWER_WORDS.includes(nw) || /^\d+$/.test(nw)) return `<strong>${w.toUpperCase()}</strong>`;
+    return w;
+  });
+  if (out.length > 4) out.splice(out.length - 2, 0, '<span class="pausa">⏸</span>');
+  return out.join(' ');
+}
+
+$('#btnAnalyzeHeadline').addEventListener('click', () => {
+  const text = $('#headlineInput').value.trim();
+  if (!text) { $('#headlineInput').focus(); return; }
+  const res = analyzeHeadline(text);
+
+  $('#headlineResult').classList.remove('hidden');
+  $('#variantsCard').classList.remove('hidden');
+  setRing($('#hlRing'), $('#hlScore'), res.score);
+
+  const [vt, vs] = res.score >= 75 ? ['Gancho forte 🔥', 'Essa headline tem estrutura de retenção. Agora o jogo é a entrega — grave e veja sua entonação.']
+    : res.score >= 55 ? ['Bom, mas dá pra afiar', 'A base existe. Aplique as sugestões abaixo e ganhe os pontos que faltam.']
+    : ['Gancho fraco', 'Assim ela não segura os 3 primeiros segundos. Reescreva com as variações abaixo.'];
+  $('#hlVerdict').textContent = vt;
+  $('#hlVerdictSub').textContent = vs;
+
+  $('#hlChips').innerHTML = res.checks.map(([cls, txt]) => `<span class="chip ${cls}">${txt}</span>`).join('');
+  $('#hlTips').innerHTML = headlineTips(res, text).map(([ico, html]) =>
+    `<div class="tip"><span class="t-ico">${ico}</span><span>${html}</span></div>`).join('');
+
+  $('#variantsList').innerHTML = headlineVariants(text).map(([tag, html], i) =>
+    `<div class="variant">
+       <div class="v-tag">${tag}</div>
+       <div class="v-text" id="var-${i}">${html}</div>
+       <div class="v-actions"><button class="mini-btn" data-var="${i}">🎙️ Praticar esta</button></div>
+     </div>`).join('');
+
+  document.querySelectorAll('[data-var]').forEach(b => b.addEventListener('click', () => {
+    $('#teleprompter').innerHTML = $('#var-' + b.dataset.var).innerHTML;
+    document.querySelector('[data-panel="studio"]').click();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }));
+});
+
+function setRing(ringEl, numEl, score) {
+  const color = score >= 75 ? 'var(--success)' : score >= 55 ? 'var(--or-light)' : 'var(--danger)';
+  ringEl.style.setProperty('--ring-color', color);
+  let cur = 0;
+  const step = () => {
+    cur = Math.min(score, cur + Math.max(1, Math.round(score / 30)));
+    ringEl.style.setProperty('--p', cur);
+    numEl.textContent = cur;
+    if (cur < score) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+
+/* ════════════ ESTÚDIO — CAPTURA DE ÁUDIO ════════════ */
+const rec = {
+  active: false,
+  ctx: null, analyser: null, stream: null, mediaRec: null,
+  chunks: [],
+  t0: 0,
+  rms: [],      // [t, rms]
+  pitch: [],    // [t, hz]
+  transcript: '',
+  interim: '',
+  recognition: null,
+  recognitionOk: false,
+  rafId: null,
+  buf: null
+};
+
+const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+$('#btnRec').addEventListener('click', () => rec.active ? stopRecording() : startRecording());
+$('#btnRedo').addEventListener('click', () => {
+  $('#resultArea').classList.add('hidden');
+  $('#btnRedo').classList.add('hidden');
+  startRecording();
+});
+
+async function startRecording() {
+  try {
+    rec.stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  } catch (e) {
+    showNotice('Não consegui acessar o microfone. Verifique a permissão do navegador (cadeado na barra de endereço).');
+    return;
+  }
+  rec.ctx = new (window.AudioContext || window.webkitAudioContext)();
+  const src = rec.ctx.createMediaStreamSource(rec.stream);
+  rec.analyser = rec.ctx.createAnalyser();
+  rec.analyser.fftSize = 2048;
+  src.connect(rec.analyser);
+  rec.buf = new Float32Array(rec.analyser.fftSize);
+
+  rec.chunks = [];
+  rec.mediaRec = new MediaRecorder(rec.stream);
+  rec.mediaRec.ondataavailable = (e) => e.data.size && rec.chunks.push(e.data);
+  rec.mediaRec.start();
+
+  rec.rms = []; rec.pitch = [];
+  rec.transcript = ''; rec.interim = '';
+  rec.t0 = performance.now();
+  rec.active = true;
+
+  // Reconhecimento de fala pt-BR (Chrome/Edge)
+  rec.recognitionOk = false;
+  if (SpeechRec) {
+    rec.recognition = new SpeechRec();
+    rec.recognition.lang = 'pt-BR';
+    rec.recognition.continuous = true;
+    rec.recognition.interimResults = true;
+    rec.recognition.onresult = (ev) => {
+      rec.recognitionOk = true;
+      let interim = '';
+      for (let i = ev.resultIndex; i < ev.results.length; i++) {
+        if (ev.results[i].isFinal) rec.transcript += ev.results[i][0].transcript + ' ';
+        else interim += ev.results[i][0].transcript;
+      }
+      rec.interim = interim;
+    };
+    rec.recognition.onend = () => { if (rec.active) { try { rec.recognition.start(); } catch (_) {} } };
+    try { rec.recognition.start(); } catch (_) {}
+  } else {
+    showNotice('Seu navegador não transcreve fala (use Chrome no Android/desktop para análise completa de texto, ritmo e vícios). A análise de voz — entonação e pausas — funciona normalmente.');
+  }
+
+  $('#btnRec').textContent = '■ Parar e avaliar';
+  $('#btnRec').classList.add('recording');
+  loop();
+}
+
+function loop() {
+  if (!rec.active) return;
+  const t = (performance.now() - rec.t0) / 1000;
+  rec.analyser.getFloatTimeDomainData(rec.buf);
+
+  // RMS
+  let sum = 0;
+  for (let i = 0; i < rec.buf.length; i++) sum += rec.buf[i] * rec.buf[i];
+  const rms = Math.sqrt(sum / rec.buf.length);
+  rec.rms.push([t, rms]);
+
+  // Pitch (autocorrelação) — só quando há sinal
+  if (rms > 0.01) {
+    const hz = autoCorrelate(rec.buf, rec.ctx.sampleRate);
+    if (hz > 0) rec.pitch.push([t, hz]);
+  }
+
+  drawViz(rms);
+  updateLiveStats(t);
+  rec.rafId = requestAnimationFrame(loop);
+}
+
+/* Autocorrelação (ACF2+) — detecção de frequência fundamental */
+function autoCorrelate(buf, sampleRate) {
+  let SIZE = buf.length;
+  let rms = 0;
+  for (let i = 0; i < SIZE; i++) rms += buf[i] * buf[i];
+  rms = Math.sqrt(rms / SIZE);
+  if (rms < 0.008) return -1;
+
+  let r1 = 0, r2 = SIZE - 1;
+  const thres = 0.2;
+  for (let i = 0; i < SIZE / 2; i++) if (Math.abs(buf[i]) < thres) { r1 = i; break; }
+  for (let i = 1; i < SIZE / 2; i++) if (Math.abs(buf[SIZE - i]) < thres) { r2 = SIZE - i; break; }
+  const sliced = buf.slice(r1, r2);
+  SIZE = sliced.length;
+  if (SIZE < 32) return -1;
+
+  const c = new Float32Array(SIZE);
+  for (let i = 0; i < SIZE; i++)
+    for (let j = 0; j < SIZE - i; j++)
+      c[i] += sliced[j] * sliced[j + i];
+
+  let d = 0;
+  while (d < SIZE - 1 && c[d] > c[d + 1]) d++;
+  let maxval = -1, maxpos = -1;
+  for (let i = d; i < SIZE; i++) if (c[i] > maxval) { maxval = c[i]; maxpos = i; }
+  let T0 = maxpos;
+  if (T0 <= 0) return -1;
+
+  const x1 = c[T0 - 1], x2 = c[T0], x3 = c[T0 + 1] || x2;
+  const a = (x1 + x3 - 2 * x2) / 2, b = (x3 - x1) / 2;
+  if (a) T0 = T0 - b / (2 * a);
+
+  const hz = sampleRate / T0;
+  return (hz >= 60 && hz <= 400) ? hz : -1;
+}
+
+/* Visualização ao vivo */
+const viz = $('#viz');
+const vctx = viz.getContext('2d');
+let vizX = 0;
+function drawViz(rms) {
+  if (viz.width !== viz.clientWidth * devicePixelRatio) {
+    viz.width = viz.clientWidth * devicePixelRatio;
+    viz.height = viz.clientHeight * devicePixelRatio;
+  }
+  const W = viz.width, H = viz.height;
+  const barH = clamp(rms * 6, 0.01, 1) * H;
+  vctx.fillStyle = 'rgba(0,0,0,0.06)';
+  vctx.fillRect(0, 0, W, H);
+  const grad = vctx.createLinearGradient(0, H, 0, 0);
+  grad.addColorStop(0, '#B90032');
+  grad.addColorStop(1, '#D4AF60');
+  vctx.fillStyle = grad;
+  vctx.fillRect(vizX, (H - barH) / 2, 3 * devicePixelRatio, barH);
+  vizX += 4 * devicePixelRatio;
+  if (vizX > W) { vizX = 0; vctx.clearRect(0, 0, W, H); }
+}
+
+function updateLiveStats(t) {
+  $('#stTime').textContent = `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, '0')}`;
+  const lastPitch = rec.pitch.length ? rec.pitch[rec.pitch.length - 1][1] : 0;
+  $('#stPitch').textContent = lastPitch ? Math.round(lastPitch) : '–';
+  const wordCount = (rec.transcript + ' ' + rec.interim).split(/\s+/).filter(Boolean).length;
+  $('#stWpm').textContent = t > 5 && wordCount ? Math.round(wordCount / (t / 60)) : '–';
+  $('#stPauses').textContent = countPausesLive();
+}
+
+function countPausesLive() {
+  return detectPauses(rec.rms).filter(p => p.dur >= 0.6).length;
+}
+
+function stopRecording() {
+  rec.active = false;
+  cancelAnimationFrame(rec.rafId);
+  if (rec.recognition) { try { rec.recognition.stop(); } catch (_) {} }
+
+  const done = new Promise(res => { rec.mediaRec.onstop = res; });
+  rec.mediaRec.stop();
+  rec.stream.getTracks().forEach(tr => tr.stop());
+  rec.ctx.close();
+
+  $('#btnRec').textContent = '● Gravar';
+  $('#btnRec').classList.remove('recording');
+  $('#btnRedo').classList.remove('hidden');
+
+  // pequena espera para o último resultado final do reconhecimento chegar
+  setTimeout(async () => {
+    await done;
+    const blob = new Blob(rec.chunks, { type: rec.mediaRec.mimeType || 'audio/webm' });
+    $('#playback').src = URL.createObjectURL(blob);
+    $('#playback').classList.remove('hidden');
+    renderResults(analyzeTake());
+  }, 600);
+}
+
+/* ════════════ ANÁLISE DO TAKE ════════════ */
+function detectPauses(rmsArr) {
+  if (rmsArr.length < 10) return [];
+  const vals = rmsArr.map(x => x[1]).slice().sort((a, b) => a - b);
+  const p15 = vals[Math.floor(vals.length * 0.15)];
+  const p85 = vals[Math.floor(vals.length * 0.85)];
+  const th = Math.max(0.008, p15 + (p85 - p15) * 0.22);
+
+  const pauses = [];
+  let start = null;
+  // ignora silêncio antes da primeira fala
+  let firstSpeech = rmsArr.find(x => x[1] > th);
+  const tFirst = firstSpeech ? firstSpeech[0] : 0;
+
+  for (const [t, v] of rmsArr) {
+    if (t < tFirst) continue;
+    if (v < th) { if (start === null) start = t; }
+    else if (start !== null) {
+      const dur = t - start;
+      if (dur >= 0.35) pauses.push({ t: start, dur });
+      start = null;
+    }
+  }
+  return pauses;
+}
+
+function analyzeTake() {
+  const durationS = rec.rms.length ? rec.rms[rec.rms.length - 1][0] : 0;
+  const pauses = detectPauses(rec.rms);
+  const dramatic = pauses.filter(p => p.dur >= 0.6 && p.dur < 2.2);
+  const long = pauses.filter(p => p.dur >= 2.2);
+  const pauseTime = pauses.reduce((s, p) => s + p.dur, 0);
+  const speakingTime = Math.max(1, durationS - pauseTime);
+
+  // Entonação (variação em semitons vs mediana)
+  const hzs = rec.pitch.map(x => x[1]);
+  let pitchStd = 0, pitchMedian = 0;
+  if (hzs.length > 10) {
+    const sorted = hzs.slice().sort((a, b) => a - b);
+    pitchMedian = sorted[Math.floor(sorted.length / 2)];
+    const semis = hzs.map(h => 12 * Math.log2(h / pitchMedian));
+    const mean = semis.reduce((a, b) => a + b, 0) / semis.length;
+    pitchStd = Math.sqrt(semis.reduce((s, x) => s + (x - mean) ** 2, 0) / semis.length);
+  }
+
+  // Dinâmica de volume (dB entre mediana e picos de fala)
+  const speechRms = rec.rms.map(x => x[1]).filter(v => v > 0.01).sort((a, b) => a - b);
+  let volDynDb = 0;
+  if (speechRms.length > 20) {
+    const p50 = speechRms[Math.floor(speechRms.length * 0.5)];
+    const p95 = speechRms[Math.floor(speechRms.length * 0.95)];
+    volDynDb = 20 * Math.log10(p95 / Math.max(p50, 1e-6));
+  }
+
+  // Texto
+  const transcript = rec.transcript.trim();
+  const tokens = norm(transcript).split(/\s+/).filter(Boolean);
+  const wpm = tokens.length ? tokens.length / (speakingTime / 60) : 0;
+  const fillerHits = tokens.filter(w => FILLERS.includes(w));
+  const fillerRate = tokens.length ? fillerHits.length / tokens.length * 100 : 0;
+  const hookText = transcript.split(/\s+/).slice(0, 12).join(' ');
+
+  // Tempo até a primeira palavra
+  const th = 0.012;
+  const first = rec.rms.find(x => x[1] > th);
+  const timeToSpeech = first ? first[0] : durationS;
+
+  return { durationS, speakingTime, pauses, dramatic, long, pitchStd, pitchMedian, volDynDb,
+           transcript, tokens, wpm, fillerHits, fillerRate, hookText, timeToSpeech,
+           hasText: rec.recognitionOk && tokens.length > 3 };
+}
+
+/* ════════════ SCORES (rubrica estilo Higgsfield) ════════════ */
+function computeScores(m) {
+  const dims = [];
+  const mapRange = (v, lo, hi, loScore) => {
+    // pontuação máxima dentro de [lo,hi], caindo linearmente fora
+    if (v >= lo && v <= hi) return 95;
+    const d = v < lo ? (lo - v) / lo : (v - hi) / hi;
+    return clamp(Math.round(95 - d * 130), loScore, 95);
+  };
+
+  // 1. Força do gancho — arranque rápido + texto dos 3 primeiros segundos
+  let hook = 50;
+  hook += m.timeToSpeech < 0.8 ? 20 : m.timeToSpeech < 1.5 ? 8 : -15;
+  if (m.hasText) {
+    const hl = analyzeHeadline(m.hookText);
+    hook = Math.round(hook * 0.45 + hl.score * 0.55);
+  }
+  dims.push({ key: 'Força do Gancho', val: clamp(hook, 5, 98),
+    why: m.timeToSpeech >= 1.5 ? 'demorou pra começar a falar' : 'arranque rápido' });
+
+  // 2. Entonação / Atenção — variação de tom + dinâmica de volume
+  let intonation = 20;
+  if (m.pitchStd > 0) intonation = m.pitchStd < 1.2 ? 30 : m.pitchStd < 2 ? 55 : m.pitchStd < 3 ? 78 : m.pitchStd < 4.5 ? 93 : 85;
+  intonation += clamp(m.volDynDb - 6, -10, 8);
+  dims.push({ key: 'Entonação', val: clamp(Math.round(intonation), 5, 98),
+    why: m.pitchStd < 2 ? 'fala monótona — pouca variação de tom' : 'boa variação melódica' });
+
+  // 3. Ritmo — WPM ideal pt-BR: 140–175
+  let pace = m.hasText ? mapRange(m.wpm, 135, 175, 15) : 50;
+  dims.push({ key: 'Ritmo', val: clamp(Math.round(pace), 5, 98),
+    why: !m.hasText ? 'sem transcrição' : m.wpm < 135 ? `${Math.round(m.wpm)} ppm — lento, acelere` : m.wpm > 175 ? `${Math.round(m.wpm)} ppm — rápido demais` : `${Math.round(m.wpm)} ppm — na zona ideal` });
+
+  // 4. Pausas dramáticas — 2 a 7 por minuto de fala; pausas longas penalizam
+  const perMin = m.dramatic.length / Math.max(0.5, m.durationS / 60);
+  let pausesScore = m.dramatic.length === 0 ? 25 : mapRange(perMin, 2, 7, 20);
+  pausesScore -= m.long.length * 12;
+  dims.push({ key: 'Pausas Dramáticas', val: clamp(Math.round(pausesScore), 5, 98),
+    why: m.dramatic.length === 0 ? 'fala corrida, sem respiro' : m.long.length ? `${m.long.length} pausa(s) longa(s) demais` : `${m.dramatic.length} pausa(s) bem usadas` });
+
+  // 5. Conexão com audiência — "você", perguntas, CTA
+  let connect = 40;
+  if (m.hasText) {
+    const t = norm(m.transcript);
+    const youCount = m.tokens.filter(w => DIRECT.includes(w)).length;
+    connect = 30 + clamp(youCount / (m.tokens.length / 100) * 8, 0, 30);
+    if (CTA_WORDS.some(w => t.includes(w))) connect += 15;
+    if ((m.transcript.match(/\?/g) || []).length) connect += 10;
+    if (EMOTION.some(w => t.includes(w))) connect += 8;
+  }
+  dims.push({ key: 'Conexão', val: clamp(Math.round(connect), 5, 98),
+    why: !m.hasText ? 'sem transcrição' : connect > 65 ? 'fala com a audiência' : 'pouco "você", pergunta e CTA' });
+
+  // 6. Clareza — vícios de linguagem
+  let clarity = m.hasText ? clamp(Math.round(95 - m.fillerRate * 9), 10, 98) : 50;
+  dims.push({ key: 'Clareza', val: clarity,
+    why: !m.hasText ? 'sem transcrição' : m.fillerRate > 4 ? `${m.fillerHits.length} vício(s): "${[...new Set(m.fillerHits)].slice(0,3).join('", "')}"` : 'discurso limpo' });
+
+  // Composto (pesos estilo preditor de viralidade)
+  const w = [0.25, 0.20, 0.13, 0.15, 0.15, 0.12];
+  const overall = Math.round(dims.reduce((s, d, i) => s + d.val * w[i], 0));
+
+  // Risco de retenção
+  const retentionRisk = m.long.length >= 2 || m.pitchStd < 1.2 || m.fillerRate > 6 ? 'alto'
+    : m.long.length === 1 || m.pitchStd < 2 || m.fillerRate > 3 ? 'médio' : 'baixo';
+
+  return { dims, overall, retentionRisk };
+}
+
+function verdict(overall, risk) {
+  if (overall >= 85) return ['Potencial explosivo 🔥', `Entrega de alto nível — risco de retenção ${risk}. Esse take tem estrutura de vídeo viral: publique e teste.`];
+  if (overall >= 70) return ['Alto potencial viral', `Você está perto. Risco de retenção ${risk}. Ajuste os pontos abaixo e regrave — a diferença entre 70 e 85 é onde mora a viralização.`];
+  if (overall >= 50) return ['Em construção', `A base existe, mas o algoritmo pune o que a audiência abandona. Risco de retenção ${risk}. Foque nas 2 primeiras sugestões e regrave.`];
+  return ['Baixo potencial (por enquanto)', `Risco de retenção ${risk}. Boa notícia: entrega é treino. Siga as sugestões, regrave 3 vezes e compare os scores.`];
+}
+
+/* ════════════ SUGESTÕES CRIATIVAS ════════════ */
+function buildTips(m, scores) {
+  const tips = [];
+  const d = Object.fromEntries(scores.dims.map(x => [x.key, x.val]));
+
+  if (d['Entonação'] < 65) tips.push(['🎢', `Sua fala variou pouco de tom (desvio de ${m.pitchStd.toFixed(1)} semitons — o ideal é 3+). Exercício: leia a headline 3 vezes — uma como <b>segredo sussurrado</b>, uma como <b>notícia urgente</b>, uma como <b>deboche</b>. Grave a que der mais vontade de ouvir.`, true]);
+
+  if (d['Pausas Dramáticas'] < 60) {
+    if (m.dramatic.length === 0)
+      tips.push(['⏸️', `Nenhuma pausa dramática detectada — fala corrida cansa e o dedo desliza. Regra de ouro: <b>pause 1 segundo ANTES da palavra mais importante</b> de cada frase. O silêncio cria tensão; a palavra vira recompensa.`, true]);
+    if (m.long.length > 0)
+      tips.push(['⚠️', `${m.long.length} pausa(s) acima de 2 segundos — no vídeo curto, isso é onde o espectador sai. Pausa dramática boa dura <b>0,6 a 1,5 segundo</b>. Corte as longas na edição ou regrave.`, true]);
+  }
+
+  if (d['Força do Gancho'] < 65) {
+    if (m.timeToSpeech >= 1.5)
+      tips.push(['🚀', `Você levou ${m.timeToSpeech.toFixed(1)}s pra começar a falar. No feed, o corte é impiedoso: <b>primeira palavra em menos de 0,5s</b>. Já comece gravando no meio da energia, não "esquentando".`, true]);
+    if (m.hasText)
+      tips.push(['🪝', `Seus 3 primeiros segundos foram: <i>"${m.hookText}..."</i> — passe essa frase no <b>Lab de Headlines</b> (primeira aba) e use uma das variações com pausa marcada.`, false]);
+  }
+
+  if (m.hasText && d['Ritmo'] < 65) {
+    tips.push([m.wpm < 135 ? '🐢' : '🐇', m.wpm < 135
+      ? `Ritmo de ${Math.round(m.wpm)} palavras/min — abaixo da zona viral (140–175). Truque: grave imaginando que <b>o vídeo será cortado em 15 segundos</b> e você precisa entregar a ideia antes.`
+      : `${Math.round(m.wpm)} palavras/min — acelerado demais, a audiência não processa. Desacelere <b>só nas frases-chave</b>: velocidade no contexto, lentidão na revelação.`, true]);
+  }
+
+  if (m.hasText && d['Clareza'] < 70)
+    tips.push(['🧹', `Vícios de linguagem detectados: <b>"${[...new Set(m.fillerHits)].join('", "')}"</b>. Troque cada um por uma <b>pausa em silêncio</b> — a pausa transmite autoridade; o "né, tipo, então" transmite insegurança.`, true]);
+
+  if (m.hasText && d['Conexão'] < 65)
+    tips.push(['🫵', `Fale <b>com</b> a pessoa, não <b>para</b> a câmera: use mais "você", faça uma pergunta no meio ("já aconteceu com você?") e termine com um comando claro — "comenta EU QUERO", "salva esse vídeo".`, false]);
+
+  if (tips.length === 0)
+    tips.push(['🏆', `Entrega redonda! Próximo nível: grave o <b>mesmo roteiro 3 vezes</b> variando só a emoção (urgência, cumplicidade, provocação) e publique a de maior score. Consistência de publicação > take perfeito.`, false]);
+
+  tips.push(['📈', `Quando publicar, observe a <b>retenção dos 3 primeiros segundos</b> no analytics da plataforma e compare com o score de gancho daqui — é o mesmo jogo que os preditores de viralidade avaliam.`, false]);
+  return tips;
+}
+
+/* ════════════ RENDER RESULTADOS ════════════ */
+function renderResults(m) {
+  const scores = computeScores(m);
+  $('#resultArea').classList.remove('hidden');
+
+  setRing($('#ringOverall'), $('#scoreOverall'), scores.overall);
+  const [vt, vs] = verdict(scores.overall, scores.retentionRisk);
+  $('#verdictTitle').textContent = vt;
+  $('#verdictSub').textContent = vs;
+
+  $('#dimsList').innerHTML = scores.dims.map(d => `
+    <div class="dim">
+      <div class="d-head"><span class="d-name">${d.key}</span><span class="d-val">${d.val} · ${d.why}</span></div>
+      <div class="bar"><i style="width:0%"></i></div>
+    </div>`).join('');
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    document.querySelectorAll('#dimsList .bar > i').forEach((el, i) => el.style.width = scores.dims[i].val + '%');
+  }));
+
+  $('#tipsList').innerHTML = buildTips(m, scores).map(([ico, html, warn]) =>
+    `<div class="tip ${warn ? 'warn' : ''}"><span class="t-ico">${ico}</span><span>${html}</span></div>`).join('');
+
+  renderTranscript(m);
+  saveHistory(scores);
+  renderHistory();
+  $('#resultArea').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function renderTranscript(m) {
+  const view = $('#transcriptView');
+  if (!m.hasText) {
+    // sem transcrição: mostra linha do tempo das pausas
+    if (m.pauses.length === 0) { view.innerHTML = '<i>Sem transcrição disponível e nenhuma pausa relevante detectada.</i>'; return; }
+    view.innerHTML = 'Linha do tempo das pausas: ' + m.pauses.map(p => {
+      const cls = p.dur >= 2.2 ? 'pz-long' : p.dur >= 0.6 ? 'pz-drama' : 'pz';
+      return `<span class="pz ${cls}">${p.t.toFixed(1)}s → ${p.dur.toFixed(1)}s</span>`;
+    }).join(' ');
+    return;
+  }
+  // distribui pausas ao longo das palavras proporcionalmente ao tempo
+  const words = m.transcript.split(/\s+/).filter(Boolean);
+  const speechDur = Math.max(1, m.durationS);
+  const marked = words.map((w, i) => {
+    const nw = norm(w).replace(/[^\w]/g, '');
+    return FILLERS.includes(nw) ? `<span class="filler">${w}</span>` : w;
+  });
+  // insere marcadores de pausa na posição proporcional
+  const inserts = m.pauses.filter(p => p.dur >= 0.6).map(p => ({
+    idx: clamp(Math.round(p.t / speechDur * words.length), 0, words.length),
+    html: `<span class="pz ${p.dur >= 2.2 ? 'pz-long' : 'pz-drama'}">⏸ ${p.dur.toFixed(1)}s</span>`
+  })).sort((a, b) => b.idx - a.idx);
+  for (const ins of inserts) marked.splice(ins.idx, 0, ins.html);
+  view.innerHTML = marked.join(' ');
+}
+
+/* ════════════ HISTÓRICO (localStorage) ════════════ */
+const HIST_KEY = 'estudio-viral-hist';
+function saveHistory(scores) {
+  try {
+    const h = JSON.parse(localStorage.getItem(HIST_KEY) || '[]');
+    h.push({ d: new Date().toISOString().slice(0, 16).replace('T', ' '), o: scores.overall });
+    localStorage.setItem(HIST_KEY, JSON.stringify(h.slice(-12)));
+  } catch (_) {}
+}
+function renderHistory() {
+  let h = [];
+  try { h = JSON.parse(localStorage.getItem(HIST_KEY) || '[]'); } catch (_) {}
+  if (!h.length) { $('#historyCard').classList.add('hidden'); return; }
+  $('#historyCard').classList.remove('hidden');
+  const best = Math.max(...h.map(x => x.o));
+  $('#historyChips').innerHTML = h.slice().reverse().map(x =>
+    `<span class="h-chip">${x.d.slice(5)} · <b>${x.o}</b>${x.o === best ? ' 🏆' : ''}</span>`).join('');
+}
+renderHistory();
+
+function showNotice(msg) {
+  const n = $('#speechNotice');
+  n.textContent = msg;
+  n.classList.remove('hidden');
+}
+</script>
+</body>
+</html>
